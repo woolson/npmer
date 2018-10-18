@@ -29,8 +29,6 @@ div(id="app")
             v-model="options.roundedAngle"
             active-color="#13ce66"
             inactive-color="#ff4949"
-            active-text="ON"
-            inactive-text="OFF"
           )
         el-form-item(:label="TEXT.leftText")
           el-input(v-model="options.leftText" clearable)
@@ -62,7 +60,7 @@ div(id="app")
 </template>
 
 <script>
-import TagSvg from './TagSvg.vue'
+import TagSvg from './TagSvg.vue';
 
 const lang = window.navigator.language === 'zh-CN' ? 'zh' : 'en';
 const TEXT = {
@@ -123,20 +121,20 @@ export default {
 
   watch: {
     'options.leftText': {
-      handler: function() {
+      handler() {
         this.$nextTick(() => {
-          const $leftText = document.querySelector('.tag__left')
-          this.leftWidth = $leftText.offsetWidth
-        })
+          const $leftText = document.querySelector('.tag__left');
+          this.leftWidth = $leftText.offsetWidth;
+        });
       },
       immediate: true,
     },
     'options.rightText': {
-      handler: function() {
+      handler() {
         this.$nextTick(() => {
-          const $rightWidth = document.querySelector('.tag__right')
-          this.rightWidth = $rightWidth.offsetWidth
-        })
+          const $rightWidth = document.querySelector('.tag__right');
+          this.rightWidth = $rightWidth.offsetWidth;
+        });
       },
       immediate: true,
     },
@@ -151,7 +149,7 @@ export default {
       link.click();
     },
     async copyLink() {
-
+      this.$message('comming');
     },
   },
 };
