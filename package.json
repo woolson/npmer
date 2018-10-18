@@ -8,6 +8,9 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "color": "^3.1.0",
+    "dom-to-image": "^2.6.0",
+    "element-ui": "^2.4.8",
     "vue": "^2.5.17"
   },
   "devDependencies": {
@@ -15,6 +18,10 @@
     "@vue/cli-plugin-eslint": "^3.0.3",
     "@vue/cli-service": "^3.0.3",
     "@vue/eslint-config-airbnb": "^3.0.5",
+    "pug": "^2.0.3",
+    "pug-plain-loader": "^1.0.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
     "vue-template-compiler": "^2.5.17"
   },
   "eslintConfig": {
