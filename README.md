@@ -1,5 +1,8 @@
 # npmer
 
+![hello-world](/assets/hello-world.svg)
+![make-perfect](/assets/make-perfect.svg)
+
 > 用于制作npm包徽章，使用的svg
 
 ## TODO
