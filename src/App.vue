@@ -1,29 +1,40 @@
 <template lang="pug">
 div(id="app")
-  header NPM Logo Customize
+  header {{TEXT.title}}
   main
     section.preview
       div
-        label Preview
-        div.tag(:class="options.angleType.toLowerCase()")
-          div.tag__left(:style="leftBg") {{options.leftText}}
-          div.tag__right(:style="rightBg") {{options.rightText}}
-      div
-        label Result
-        img(:src="generated")
+        label {{TEXT.preview}}
+        TagSvg(
+          ref="content"
+          :roundedAngle="options.roundedAngle"
+          :leftText="options.leftText"
+          :leftWidth="leftWidth"
+          :leftColor="colors[options.leftColor]"
+          :rightText="options.rightText"
+          :rightWidth="rightWidth"
+          :rightColor="colors[options.rightColor]"
+        )
+        div.tag
+          div.tag__left {{options.leftText}}
+          div.tag__right {{options.rightText}}
     section.options
       el-form(
         ref="options"
         :model="options"
         label-width="100px"
       )
-        el-form-item(label="Angle Type")
-          el-radio-group(v-model="options.angleType")
-            el-radio(label="Rounded")
-            el-radio(label="Right")
-        el-form-item(label="Left Text")
+        el-form-item(:label="TEXT.roundedAngle")
+          el-switch(
+            v-model="options.roundedAngle"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-text="ON"
+            inactive-text="OFF"
+          )
+        el-form-item(:label="TEXT.leftText")
           el-input(v-model="options.leftText" clearable)
-        el-form-item(label="Left Color")
+        el-form-item(:label="TEXT.leftColor")
           ul.options__color
             li(
               v-for="color,index in colors"
@@ -31,9 +42,9 @@ div(id="app")
               :style="{background: color}"
               @click="$set(options, 'leftColor', index)"
             )
-        el-form-item(label="Right Text")
+        el-form-item(:label="TEXT.rightText")
           el-input(v-model="options.rightText" clearable)
-        el-form-item(label="Right Color")
+        el-form-item(:label="TEXT.rightColor")
           ul.options__color
             li(
               v-for="color,index in colors"
@@ -41,66 +52,120 @@ div(id="app")
               :style="{background: color}"
               @click="$set(options, 'rightColor', index)"
             )
-      el-button.start(
-        @click="generateImg"
-      ) Generate
+        el-form-item
+          el-button.download(
+            @click="downloadImg"
+          ) {{TEXT.download}}
+          el-button.copy(
+            @click="copyLink"
+          ) {{TEXT.copyLink}}
 </template>
 
 <script>
-import Dom2Image from 'dom-to-image'
-import Color from 'color'
+import TagSvg from './TagSvg.vue'
+
+const lang = window.navigator.language === 'zh-CN' ? 'zh' : 'en';
+const TEXT = {
+  en: {
+    title: 'Customize NPM Logo',
+    preview: 'Preview',
+    result: 'Result',
+    roundedAngle: 'Rounded',
+    leftText: 'Left Text',
+    leftColor: 'Left Color',
+    rightText: 'Right Text',
+    rightColor: 'Right Color',
+    copyLink: 'Copy Link',
+    download: 'Download',
+  },
+  zh: {
+    title: '自定义 NPM 徽标',
+    preview: '预览',
+    result: '结果',
+    roundedAngle: '使用圆角',
+    leftText: '左边文字',
+    leftColor: '左边底色',
+    rightText: '右边文字',
+    rightColor: '右边底色',
+    copyLink: '复制链接',
+    download: '下载',
+  },
+}[lang];
 
 export default {
   name: 'app',
 
+  components: {
+    TagSvg,
+  },
+
   data: () => ({
+    TEXT,
     options: {
-      angleType: 'Rounded',
-      leftText: 'leftText',
-      rightText: 'rightText',
+      roundedAngle: true,
+      leftText: 'build',
+      rightText: 'passing',
       leftColor: 0,
-      rightColor: 3
+      rightColor: 3,
     },
     generated: '',
-    colors: ['#5F5F5F', '#E05D44', '#97CA00', '#44CC11', '#007EC6', '#7289DA']
+    colors: [
+      '#5F5F5F',
+      '#E05D44',
+      '#97CA00',
+      '#44CC11',
+      '#007EC6',
+      '#7289DA',
+    ],
+    leftWidth: 0,
+    rightWidth: 0,
   }),
 
-  computed: {
-    leftBg () {
-      let color = this.colors[this.options.leftColor]
-      let darkColor = Color(color).darken(0.1).hex()
-      return {
-        background: `linear-gradient(to bottom, ${color}, ${darkColor})`
-      }
+  watch: {
+    'options.leftText': {
+      handler: function() {
+        this.$nextTick(() => {
+          const $leftText = document.querySelector('.tag__left')
+          this.leftWidth = $leftText.offsetWidth
+        })
+      },
+      immediate: true,
     },
-    rightBg () {
-      let color = this.colors[this.options.rightColor]
-      let darkColor = Color(color).darken(0.1).hex()
-      return {
-        background: `linear-gradient(to bottom, ${color}, ${darkColor})`
-      }
-    }
+    'options.rightText': {
+      handler: function() {
+        this.$nextTick(() => {
+          const $rightWidth = document.querySelector('.tag__right')
+          this.rightWidth = $rightWidth.offsetWidth
+        })
+      },
+      immediate: true,
+    },
   },
 
   methods: {
-    async generateImg () {
-      try {
-        const $content = document.querySelector('.tag')
-        this.generated = await Dom2Image.toSvg($content)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-  }
+    async downloadImg() {
+      const dataUrl = this.$refs.content.$el.outerHTML;
+      const link = document.createElement('a');
+      link.download = 'npm-logo.svg';
+      link.href = `data:image/svg+xml;charset=utf-8,${dataUrl}`;
+      link.click();
+    },
+    async copyLink() {
+
+    },
+  },
 };
 </script>
 
 <style lang="stylus">
+body
+  padding 0
+  margin 0
+
 #app
   font-family "DejaVu Sans", Verdana, Geneva, sans-serif
-  text-align center
   color #2c3e50
-  width 500px
+  max-width 500px
   margin 0 auto
   display flex
   flex-direction column
@@ -114,6 +179,7 @@ header
   background #C43030
   color white
   line-height 50px
+  text-align center
 
 main
   padding 20px
@@ -137,16 +203,11 @@ main
 
 .tag
   display flex
-  overflow hidden
   div
+    user-select none
     font-size 12px
     color white
     padding 3px 5px
-    text-anchor middle
-    font-size 110
-    text-shadow 0 1px 0 rgba(black, .3)
-  &.rounded
-    border-radius 4px
 
 .tag__left
   margin-right -1px
@@ -164,14 +225,15 @@ main
     width 20px
     height 20px
     transition transform .2s
-    border: 2px solid white
     border-left none
     border-right none
+    cursor pointer
     &:hover
-      transform scale(1.2)
+      transform scale(1.1)
     &.active
-      border: 2px solid #C43030
+      border: 4px solid transparent
 
 .start
+.download
   width 100px
 </style>
