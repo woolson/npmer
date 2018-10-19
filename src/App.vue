@@ -58,14 +58,14 @@ div(id="app")
             inactive-color="#ff4949"
           )
         el-form-item(:label="TEXT.link")
-          el-input(v-model="options.link" disabled)
+          el-input(v-model="options.link" readonly)
             template(slot="append")
               el-button(
                 ref="copyButton"
                 v-clipboard="options.link"
                 @success="$notify.success({title: TEXT.copy + TEXT.success})"
               ) {{TEXT.copy}}
-        el-form-item
+        div.options__button
           el-button.download(
             @click="downloadImg"
           ) {{TEXT.download}}
@@ -83,8 +83,8 @@ div(id="app")
 </template>
 
 <script>
+import uuid from 'uuid/v1';
 import TagSvg from './TagSvg.vue';
-import uuid from 'uuid/v1'
 
 const lang = window.navigator.language === 'zh-CN' ? 'zh' : 'en';
 const TEXT = {
@@ -163,8 +163,8 @@ export default {
   mounted() {
     this.$github.authenticate({
       type: 'token',
-      token: '7e61d5e0c33312b0d801bc22872d98243c944e69'
-    })
+      token: '4bce9d1b5cd068cbcce2b693cbfec38225122433',
+    });
   },
 
   watch: {
@@ -212,9 +212,13 @@ export default {
         const url = data.files[newFileName].raw_url || '';
         this.$set(this.options, 'link', url.replace('gist.githubusercontent.com', 'gistcdn.githack.com'));
         this.loading = false;
-        this.$notify.success({title: TEXT.createLink + TEXT.success});
+        this.$notify.success({
+          title: TEXT.createLink + TEXT.success,
+        });
       } catch (err) {
-        this.$notify.error({title: TEXT.errorMsg});
+        this.$notify.error({
+          title: TEXT.errorMsg,
+        });
       }
     },
   },
@@ -225,9 +229,10 @@ export default {
 body
   padding 0
   margin 0
+  padding-bottom 20px
 
 #app
-  font-family "DejaVu Sans", Verdana, Geneva, sans-serif
+  font-family "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
   color #2c3e50
   max-width 500px
   margin 0 auto
@@ -298,6 +303,9 @@ main
     &.active
       border: 4px solid transparent
 
+.options__button
+  text-align center
+
 .copy
 .download
   min-width 120px
@@ -312,11 +320,14 @@ footer
   width 100%
   background #F3D6D6
   border-radius 5px
-  padding 20px 20px 15px
+  padding 10px 10px 10px
   display flex
+  flex-wrap wrap
   color #C43030
   > div
     flex 1
+    padding 5px 0
+    white-space nowrap
   a
     color #C43030
 </style>
