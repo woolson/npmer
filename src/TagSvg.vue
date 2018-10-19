@@ -8,12 +8,12 @@ svg(
   linearGradient(id="b" x2="0" y2="100%")
     stop(offset="0" stop-color="#bbb" stop-opacity=".1")
     stop(offset="1" stop-opacity=".1")
-  clipPath(id="a")
+  clipPath(v-if="roundedAngle" id="a")
     rect(:width="width" height="20" rx="3" fill="#fff")
   g(:clip-path="roundedAngle ? 'url(#a)' : ''")
     path(:fill="leftColor" :d="leftPathD")
     path(:fill="rightColor" :d="rightPathD")
-    path(fill="url(#b)" :d="bgPathD")
+    path(v-if="gradient" fill="url(#b)" :d="bgPathD")
   g(
     fill="#fff"
     text-anchor="middle"
@@ -54,6 +54,7 @@ export default {
     rightWidth: Number,
     rightColor: String,
     roundedAngle: Boolean,
+    gradient: Boolean,
   },
 
   computed: {

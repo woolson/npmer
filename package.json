@@ -1,6 +1,6 @@
 {
   "name": "npm-tag",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -8,8 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@octokit/rest": "^15.15.1",
     "element-ui": "^2.4.8",
-    "vue": "^2.5.17"
+    "uuid": "^3.3.2",
+    "vue": "^2.5.17",
+    "vue-clipboards": "^1.2.4",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.3",

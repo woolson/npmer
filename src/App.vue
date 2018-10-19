@@ -8,6 +8,7 @@ div(id="app")
         TagSvg(
           ref="content"
           :roundedAngle="options.roundedAngle"
+          :gradient="options.gradient"
           :leftText="options.leftText"
           :leftWidth="leftWidth"
           :leftColor="colors[options.leftColor]"
@@ -24,12 +25,6 @@ div(id="app")
         :model="options"
         label-width="100px"
       )
-        el-form-item(:label="TEXT.roundedAngle")
-          el-switch(
-            v-model="options.roundedAngle"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          )
         el-form-item(:label="TEXT.leftText")
           el-input(v-model="options.leftText" clearable)
         el-form-item(:label="TEXT.leftColor")
@@ -50,17 +45,46 @@ div(id="app")
               :style="{background: color}"
               @click="$set(options, 'rightColor', index)"
             )
+        el-form-item(:label="TEXT.roundedAngle")
+          el-switch(
+            v-model="options.roundedAngle"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          )
+        el-form-item(:label="TEXT.gradient")
+          el-switch(
+            v-model="options.gradient"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          )
+        el-form-item(:label="TEXT.link")
+          el-input(v-model="options.link" disabled)
+            template(slot="append")
+              el-button(
+                ref="copyButton"
+                v-clipboard="options.link"
+                @success="$notify.success({title: TEXT.copy + TEXT.success})"
+              ) {{TEXT.copy}}
         el-form-item
           el-button.download(
             @click="downloadImg"
           ) {{TEXT.download}}
           el-button.copy(
             @click="copyLink"
-          ) {{TEXT.copyLink}}
+            :loading="loading"
+          ) {{TEXT.createLink}}
+  footer
+    div
+      span {{TEXT.fileSaver}}:&nbsp;
+      a(href="https://gist.github.com/" target="_blank") gist.github.com
+    div
+      span {{TEXT.linkConvertor}}:&nbsp;
+      a(href="http://raw.githack.com/" target="_blank") raw.githack.com
 </template>
 
 <script>
 import TagSvg from './TagSvg.vue';
+import uuid from 'uuid/v1'
 
 const lang = window.navigator.language === 'zh-CN' ? 'zh' : 'en';
 const TEXT = {
@@ -69,24 +93,38 @@ const TEXT = {
     preview: 'Preview',
     result: 'Result',
     roundedAngle: 'Rounded',
+    gradient: 'Gradient',
     leftText: 'Left Text',
     leftColor: 'Left Color',
     rightText: 'Right Text',
     rightColor: 'Right Color',
-    copyLink: 'Copy Link',
+    createLink: 'Create Link ',
     download: 'Download',
+    errorMsg: 'Error, Try again later!',
+    success: 'Success',
+    link: 'Link',
+    copy: 'Copy ',
+    fileSaver: 'File Saver',
+    linkConvertor: 'Link Convertor',
   },
   zh: {
     title: '自定义 NPM 徽标',
     preview: '预览',
     result: '结果',
     roundedAngle: '使用圆角',
+    gradient: '渐变底色',
     leftText: '左边文字',
     leftColor: '左边底色',
     rightText: '右边文字',
     rightColor: '右边底色',
-    copyLink: '复制链接',
+    createLink: '生成链接',
     download: '下载',
+    errorMsg: '请求出错，稍后重试！',
+    success: '成功',
+    link: '链接',
+    copy: '复制',
+    fileSaver: '文件存储',
+    linkConvertor: '链接转换',
   },
 }[lang];
 
@@ -101,10 +139,12 @@ export default {
     TEXT,
     options: {
       roundedAngle: true,
+      gradient: true,
       leftText: 'build',
       rightText: 'passing',
       leftColor: 0,
       rightColor: 3,
+      link: '',
     },
     generated: '',
     colors: [
@@ -117,7 +157,15 @@ export default {
     ],
     leftWidth: 0,
     rightWidth: 0,
+    loading: false,
   }),
+
+  mounted() {
+    this.$github.authenticate({
+      type: 'token',
+      token: '7e61d5e0c33312b0d801bc22872d98243c944e69'
+    })
+  },
 
   watch: {
     'options.leftText': {
@@ -149,7 +197,25 @@ export default {
       link.click();
     },
     async copyLink() {
-      this.$message('comming');
+      try {
+        this.loading = true;
+        const newFileName = `${uuid()}.svg`;
+        const { data } = await this.$github.gists.edit({
+          gist_id: '49127a963e5ce752819f3579acb9fce8',
+          description: 'npm customize logo',
+          files: {
+            [newFileName]: {
+              content: this.$refs.content.$el.outerHTML,
+            },
+          },
+        });
+        const url = data.files[newFileName].raw_url || '';
+        this.$set(this.options, 'link', url.replace('gist.githubusercontent.com', 'gistcdn.githack.com'));
+        this.loading = false;
+        this.$notify.success({title: TEXT.createLink + TEXT.success});
+      } catch (err) {
+        this.$notify.error({title: TEXT.errorMsg});
+      }
     },
   },
 };
@@ -172,6 +238,9 @@ body
   border 1px solid #C43030
   border-radius 5px
 
+input:focus
+  border-color #C43030!important
+
 header
   width 100%
   background #C43030
@@ -180,9 +249,13 @@ header
   text-align center
 
 main
-  padding 20px
   width 100%
   box-sizing border-box
+  // box-shadow 0 5px 10px rgba(black, .1)
+  background white
+  z-index 2
+  > section
+    padding 20px
 
 .preview
   display flex
@@ -196,9 +269,6 @@ main
     flex 1
     text-align center
 
-.options
-  margin-top 10px
-
 .tag
   display flex
   div
@@ -209,9 +279,6 @@ main
 
 .tag__left
   margin-right -1px
-
-.options
-  margin 20px 0
 
 .options__color
   padding 0
@@ -231,7 +298,25 @@ main
     &.active
       border: 4px solid transparent
 
-.start
+.copy
 .download
-  width 100px
+  min-width 120px
+  &:hover
+    border-color #C43030
+    color #C43030
+    background #F3D6D6
+
+footer
+  margin-top -5px
+  box-sizing border-box
+  width 100%
+  background #F3D6D6
+  border-radius 5px
+  padding 20px 20px 15px
+  display flex
+  color #C43030
+  > div
+    flex 1
+  a
+    color #C43030
 </style>
