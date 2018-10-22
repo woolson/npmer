@@ -11,8 +11,8 @@ svg(
   clipPath(v-if="roundedAngle" id="a")
     rect(:width="width" height="20" rx="3" fill="#fff")
   g(:clip-path="roundedAngle ? 'url(#a)' : ''")
-    path(:fill="leftColor" :d="leftPathD")
-    path(:fill="rightColor" :d="rightPathD")
+    path(fill="#555555" :d="leftPathD")
+    path(:fill="bgColor" :d="rightPathD")
     path(v-if="gradient" fill="url(#b)" :d="bgPathD")
   g(
     fill="#fff"
@@ -52,7 +52,7 @@ export default {
     leftColor: String,
     rightText: String,
     rightWidth: Number,
-    rightColor: String,
+    bgColor: String,
     roundedAngle: Boolean,
     gradient: Boolean,
   },

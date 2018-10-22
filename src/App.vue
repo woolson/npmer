@@ -11,10 +11,9 @@ div(id="app")
           :gradient="options.gradient"
           :leftText="options.leftText"
           :leftWidth="leftWidth"
-          :leftColor="colors[options.leftColor]"
           :rightText="options.rightText"
           :rightWidth="rightWidth"
-          :rightColor="colors[options.rightColor]"
+          :bgColor="colors[options.bgColor].value"
         )
         div.tag
           div.tag__left {{options.leftText}}
@@ -27,23 +26,15 @@ div(id="app")
       )
         el-form-item(:label="TEXT.leftText")
           el-input(v-model="options.leftText" clearable)
-        el-form-item(:label="TEXT.leftColor")
-          ul.options__color
-            li(
-              v-for="color,index in colors"
-              :class="{active: options.leftColor === index}"
-              :style="{background: color}"
-              @click="$set(options, 'leftColor', index)"
-            )
         el-form-item(:label="TEXT.rightText")
           el-input(v-model="options.rightText" clearable)
-        el-form-item(:label="TEXT.rightColor")
+        el-form-item(:label="TEXT.bgColor")
           ul.options__color
             li(
               v-for="color,index in colors"
-              :class="{active: options.rightColor === index}"
-              :style="{background: color}"
-              @click="$set(options, 'rightColor', index)"
+              :class="{active: options.bgColor === index}"
+              :style="{background: color.value}"
+              @click="$set(options, 'bgColor', index)"
             )
         el-form-item(:label="TEXT.roundedAngle")
           el-switch(
@@ -73,17 +64,17 @@ div(id="app")
             @click="copyLink"
             :loading="loading"
           ) {{TEXT.createLink}}
-  footer
-    div
-      span {{TEXT.fileSaver}}:&nbsp;
-      a(href="https://gist.github.com/" target="_blank") gist.github.com
-    div
-      span {{TEXT.linkConvertor}}:&nbsp;
-      a(href="http://raw.githack.com/" target="_blank") raw.githack.com
+  //- footer
+  //-   div
+  //-     span {{TEXT.fileSaver}}:&nbsp;
+  //-     a(href="https://gist.github.com/" target="_blank") gist.github.com
+  //-   div
+  //-     span {{TEXT.linkConvertor}}:&nbsp;
+  //-     a(href="http://raw.githack.com/" target="_blank") raw.githack.com
 </template>
 
 <script>
-import uuid from 'uuid/v1';
+import 'whatwg-fetch';
 import TagSvg from './TagSvg.vue';
 
 const lang = window.navigator.language === 'zh-CN' ? 'zh' : 'en';
@@ -95,9 +86,8 @@ const TEXT = {
     roundedAngle: 'Rounded',
     gradient: 'Gradient',
     leftText: 'Left Text',
-    leftColor: 'Left Color',
     rightText: 'Right Text',
-    rightColor: 'Right Color',
+    bgColor: 'Background Color',
     createLink: 'Create Link ',
     download: 'Download',
     errorMsg: 'Error, Try again later!',
@@ -114,9 +104,8 @@ const TEXT = {
     roundedAngle: '使用圆角',
     gradient: '渐变底色',
     leftText: '左边文字',
-    leftColor: '左边底色',
     rightText: '右边文字',
-    rightColor: '右边底色',
+    bgColor: '标签底色',
     createLink: '生成链接',
     download: '下载',
     errorMsg: '请求出错，稍后重试！',
@@ -142,18 +131,17 @@ export default {
       gradient: true,
       leftText: 'build',
       rightText: 'passing',
-      leftColor: 0,
-      rightColor: 3,
+      bgColor: 3,
       link: '',
     },
     generated: '',
     colors: [
-      '#5F5F5F',
-      '#E05D44',
-      '#97CA00',
-      '#44CC11',
-      '#007EC6',
-      '#7289DA',
+      { name: 'gray', value: '#5F5F5F' },
+      { name: 'red', value: '#E05D44' },
+      { name: 'green', value: '#97CA00' },
+      { name: 'lightgreen', value: '#44CC11' },
+      { name: 'blue', value: '#007EC6' },
+      { name: 'purple', value: '#7289DA' },
     ],
     leftWidth: 0,
     rightWidth: 0,
@@ -199,23 +187,31 @@ export default {
     async copyLink() {
       try {
         this.loading = true;
-        const newFileName = `${uuid()}.svg`;
-        const { data } = await this.$github.gists.edit({
-          gist_id: '49127a963e5ce752819f3579acb9fce8',
-          description: 'npm customize logo',
-          files: {
-            [newFileName]: {
-              content: this.$refs.content.$el.outerHTML,
-            },
+        const {
+          bgColor,
+          rounded,
+          leftText,
+          rightText,
+          gradient,
+        } = this.options;
+        const response = await fetch('https://woolson.cn/npmer/api/fetch', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        });
-        const url = data.files[newFileName].raw_url || '';
-        this.$set(this.options, 'link', url.replace('gist.githubusercontent.com', 'gistcdn.githack.com'));
+          body: JSON.stringify({
+            name: encodeURI(`${this.colors[bgColor].name}-${rounded ? 'rounded' : 'square'}-${gradient ? 'gradient' : 'flat'}-${leftText}-${rightText}.svg`),
+            content: this.$refs.content.$el.outerHTML,
+          }),
+        }).then(res => res.json());
+        this.$set(this.options, 'link', response.url);
         this.loading = false;
         this.$notify.success({
           title: TEXT.createLink + TEXT.success,
         });
       } catch (err) {
+        // eslint-disable-next-line
+        console.error(err);
         this.$notify.error({
           title: TEXT.errorMsg,
         });
@@ -280,7 +276,7 @@ main
     user-select none
     font-size 12px
     color white
-    padding 3px 5px
+    padding 3px 7px
 
 .tag__left
   margin-right -1px
@@ -298,10 +294,10 @@ main
     border-left none
     border-right none
     cursor pointer
-    &:hover
+    &:not(.active):hover
       transform scale(1.1)
     &.active
-      border: 4px solid transparent
+      border: 2px solid transparent
 
 .options__button
   text-align center
@@ -314,20 +310,21 @@ main
     color #C43030
     background #F3D6D6
 
-footer
-  margin-top -5px
-  box-sizing border-box
-  width 100%
-  background #F3D6D6
-  border-radius 5px
-  padding 10px 10px 10px
-  display flex
-  flex-wrap wrap
-  color #C43030
-  > div
-    flex 1
-    padding 5px 0
-    white-space nowrap
-  a
-    color #C43030
+// footer
+//   margin-top -5px
+//   box-sizing border-box
+//   width 100%
+//   background #F3D6D6
+//   border-radius 5px
+//   padding 10px 10px 10px
+//   display flex
+//   flex-wrap wrap
+//   color #C43030
+//   font-size 13px
+//   > div
+//     flex 1
+//     padding 5px 0
+//     white-space nowrap
+//   a
+//     color #C43030
 </style>

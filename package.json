@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "@octokit/rest": "^15.15.1",
+    "body-parser": "^1.18.3",
     "element-ui": "^2.4.8",
+    "shelljs": "^0.8.2",
     "uuid": "^3.3.2",
     "vue": "^2.5.17",
     "vue-clipboards": "^1.2.4",
