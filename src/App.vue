@@ -141,14 +141,17 @@ export default {
       gradient: true,
       leftText: 'build',
       rightText: 'passing',
-      bgColor: 3,
+      bgColor: 0,
       link: '',
     },
     generated: '',
     colors: [
-      { name: 'gray', value: '#5F5F5F' },
+      { name: 'gray', value: '#666666' },
+      { name: 'lightgray', value: '#9F9F9F' },
       { name: 'red', value: '#E05D44' },
+      { name: 'orange', value: '#FE7D37' },
       { name: 'green', value: '#97CA00' },
+      { name: 'yellow', value: '#DFB317' },
       { name: 'lightgreen', value: '#44CC11' },
       { name: 'blue', value: '#007EC6' },
       { name: 'purple', value: '#7289DA' },
@@ -249,7 +252,9 @@ body
 #app
   font-family "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
   color #2c3e50
-  max-width 100vw
+  width 100vw
+  max-width 500px
+  min-width 300px
   min-height 100vh
   box-sizing border-box
   margin 0 auto
