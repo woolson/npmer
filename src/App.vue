@@ -8,6 +8,7 @@ div(id="app")
         TagSvg(
           ref="content"
           :roundedAngle="options.roundedAngle"
+          :textShadow="options.textShadow"
           :gradient="options.gradient"
           :leftText="options.leftText"
           :leftWidth="leftWidth"
@@ -39,6 +40,12 @@ div(id="app")
         el-form-item(:label="TEXT.roundedAngle")
           el-switch(
             v-model="options.roundedAngle"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          )
+        el-form-item(:label="TEXT.textShadow")
+          el-switch(
+            v-model="options.textShadow"
             active-color="#13ce66"
             inactive-color="#ff4949"
           )
@@ -87,6 +94,7 @@ const TEXT = {
     gradient: 'Gradient',
     leftText: 'Left Text',
     rightText: 'Right Text',
+    textShadow: 'Text Shadow',
     bgColor: 'Background Color',
     createLink: 'Create Link ',
     download: 'Download',
@@ -105,6 +113,7 @@ const TEXT = {
     gradient: '渐变底色',
     leftText: '左边文字',
     rightText: '右边文字',
+    textShadow: '文字阴影',
     bgColor: '标签底色',
     createLink: '生成链接',
     download: '下载',
@@ -128,6 +137,7 @@ export default {
     TEXT,
     options: {
       roundedAngle: true,
+      textShadow: true,
       gradient: true,
       leftText: 'build',
       rightText: 'passing',
@@ -193,14 +203,23 @@ export default {
           leftText,
           rightText,
           gradient,
+          textShadow,
         } = this.options;
+        const names = [
+          this.colors[bgColor].name,
+          rounded ? 'rounded' : 'square',
+          gradient ? 'gradient' : 'flat',
+          textShadow ? 'shadow' : 'plain',
+          leftText,
+          rightText,
+        ];
         const response = await fetch('https://woolson.cn/npmer/api/fetch', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            name: encodeURI(`${this.colors[bgColor].name}-${rounded ? 'rounded' : 'square'}-${gradient ? 'gradient' : 'flat'}-${leftText}-${rightText}.svg`),
+            name: encodeURI(`${names.join('-')}.svg`),
             content: this.$refs.content.$el.outerHTML,
           }),
         }).then(res => res.json());
@@ -222,39 +241,45 @@ export default {
 </script>
 
 <style lang="stylus">
+html
 body
   padding 0
   margin 0
-  padding-bottom 20px
 
 #app
   font-family "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
   color #2c3e50
-  max-width 500px
+  max-width 100vw
+  min-height 100vh
+  box-sizing border-box
   margin 0 auto
   display flex
   flex-direction column
-  justify-content center
+  justify-content flex-start
   align-items center
-  border 1px solid #C43030
-  border-radius 5px
+  border 10px solid #C43030
+  border-radius 35px
+  // background #C43030
+  overflow hidden
 
 input:focus
   border-color #C43030!important
 
 header
-  width 100%
+  width 50%
   background #C43030
   color white
-  line-height 50px
+  line-height 1
+  padding-bottom 10px
   text-align center
+  border-radius 0 0 10px 10px
 
 main
   width 100%
   box-sizing border-box
-  // box-shadow 0 5px 10px rgba(black, .1)
-  background white
   z-index 2
+  background white
+  border-radius 20px
   > section
     padding 20px
 
@@ -301,6 +326,9 @@ main
 
 .options__button
   text-align center
+  display flex
+  button
+    flex 1
 
 .copy
 .download
@@ -309,6 +337,7 @@ main
     border-color #C43030
     color #C43030
     background #F3D6D6
+
 
 // footer
 //   margin-top -5px

@@ -22,6 +22,7 @@ svg(
   )
     text(
       :x="leftWidth * 5" y="150"
+      v-if="textShadow"
       fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
@@ -32,6 +33,7 @@ svg(
     ) {{leftText}}
     text(
       :x="leftWidth * 10 + rightWidth * 5" y="150"
+      v-if="textShadow"
       fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
@@ -55,6 +57,7 @@ export default {
     bgColor: String,
     roundedAngle: Boolean,
     gradient: Boolean,
+    textShadow: Boolean,
   },
 
   computed: {
