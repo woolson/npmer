@@ -1,6 +1,8 @@
 <template lang="pug">
 div(id="app")
   header {{TEXT.title}}
+    div.header__left
+    div.header__right
   main
     section.preview
       div
@@ -56,11 +58,11 @@ div(id="app")
             inactive-color="#ff4949"
           )
         el-form-item(:label="TEXT.link")
-          el-input(v-model="options.link" readonly)
+          el-input(v-model="link" readonly)
             template(slot="append")
               el-button(
                 ref="copyButton"
-                v-clipboard="options.link"
+                v-clipboard="link"
                 @success="$notify.success({title: TEXT.copy + TEXT.success})"
               ) {{TEXT.copy}}
         div.options__button
@@ -82,12 +84,12 @@ div(id="app")
 
 <script>
 import 'whatwg-fetch';
-import TagSvg from './TagSvg.vue';
+import TagSvg from './tag-svg.vue';
 
 const lang = window.navigator.language === 'zh-CN' ? 'zh' : 'en';
 const TEXT = {
   en: {
-    title: 'Customize NPM Logo',
+    title: 'Customize NPM Badge',
     preview: 'Preview',
     result: 'Result',
     roundedAngle: 'Rounded',
@@ -106,7 +108,7 @@ const TEXT = {
     linkConvertor: 'Link Convertor',
   },
   zh: {
-    title: '自定义 NPM 徽标',
+    title: '在生成NPM徽标链接',
     preview: '预览',
     result: '结果',
     roundedAngle: '使用圆角',
@@ -142,7 +144,6 @@ export default {
       leftText: 'build',
       rightText: 'passing',
       bgColor: 0,
-      link: '',
     },
     generated: '',
     colors: [
@@ -156,6 +157,7 @@ export default {
       { name: 'blue', value: '#007EC6' },
       { name: 'purple', value: '#7289DA' },
     ],
+    link: '',
     leftWidth: 0,
     rightWidth: 0,
     loading: false,
@@ -186,6 +188,12 @@ export default {
         });
       },
       immediate: true,
+    },
+    options: {
+      handler() {
+        this.link = '';
+      },
+      deep: true,
     },
   },
 
@@ -226,7 +234,7 @@ export default {
             content: this.$refs.content.$el.outerHTML,
           }),
         }).then(res => res.json());
-        this.$set(this.options, 'link', response.url);
+        this.link = response.url;
         this.loading = false;
         this.$notify.success({
           title: TEXT.createLink + TEXT.success,
@@ -263,7 +271,7 @@ body
   justify-content flex-start
   align-items center
   border 10px solid #C43030
-  border-radius 35px
+  border-radius 38px
   // background #C43030
   overflow hidden
 
@@ -271,13 +279,37 @@ input:focus
   border-color #C43030!important
 
 header
-  width 50%
+  padding 4px 40px 12px 40px
   background #C43030
   color white
   line-height 1
-  padding-bottom 10px
   text-align center
-  border-radius 0 0 10px 10px
+  border-radius 0 0 18px 18px
+  position relative
+
+.header__left
+.header__right
+  position absolute
+  width 10px
+  height 10px
+  top 0
+  background #C43030
+  &:after
+    display block
+    content ' '
+    height 10px
+    width 10px
+    border-radius 0 6px 0 0
+    background white
+.header__left
+  margin-left -10px
+  left 0
+
+.header__right
+  margin-right -10px
+  right 0
+  &:after
+    border-radius 6px 0 0 0
 
 main
   width 100%

@@ -10,7 +10,7 @@ import {
 import 'element-ui/lib/theme-chalk/index.css';
 import * as GitHubApi from '@octokit/rest';
 import Clipboards from 'vue-clipboards';
-import App from './App.vue';
+import App from './app.vue';
 
 Vue.config.productionTip = false;
 Vue.component(Button.name, Button);
