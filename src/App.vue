@@ -334,6 +334,7 @@ main
 
 .tag
   display flex
+  font-family DejaVu Sans,Verdana,Geneva,sans-serif
   div
     user-select none
     font-size 12px
