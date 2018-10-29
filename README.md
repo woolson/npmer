@@ -9,9 +9,8 @@
 
 - 支持添加icon
 - 更多样式（无渐变）*done*
-- 名称控制
-- github仓库存储
-  - [git接口]https://octokit.github.io/rest.js/#api-Repos-createFile
+- 名称控制 *done*
+- <del>github仓库存储</del>改用[gitee](https://gitee.com/)
 
 ## Project setup
 
