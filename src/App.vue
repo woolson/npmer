@@ -266,8 +266,8 @@ export default {
           textShadow ? 'shadow' : 'plain',
           leftText,
           rightText,
-          iconIndex ? this.icons[iconIndex].name.toLowerCase() : '',
         ];
+        if (iconIndex) names.push(this.icons[iconIndex].name.toLowerCase());
         const response = await fetch('https://woolson.cn/npmer/api/fetch', {
           method: 'POST',
           headers: {
