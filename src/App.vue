@@ -9,6 +9,9 @@ div(id="app")
         label {{TEXT.preview}}
         TagSvg(
           ref="content"
+          :iconPath="iconPath"
+          :iconScale="iconScale"
+          :iconWidth="iconWidth"
           :roundedAngle="options.roundedAngle"
           :textShadow="options.textShadow"
           :gradient="options.gradient"
@@ -31,6 +34,18 @@ div(id="app")
           el-input(v-model="options.leftText" clearable)
         el-form-item(:label="TEXT.rightText")
           el-input(v-model="options.rightText" clearable)
+        el-form-item(:label="TEXT.icon")
+          el-select(
+            v-model="options.iconIndex"
+            placeholder="请选择"
+            clearable
+          )
+            el-option(
+              v-for="item,index in icons"
+              :key="item.name"
+              :label="item.name"
+              :value="index"
+            )
         el-form-item(:label="TEXT.bgColor")
           ul.options__color
             li(
@@ -61,8 +76,14 @@ div(id="app")
           el-input(v-model="link" readonly)
             template(slot="append")
               el-button(
-                ref="copyButton"
                 v-clipboard="link"
+                @success="$notify.success({title: TEXT.copy + TEXT.success})"
+              ) {{TEXT.copy}}
+        el-form-item(:label="TEXT.markdown")
+          el-input(v-model="markdownLink" readonly)
+            template(slot="append")
+              el-button(
+                v-clipboard="markdownLink"
                 @success="$notify.success({title: TEXT.copy + TEXT.success})"
               ) {{TEXT.copy}}
         div.options__button
@@ -85,6 +106,7 @@ div(id="app")
 <script>
 import 'whatwg-fetch';
 import TagSvg from './tag-svg.vue';
+import Icons from './icons.js';
 
 const lang = window.navigator.language === 'zh-CN' ? 'zh' : 'en';
 const TEXT = {
@@ -96,12 +118,14 @@ const TEXT = {
     gradient: 'Gradient',
     leftText: 'Left Text',
     rightText: 'Right Text',
+    icon: 'Icon',
     textShadow: 'Text Shadow',
     bgColor: 'Background Color',
     createLink: 'Create Link ',
     download: 'Download',
     errorMsg: 'Error, Try again later!',
     success: 'Success',
+    markdown: 'Markdown',
     link: 'Link',
     copy: 'Copy ',
     fileSaver: 'File Saver',
@@ -115,6 +139,7 @@ const TEXT = {
     gradient: '渐变底色',
     leftText: '左边文字',
     rightText: '右边文字',
+    icon: '图标',
     textShadow: '文字阴影',
     bgColor: '标签底色',
     createLink: '生成链接',
@@ -122,6 +147,7 @@ const TEXT = {
     errorMsg: '请求出错，稍后重试！',
     success: '成功',
     link: '链接',
+    markdown: 'Markdown',
     copy: '复制',
     fileSaver: '文件存储',
     linkConvertor: '链接转换',
@@ -137,6 +163,7 @@ export default {
 
   data: () => ({
     TEXT,
+    icons: Icons,
     options: {
       roundedAngle: true,
       textShadow: true,
@@ -158,8 +185,12 @@ export default {
       { name: 'purple', value: '#7289DA' },
     ],
     link: '',
+    markdownLink: '',
     leftWidth: 0,
     rightWidth: 0,
+    iconWidth: 0,
+    iconPath: '',
+    iconScale: 0,
     loading: false,
   }),
 
@@ -189,6 +220,17 @@ export default {
       },
       immediate: true,
     },
+    'options.iconIndex': {
+      handler(newValue) {
+        const {
+          scale,
+          path,
+        } = this.icons[newValue] || {};
+        this.iconPath = path || '';
+        this.iconScale = scale || 0;
+      },
+      immediate: true,
+    },
     options: {
       handler() {
         this.link = '';
@@ -215,6 +257,7 @@ export default {
           rightText,
           gradient,
           textShadow,
+          iconIndex,
         } = this.options;
         const names = [
           this.colors[bgColor].name,
@@ -223,6 +266,7 @@ export default {
           textShadow ? 'shadow' : 'plain',
           leftText,
           rightText,
+          iconIndex ? this.icons[iconIndex].name.toLowerCase() : '',
         ];
         const response = await fetch('https://woolson.cn/npmer/api/fetch', {
           method: 'POST',
@@ -235,6 +279,7 @@ export default {
           }),
         }).then(res => res.json());
         this.link = response.url;
+        this.markdownLink = `![${leftText}](${response.url})`;
         this.loading = false;
         this.$notify.success({
           title: TEXT.createLink + TEXT.success,
@@ -343,6 +388,9 @@ main
 
 .tag__left
   margin-right -1px
+
+.options .el-select
+  width 100%
 
 .options__color
   padding 0

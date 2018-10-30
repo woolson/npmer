@@ -5,6 +5,8 @@ import {
   Input,
   FormItem,
   Switch,
+  Select,
+  Option,
   Notification,
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -18,6 +20,8 @@ Vue.component(Form.name, Form);
 Vue.component(Input.name, Input);
 Vue.component(FormItem.name, FormItem);
 Vue.component(Switch.name, Switch);
+Vue.component(Select.name, Select);
+Vue.component(Option.name, Option);
 Vue.component(Notification.name, Notification);
 Vue.use(Clipboards);
 
