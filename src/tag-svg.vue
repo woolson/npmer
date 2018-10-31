@@ -18,9 +18,8 @@ svg(
     path(
       id="icon"
       :d="iconPath"
-      :transform="'scale(' + iconScale + ')'"
       fill="#FFFFFF"
-      transform-origin="5px 3px 0px"
+      :style="iconStyle"
     )
   g(
     fill="#fff"
@@ -73,7 +72,7 @@ export default {
   watch: {
     iconPath: {
       handler(newValue) {
-        this.iconWidth = newValue ? 15 : 0
+        this.iconWidth = newValue ? 15 : 0;
       },
       immediate: true,
     },
@@ -91,6 +90,12 @@ export default {
     },
     width() {
       return this.leftWidth + this.rightWidth + this.iconWidth;
+    },
+    iconStyle() {
+      return {
+        transform: `scale(${this.iconScale})`,
+        transformOrigin: '5px 3px 0px',
+      };
     },
   },
 };

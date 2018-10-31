@@ -106,7 +106,7 @@ div(id="app")
 <script>
 import 'whatwg-fetch';
 import TagSvg from './tag-svg.vue';
-import Icons from './icons.js';
+import Icons from './icons';
 
 const lang = window.navigator.language === 'zh-CN' ? 'zh' : 'en';
 const TEXT = {
