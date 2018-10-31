@@ -37,7 +37,7 @@ div(id="app")
         el-form-item(:label="TEXT.icon")
           el-select(
             v-model="options.iconIndex"
-            placeholder="请选择"
+            :placeholder="TEXT.select"
             clearable
           )
             el-option(
@@ -91,16 +91,12 @@ div(id="app")
             @click="downloadImg"
           ) {{TEXT.download}}
           el-button.copy(
-            @click="copyLink"
+            @click="createLink"
             :loading="loading"
           ) {{TEXT.createLink}}
-  //- footer
-  //-   div
-  //-     span {{TEXT.fileSaver}}:&nbsp;
-  //-     a(href="https://gist.github.com/" target="_blank") gist.github.com
-  //-   div
-  //-     span {{TEXT.linkConvertor}}:&nbsp;
-  //-     a(href="http://raw.githack.com/" target="_blank") raw.githack.com
+  footer
+    a(href="https://github.com/woolson/npmer-page" target="_blank")
+      img(src="../public/images/github.svg")
 </template>
 
 <script>
@@ -111,46 +107,48 @@ import Icons from './icons';
 const lang = window.navigator.language === 'zh-CN' ? 'zh' : 'en';
 const TEXT = {
   en: {
-    title: 'Customize NPM Badge',
-    preview: 'Preview',
-    result: 'Result',
-    roundedAngle: 'Rounded',
-    gradient: 'Gradient',
-    leftText: 'Left Text',
-    rightText: 'Right Text',
-    icon: 'Icon',
-    textShadow: 'Text Shadow',
     bgColor: 'Background Color',
+    copy: 'Copy ',
     createLink: 'Create Link ',
     download: 'Download',
     errorMsg: 'Error, Try again later!',
-    success: 'Success',
-    markdown: 'Markdown',
-    link: 'Link',
-    copy: 'Copy ',
     fileSaver: 'File Saver',
+    gradient: 'Gradient',
+    icon: 'Icon',
+    leftText: 'Left Text',
+    link: 'Link',
     linkConvertor: 'Link Convertor',
+    markdown: 'Markdown',
+    preview: 'Preview',
+    result: 'Result',
+    rightText: 'Right Text',
+    roundedAngle: 'Rounded',
+    select: 'Select',
+    success: 'Success',
+    textShadow: 'Text Shadow',
+    title: 'Customize NPM Badge',
   },
   zh: {
-    title: '在生成NPM徽标链接',
-    preview: '预览',
-    result: '结果',
-    roundedAngle: '使用圆角',
-    gradient: '渐变底色',
-    leftText: '左边文字',
-    rightText: '右边文字',
-    icon: '图标',
-    textShadow: '文字阴影',
     bgColor: '标签底色',
+    copy: '复制',
     createLink: '生成链接',
     download: '下载',
     errorMsg: '请求出错，稍后重试！',
-    success: '成功',
-    link: '链接',
-    markdown: 'Markdown',
-    copy: '复制',
     fileSaver: '文件存储',
+    gradient: '渐变底色',
+    icon: '图标',
+    leftText: '左边文字',
+    link: '链接',
     linkConvertor: '链接转换',
+    markdown: 'Markdown',
+    preview: '预览',
+    result: '结果',
+    rightText: '右边文字',
+    roundedAngle: '使用圆角',
+    select: '请选择',
+    success: '成功',
+    textShadow: '文字阴影',
+    title: '在生成NPM徽标链接',
   },
 }[lang];
 
@@ -247,7 +245,7 @@ export default {
       link.href = `data:image/svg+xml;charset=utf-8,${dataUrl}`;
       link.click();
     },
-    async copyLink() {
+    async createLink() {
       try {
         this.loading = true;
         const {
@@ -297,13 +295,16 @@ export default {
 </script>
 
 <style lang="stylus">
+$main = #C43030
+$font = "Source Sans Pro", "Helvetica Neue", Arial, sans-serif
+
 html
 body
   padding 0
   margin 0
 
 #app
-  font-family "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+  font-family $font
   color #2c3e50
   width 100vw
   max-width 500px
@@ -315,17 +316,22 @@ body
   flex-direction column
   justify-content flex-start
   align-items center
-  border 10px solid #C43030
+  border 10px solid $main
   border-radius 38px
-  // background #C43030
   overflow hidden
+  padding-bottom 20px
 
 input:focus
-  border-color #C43030!important
+  border-color $main!important
+
+.el-select-dropdown__item
+  font-family $font
+  &.selected
+    color $main
 
 header
   padding 4px 40px 12px 40px
-  background #C43030
+  background $main
   color white
   line-height 1
   text-align center
@@ -338,7 +344,7 @@ header
   width 10px
   height 10px
   top 0
-  background #C43030
+  background $main
   &:after
     display block
     content ' '
@@ -420,12 +426,13 @@ main
 .download
   min-width 120px
   &:hover
-    border-color #C43030
-    color #C43030
+    border-color $main
+    color $main
     background #F3D6D6
 
-
-// footer
+footer
+  img
+    width 30px
 //   margin-top -5px
 //   box-sizing border-box
 //   width 100%
@@ -434,12 +441,12 @@ main
 //   padding 10px 10px 10px
 //   display flex
 //   flex-wrap wrap
-//   color #C43030
+//   color $main
 //   font-size 13px
 //   > div
 //     flex 1
 //     padding 5px 0
 //     white-space nowrap
 //   a
-//     color #C43030
+//     color $main
 </style>
