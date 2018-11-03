@@ -1,8 +1,28 @@
-# npmer
+# npm/github徽章Badage
 
-![Protect](https://woolson.gitee.io/npmer-badge/lightgreen-square-gradient-shadow-Protect-the%20earth-earth.svg)
+![Protect](https://woolson.gitee.io/npmer-badge/lightgreen-square-gradient-shadow-Protect-the%20earth-earth.svg) ![lpl-ig](https://woolson.gitee.io/npmer-badge/LPL-IG-555555-%E7%89%9B%E9%80%BC%F0%9F%90%82%F0%9F%8D%BA%F0%9F%90%82%F0%9F%8D%BA-46BC99-heart-E05D44-square-gradient-shadow.svg)
 
 > 使用`svg`制作`npm`徽章, Make npm badge with svg
+
+## 特性 Features
+
+**已有特性:**
+
+- `svg`实现不失真
+- 支持下载徽章文件
+- 支持生成在线链接
+- 支持左右自定义背景颜色
+- 支持自定义图标
+- 支持自定义图标颜色
+
+**Supported Features:**
+
+- build with svg
+- download badge file locally
+- generate online link
+- customize left and right background color
+- customize icon
+- customize icon color
 
 ## TODO
 

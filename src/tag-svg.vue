@@ -11,14 +11,14 @@ svg(
   clipPath(v-if="roundedAngle" id="a")
     rect(:width="width" height="20" rx="3" fill="#fff")
   g(:clip-path="roundedAngle ? 'url(#a)' : ''")
-    path(fill="#555555" :d="leftPathD")
-    path(:fill="bgColor" :d="rightPathD")
+    path(:fill="leftBgColor" :d="leftPathD")
+    path(:fill="rightBgColor" :d="rightPathD")
     path(v-if="gradient" fill="url(#b)" :d="bgPathD")
   g
     path(
       id="icon"
       :d="iconPath"
-      fill="#FFFFFF"
+      :fill="iconColor"
       :style="iconStyle"
     )
   g(
@@ -49,7 +49,7 @@ svg(
 
 <script>
 export default {
-  name: 'TagSvg',
+  name: 'tag-svg',
 
   props: {
     leftText: String,
@@ -57,12 +57,14 @@ export default {
     leftColor: String,
     rightText: String,
     rightWidth: Number,
-    bgColor: String,
+    leftBgColor: String,
+    rightBgColor: String,
     roundedAngle: Boolean,
     gradient: Boolean,
     textShadow: Boolean,
     iconScale: Number,
     iconPath: String,
+    iconColor: String,
   },
 
   data: () => ({
@@ -72,9 +74,14 @@ export default {
   watch: {
     iconPath: {
       handler(newValue) {
-        this.iconWidth = newValue ? 15 : 0;
+        if (newValue) this.iconWidth = this.leftText ? 15 : 10;
+        else this.iconWidth = 0;
       },
       immediate: true,
+    },
+    leftText(newValue) {
+      if (this.iconWidth) this.iconWidth = newValue ? 15 : 10;
+      else this.iconWidth = 0;
     },
   },
 
