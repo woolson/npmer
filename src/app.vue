@@ -228,9 +228,9 @@ export default {
         } = this.options;
         const names = [
           leftText,
-          leftBgColor.replace('#', ''),
+          leftBgColor.replace('#', '').toLowerCase(),
           rightText,
-          rightBgColor.replace('#', ''),
+          rightBgColor.replace('#', '').toLowerCase(),
           rounded ? 'rounded' : 'square',
           gradient ? 'gradient' : 'flat',
           textShadow ? 'shadow' : 'plain',
@@ -240,7 +240,7 @@ export default {
         // leftText-leftColor-rightText-rightColor-iconName-iconColor-gradient-textShadow-rounded
         if (iconIndex) {
           const name = this.icons[iconIndex].name.toLowerCase();
-          names.splice(4, 0, name, iconColor.replace('#', ''));
+          names.splice(4, 0, name, iconColor.replace('#', '').toLowerCase());
         }
         // console.log('[name]', `${names.join('-')}.svg`)
         const response = await fetch('https://woolson.cn/npmer/api/fetch', {
