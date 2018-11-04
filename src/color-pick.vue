@@ -7,7 +7,10 @@ div.options__color
       :style="{background: color}"
       @click="$emit('input', color)"
     )
-  el-color-picker(@change="$emit('input', $event)")
+  el-color-picker(
+    @change="$emit('input', $event)"
+    :predefine="defaultColors"
+  )
 </template>
 
 <script>
@@ -19,6 +22,15 @@ export default {
     label: String,
     colors: Array,
   },
+
+  data: () => ({
+    defaultColors: [
+      '#9F9F9F',
+      '#666666',
+      '#FE7D37',
+      '#97CA00',
+    ],
+  }),
 };
 </script>
 

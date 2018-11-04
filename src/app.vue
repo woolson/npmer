@@ -138,18 +138,15 @@ export default {
       roundedAngle: true,
       textShadow: true,
       gradient: true,
-      leftText: 'build',
-      rightText: 'passing',
-      iconColor: '#FFFFFF',
+      leftText: 'welcome',
+      rightText: 'programmer',
+      iconIndex: 8,
+      iconColor: '#E05D44',
       leftBgColor: '#555555',
-      rightBgColor: '#555555',
+      rightBgColor: '#44CC11',
     },
     colors: [
-      '#666666',
-      '#9F9F9F',
       '#E05D44',
-      '#FE7D37',
-      '#97CA00',
       '#DFB317',
       '#44CC11',
       '#46BC99',
@@ -164,6 +161,13 @@ export default {
     iconScale: 0,
     loading: false,
   }),
+
+  mounted() {
+    setTimeout(() => {
+      this.$set(this.options, 'iconIndex', null);
+      this.$set(this.options, 'iconColor', '#FFFFFF');
+    }, 3000);
+  },
 
   watch: {
     'options.leftText': {
