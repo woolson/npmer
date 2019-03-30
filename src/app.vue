@@ -445,6 +445,7 @@ main
 .options__button
   text-align center
   display flex
+  padding 10px 0
   button
     flex 1
 
