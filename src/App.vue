@@ -1,8 +1,21 @@
 <template lang="pug">
 div(id="app")
   header {{TEXT.title}}
-    div.header__left
-    div.header__right
+  div.github-info
+    iframe(
+      src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer-page&type=star&count=true"
+      frameborder="0"
+      scrolling="0"
+      width="100px"
+      height="20px"
+    )
+    iframe(
+      src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer-page&type=fork&count=true"
+      frameborder="0"
+      scrolling="0"
+      width="100px"
+      height="20px"
+    )
   main
     section.preview
       div
@@ -31,17 +44,11 @@ div(id="app")
         :model="options"
         label-width="100px"
       )
-        el-form-item(:label="TEXT.leftText")
-          el-input(
-            v-model="options.leftText"
-            clearable
-          )
-        el-form-item(:label="TEXT.rightText")
-          el-input(
-            v-model="options.rightText"
-            clearable
-          )
-        el-form-item(:label="TEXT.icon")
+        div.options__row
+          span {{TEXT.icon}}
+          span {{TEXT.leftText}}
+          span {{TEXT.rightText}}
+        div.options__row.u-bb
           el-select(
             v-model="options.iconIndex"
             :placeholder="TEXT.select"
@@ -53,7 +60,37 @@ div(id="app")
               :label="item.name"
               :value="index"
             )
-        el-form-item(
+          el-input(
+            v-model="options.leftText"
+            clearable
+          )
+          el-input(
+            v-model="options.rightText"
+            clearable
+          )
+        div.options__row.u-bb
+          div.options__switch
+            label {{TEXT.roundedAngle}}
+            el-switch(
+              v-model="options.roundedAngle"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            )
+          div.options__switch
+            label {{TEXT.textShadow}}
+            el-switch(
+              v-model="options.textShadow"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            )
+          div.options__switch
+            label {{TEXT.gradient}}
+            el-switch(
+              v-model="options.gradient"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            )
+        el-form-item.u-bb(
           :label="TEXT.iconColor"
           v-show="options.iconPath"
         )
@@ -61,42 +98,24 @@ div(id="app")
             v-model="options.iconColor"
             :colors="['#FFFFFF', ...colors]"
           )
-        el-form-item.options__color(:label="TEXT.leftBgColor")
+        el-form-item.options__color.u-bb(:label="TEXT.leftBgColor")
           color-pick(
             v-model="options.leftBgColor"
             :colors="['#555555', ...colors]"
           )
-        el-form-item.options__color(:label="TEXT.rightBgColor")
+        el-form-item.options__color.u-bb(:label="TEXT.rightBgColor")
           color-pick(
             v-model="options.rightBgColor"
             :colors="['#555555', ...colors]"
           )
-        el-form-item(:label="TEXT.roundedAngle")
-          el-switch(
-            v-model="options.roundedAngle"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          )
-        el-form-item(:label="TEXT.textShadow")
-          el-switch(
-            v-model="options.textShadow"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          )
-        el-form-item(:label="TEXT.gradient")
-          el-switch(
-            v-model="options.gradient"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          )
-        el-form-item(:label="TEXT.link")
+        el-form-item.u-bb(:label="TEXT.link")
           el-input(v-model="link" readonly)
             template(slot="append")
               el-button(
                 v-clipboard="link"
                 @success="$notify.success({title: TEXT.copy + TEXT.success})"
               ) {{TEXT.copy}}
-        el-form-item(:label="TEXT.markdown")
+        el-form-item.u-bb(:label="TEXT.markdown")
           el-input(v-model="markdownLink" readonly)
             template(slot="append")
               el-button(
@@ -111,9 +130,6 @@ div(id="app")
             @click="createLink"
             :loading="loading"
           ) {{TEXT.createLink}}
-  footer
-    a(href="https://github.com/woolson/npmer-page" target="_blank")
-      img(src="../public/images/github.svg")
 </template>
 
 <script>
@@ -284,11 +300,33 @@ body
   padding 0
   margin 0
 
+.u-bb
+  position relative
+  &:after
+    bottom 0
+    content ' '
+    position absolute
+    left 0
+    width 100%
+    height 1px
+    z-index 0
+    transition all .2s
+    background #EFEFEF
+    transform scaleY(0.5)
+    transform-origin 50%100%
+
+.u-mb10
+  margin-bottom 10px !important
+
+.el-form-item
+  margin-bottom 0
+  padding 10px 0
+
 #app
   font-family $font
   color #2c3e50
   width 100vw
-  max-width 500px
+  max-width 600px
   min-width 300px
   min-height 100vh
   box-sizing border-box
@@ -297,10 +335,37 @@ body
   flex-direction column
   justify-content flex-start
   align-items center
-  border 10px solid $main
+  // border 10px solid $main
   border-radius 38px
-  overflow hidden
   padding-bottom 20px
+
+.options__row
+  padding 10px 0
+  display flex
+  span
+    flex 1
+    text-align center
+    font-size 14px
+  .el-select input
+    border-top-right-radius 0
+    border-bottom-right-radius 0
+  > .el-input
+    &:nth-child(2) > input
+      border-radius 0
+    &:last-child > input
+      border-top-left-radius 0
+      border-bottom-left-radius 0
+
+.options__switch
+  flex 1
+  display flex
+  align-items center
+  justify-content space-between
+  padding 10px
+  label
+    font-size 14px
+  > div
+    margin-right 15px
 
 input:focus
   border-color $main!important
@@ -311,31 +376,19 @@ input:focus
     color $main
 
 header
-  padding 4px 40px 12px 40px
+  margin-top 20px
+  padding 15px 40px
   background $main
   color white
   line-height 1
   text-align center
-  border-radius 0 0 18px 18px
+  border-radius 5px
   position relative
+  font-size 20px
 
-.header__left
-.header__right
-  position absolute
-  width 10px
-  height 10px
-  top 0
-  background $main
-  &:after
-    display block
-    content ' '
-    height 10px
-    width 10px
-    border-radius 0 6px 0 0
-    background white
-.header__left
-  margin-left -10px
-  left 0
+.github-info
+  margin-top 20px
+  display flex
 
 .header__right
   margin-right -10px
@@ -350,12 +403,17 @@ main
   background white
   border-radius 20px
   > section
-    padding 20px
+    background #F8F8FA
+    padding 10px 20px
+    border-radius 10px
+    margin-top 20px
+    // box-shadow 0 0 15px rgba(black, .1)
 
 .preview
-  display flex
+  padding 20px 0
   label
-    margin-bottom 10px
+    margin-bottom 15px
+    font-size 20px
   > div
     display flex
     flex-direction column
@@ -363,6 +421,8 @@ main
     align-items center
     flex 1
     text-align center
+    svg
+      transform scale(1.1)
 
 .tag
   display flex
