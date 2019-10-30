@@ -36,22 +36,26 @@ svg(
     font-size="12"
   )
     text(
-      :x="leftWidth / 2 + (leftIcon ? iconWidth : 0)" y="15"
+      :x="leftWidth / 2 + (leftIcon ? iconWidth : 0)"
+      y="15"
       v-if="textShadow"
       fill="#010101"
       fill-opacity=".3"
     ) {{leftText}}
     text(
-      :x="leftWidth / 2 + (leftIcon ? iconWidth : 0)" y="15"
+      :x="leftWidth / 2 + (leftIcon ? iconWidth : 0)"
+      y="14"
     ) {{leftText}}
     text(
-      :x="leftWidth + rightWidth / 2 + iconWidth" y="15"
+      :x="+leftWidth + rightWidth / 2 + iconWidth"
+      y="15"
       v-if="textShadow"
       fill="#010101"
       fill-opacity=".3"
     ) {{rightText}}
     text(
-      :x="leftWidth + rightWidth / 2 + iconWidth" y="14"
+      :x="+leftWidth + rightWidth / 2 + iconWidth"
+      y="14"
     ) {{rightText}}
 </template>
 
@@ -115,13 +119,13 @@ export default {
     iconStyle() {
       return {
         transform: `scale(${this.iconScale})`,
-        transformOrigin: `${this.iconX + (this.leftIcon ? 0 : this.leftWidth)}px ${this.iconY}px 0px`,
+        transformOrigin: `${+this.iconX + (this.leftIcon ? 0 : this.leftWidth)}px ${this.iconY}px 0px`,
       };
     },
     iconShadowStyle() {
       return {
         transform: `scale(${this.iconScale})`,
-        transformOrigin: `${this.iconX + (this.leftIcon ? 0 : this.leftWidth)}px ${this.iconY + 1}px 0px`,
+        transformOrigin: `${+this.iconX + (this.leftIcon ? 0 : this.leftWidth)}px ${+this.iconY + 1}px 0px`,
       };
     },
   },
