@@ -1,4 +1,4 @@
-# npm/github徽章Badage
+# NPM/GitHub Badge徽章
 
 ![Protect](https://woolson.gitee.io/npmer-badge/lightgreen-square-gradient-shadow-Protect-the%20earth-earth.svg) ![lpl-ig](https://woolson.gitee.io/npmer-badge/LPL-IG-555555-%E7%89%9B%E9%80%BC%F0%9F%90%82%F0%9F%8D%BA%F0%9F%90%82%F0%9F%8D%BA-46BC99-heart-E05D44-square-gradient-shadow.svg)
 
@@ -6,41 +6,22 @@
 
 ## 特性 Features
 
-**已有特性:**
-
-- `svg`实现不失真
-- 支持下载徽章文件
-- 支持生成在线链接
-- 支持左右自定义背景颜色
-- 支持自定义图标
-- 支持自定义图标颜色
-
-**Supported Features:**
-
-- build with svg
-- download badge file locally
-- generate online link
-- customize left and right background color
-- customize icon
-- customize icon color
+- Build with svg `svg`实现不失真
+- Download badge file locally 支持下载徽章文件
+- Generate online link 支持生成在线链接
+- Customize left and right background color 支持左右自定义背景颜色
+- Customize icon 支持自定义图标
+- Customize icon color 支持自定义图标颜色
 
 ## TODO
 
-**将要添加的新特性：**
+**New Feature 新特性**
 
-- 支持添加icon <span style="color:green">完成</span> **图标目前有限**
-- 更多样式（无渐变）<span style="color:green">完成</span>
-- 用设置项为图标命名 <span style="color:green">完成</span>
+- Support add icon 支持添加icon <span style="color:green">完成</span>
+- More style 更多样式（无渐变）<span style="color:green">完成</span>
+- Named with options 使用选项命名文件 <span style="color:green">完成</span>
 - <del>github仓库存储</del>改用[gitee](https://gitee.com/)
-- 自定义图标
-
-**New Feature:**
-
-- support add icon before left text <span style="color:green">done</span> **limited number**
-- more style. <span style="color:green">done</span>
-- named with options. <span style="color:green">done</span>
-- <del>github for store svg files.</del> change to => [gitee](https://gitee.com/)
-- customize icon
+- Customize icon 自定义图标 <span style="color:green">完成</span>
 
 ## 开发
 
