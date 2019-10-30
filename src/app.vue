@@ -64,29 +64,27 @@ div(id="app")
           :label="TEXT.iconPath"
         )
           el-input(v-model="options.iconPath" clearable)
-        div.options__row.u-bb(
-          v-show="options.iconIndex === 13"
-        )
-          el-form-item.u-bb(:label="TEXT.iconScale")
+        div.options__row.u-bb
+          el-form-item(:label="TEXT.iconScale")
             el-input(
               v-model="options.iconScale"
               type="number"
               step="0.001"
               min="0"
             )
-          el-form-item.u-bb(:label="TEXT.iconPosition")
-            el-radio-group(v-model="options.iconPosition")
+          el-form-item(:label="TEXT.iconPosition")
+            el-radio-group(v-model="options.iconPosition" fill="#C43030")
               el-radio-button(label="left") {{TEXT.left}}
               el-radio-button(label="right") {{TEXT.right}}
-        div.options__row.u-bb(v-show="options.iconIndex === 13")
-          el-form-item.u-bb(:label="TEXT.iconXOffset")
+        div.options__row.u-bb
+          el-form-item(:label="TEXT.iconXOffset")
             el-input(
               v-model="options.iconX"
               type="number"
               step="1"
               min="0"
             )
-          el-form-item.u-bb(:label="TEXT.iconYOffset")
+          el-form-item(:label="TEXT.iconYOffset")
             el-input(
               v-model="options.iconY"
               type="number"
@@ -365,8 +363,14 @@ body
   margin-bottom 10px !important
 
 .el-form-item
-  margin-bottom 0
+  margin-bottom 0 !important
   padding 10px 0
+
+.el-radio-button__inner:hover
+  color $main
+
+.options__row > .el-form-item
+  padding 0 !important
 
 #app
   font-family $font

@@ -16,6 +16,14 @@ svg(
     path(v-if="gradient" fill="url(#b)" :d="bgPathD")
   g
     path(
+      v-if="textShadow"
+      id="icon"
+      :d="iconPath"
+      fill="#010101"
+      fill-opacity=".3"
+      :style="iconShadowStyle"
+    )
+    path(
       id="icon"
       :d="iconPath"
       :fill="iconColor"
@@ -28,13 +36,13 @@ svg(
     font-size="12"
   )
     text(
-      :x="leftWidth / 2 + iconWidth" y="15"
+      :x="leftWidth / 2 + (leftIcon ? iconWidth : 0)" y="15"
       v-if="textShadow"
       fill="#010101"
       fill-opacity=".3"
     ) {{leftText}}
     text(
-      :x="leftWidth / 2 + iconWidth" y="14"
+      :x="leftWidth / 2 + (leftIcon ? iconWidth : 0)" y="15"
     ) {{leftText}}
     text(
       :x="leftWidth + rightWidth / 2 + iconWidth" y="15"
@@ -62,11 +70,12 @@ export default {
     roundedAngle: Boolean,
     gradient: Boolean,
     textShadow: Boolean,
-    iconScale: Number,
+    iconScale: [Number, String],
     iconPath: String,
     iconColor: String,
-    iconX: Number,
-    iconY: Number,
+    iconPosition: String,
+    iconX: [Number, String],
+    iconY: [Number, String],
   },
 
   data: () => ({
@@ -88,11 +97,14 @@ export default {
   },
 
   computed: {
+    leftIcon() {
+      return this.iconPosition === 'left';
+    },
     leftPathD() {
-      return `M0 0h${this.leftWidth + this.iconWidth}v20H0z`;
+      return `M0 0h${this.leftWidth + (this.leftIcon ? this.iconWidth : 0)}v20H0z`;
     },
     rightPathD() {
-      return `M${this.leftWidth + this.iconWidth} 0h${this.rightWidth}v20H${this.leftWidth + this.iconWidth}z`;
+      return `M${this.leftWidth + (this.leftIcon ? this.iconWidth : 0)} 0h${this.rightWidth + (this.leftIcon ? 0 : this.iconWidth)}v20H${this.leftWidth + (this.leftIcon ? this.iconWidth : 0)}z`;
     },
     bgPathD() {
       return `M0 0h${this.width}v20H0z`;
@@ -103,7 +115,13 @@ export default {
     iconStyle() {
       return {
         transform: `scale(${this.iconScale})`,
-        transformOrigin: `${this.iconX}px ${this.iconY}px 0px`,
+        transformOrigin: `${this.iconX + (this.leftIcon ? 0 : this.leftWidth)}px ${this.iconY}px 0px`,
+      };
+    },
+    iconShadowStyle() {
+      return {
+        transform: `scale(${this.iconScale})`,
+        transformOrigin: `${this.iconX + (this.leftIcon ? 0 : this.leftWidth)}px ${this.iconY + 1}px 0px`,
       };
     },
   },

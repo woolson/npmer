@@ -35,6 +35,7 @@ Vue.component(RadioGroup.name, RadioGroup);
 Vue.use(Clipboards);
 
 Vue.prototype.$notify = Notification;
+Vue.prototype.$ELEMENT = { size: 'medium' };
 
 new Vue({
   render: h => h(App),
