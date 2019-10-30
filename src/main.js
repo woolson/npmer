@@ -9,6 +9,10 @@ import {
   Option,
   Select,
   Switch,
+  Dialog,
+  Radio,
+  RadioGroup,
+  RadioButton,
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import Clipboards from 'vue-clipboards';
@@ -24,6 +28,10 @@ Vue.component(Notification.name, Notification);
 Vue.component(Option.name, Option);
 Vue.component(Select.name, Select);
 Vue.component(Switch.name, Switch);
+Vue.component(Dialog.name, Dialog);
+Vue.component(Radio.name, Radio);
+Vue.component(RadioButton.name, RadioButton);
+Vue.component(RadioGroup.name, RadioGroup);
 Vue.use(Clipboards);
 
 Vue.prototype.$notify = Notification;

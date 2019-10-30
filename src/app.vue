@@ -22,18 +22,9 @@ div(id="app")
         label {{TEXT.preview}}
         tag-svg(
           ref="content"
-          :gradient="options.gradient"
-          :roundedAngle="options.roundedAngle"
-          :textShadow="options.textShadow"
-          :iconPath="options.iconPath"
-          :iconScale="options.iconScale"
-          :iconColor="options.iconColor"
-          :leftText="options.leftText"
-          :rightText="options.rightText"
+          v-bind="options"
           :leftWidth="leftWidth"
           :rightWidth="rightWidth"
-          :leftBgColor="options.leftBgColor"
-          :rightBgColor="options.rightBgColor"
         )
         div.tag
           div.tag__left {{options.leftText}}
@@ -68,6 +59,40 @@ div(id="app")
             v-model="options.rightText"
             clearable
           )
+        el-form-item.u-bb(
+          v-show="options.iconIndex === 13"
+          :label="TEXT.iconPath"
+        )
+          el-input(v-model="options.iconPath" clearable)
+        div.options__row.u-bb(
+          v-show="options.iconIndex === 13"
+        )
+          el-form-item.u-bb(:label="TEXT.iconScale")
+            el-input(
+              v-model="options.iconScale"
+              type="number"
+              step="0.001"
+              min="0"
+            )
+          el-form-item.u-bb(:label="TEXT.iconPosition")
+            el-radio-group(v-model="options.iconPosition")
+              el-radio-button(label="left") {{TEXT.left}}
+              el-radio-button(label="right") {{TEXT.right}}
+        div.options__row.u-bb(v-show="options.iconIndex === 13")
+          el-form-item.u-bb(:label="TEXT.iconXOffset")
+            el-input(
+              v-model="options.iconX"
+              type="number"
+              step="1"
+              min="0"
+            )
+          el-form-item.u-bb(:label="TEXT.iconYOffset")
+            el-input(
+              v-model="options.iconY"
+              type="number"
+              step="1"
+              min="0"
+            )
         div.options__row.u-bb
           div.options__switch
             label {{TEXT.roundedAngle}}
@@ -92,8 +117,7 @@ div(id="app")
             )
         el-form-item.u-bb(
           :label="TEXT.iconColor"
-          v-show="options.iconPath"
-        )
+          v-show="options.iconPath")
           color-pick(
             v-model="options.iconColor"
             :colors="['#FFFFFF', ...colors]"
@@ -149,17 +173,20 @@ export default {
 
   data: () => ({
     TEXT: Text,
-    icons: Icons,
+    icons: [...Icons, { name: 'Custom' }],
     options: {
       roundedAngle: true,
       textShadow: true,
       gradient: true,
       leftText: 'welcome',
       rightText: 'programmer',
-      iconIndex: 8,
+      iconIndex: 13,
       iconColor: '#E05D44',
       leftBgColor: '#555555',
       rightBgColor: '#44CC11',
+      iconPosition: 'left',
+      iconY: 3,
+      iconX: 5,
     },
     colors: [
       '#E05D44',
@@ -176,13 +203,16 @@ export default {
     iconPath: '',
     iconScale: 0,
     loading: false,
+    customPath: '',
+    showCustom: false,
+    customScale: 0.13,
   }),
 
   mounted() {
-    setTimeout(() => {
-      this.$set(this.options, 'iconIndex', null);
-      this.$set(this.options, 'iconColor', '#FFFFFF');
-    }, 3000);
+    // setTimeout(() => {
+    //   this.$set(this.options, 'iconIndex', null);
+    //   this.$set(this.options, 'iconColor', '#FFFFFF');
+    // }, 3000);
   },
 
   watch: {
@@ -209,9 +239,15 @@ export default {
         const {
           scale,
           path,
+          name,
         } = this.icons[newValue] || {};
-        this.$set(this.options, 'iconPath', path || '');
-        this.$set(this.options, 'iconScale', scale || 0);
+
+        if (name === 'Custom') {
+          this.$set(this.options, 'iconScale', 0.013);
+        } else {
+          this.$set(this.options, 'iconPath', path || '');
+          this.$set(this.options, 'iconScale', scale || 0);
+        }
       },
       immediate: true,
     },
@@ -231,6 +267,11 @@ export default {
       link.download = 'npm-logo.svg';
       link.href = `data:image/svg+xml;charset=utf-8,${dataUrl}`;
       link.click();
+    },
+    onCustom() {
+      this.$set(this.options, 'iconPath', this.customPath || '');
+      this.$set(this.options, 'iconScale', this.customScale / 10 || 0);
+      this.showCustom = false;
     },
     async createLink() {
       try {
@@ -259,7 +300,12 @@ export default {
         // 左文字-左底色-右文字-右底色-图标名称-图标颜色-是否渐变-是否文字阴影-是否圆角
         // leftText-leftColor-rightText-rightColor-iconName-iconColor-gradient-textShadow-rounded
         if (iconIndex) {
-          const name = this.icons[iconIndex].name.toLowerCase();
+          let name = '';
+          if (iconIndex === 13) {
+            name = `custom${Date.now()}`;
+          } else {
+            name = this.icons[iconIndex].name.toLowerCase();
+          }
           names.splice(4, 0, name, iconColor.replace('#', '').toLowerCase());
         }
         // console.log('[name]', `${names.join('-')}.svg`)

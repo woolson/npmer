@@ -65,6 +65,8 @@ export default {
     iconScale: Number,
     iconPath: String,
     iconColor: String,
+    iconX: Number,
+    iconY: Number,
   },
 
   data: () => ({
@@ -101,7 +103,7 @@ export default {
     iconStyle() {
       return {
         transform: `scale(${this.iconScale})`,
-        transformOrigin: '5px 3px 0px',
+        transformOrigin: `${this.iconX}px ${this.iconY}px 0px`,
       };
     },
   },
