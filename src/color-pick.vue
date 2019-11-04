@@ -36,8 +36,10 @@ export default {
 
 <style lang="stylus" scoped>
 .options__color
+  flex 1
   display flex
   align-items center
+  justify-content space-between
   >>> .el-form-item__content
     display flex
     align-items center

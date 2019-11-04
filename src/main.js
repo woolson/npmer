@@ -13,6 +13,7 @@ import {
   Radio,
   RadioGroup,
   RadioButton,
+  Popover,
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import Clipboards from 'vue-clipboards';
@@ -32,6 +33,7 @@ Vue.component(Dialog.name, Dialog);
 Vue.component(Radio.name, Radio);
 Vue.component(RadioButton.name, RadioButton);
 Vue.component(RadioGroup.name, RadioGroup);
+Vue.component(Popover.name, Popover);
 Vue.use(Clipboards);
 
 Vue.prototype.$notify = Notification;

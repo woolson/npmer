@@ -24,6 +24,7 @@ svg(
       :style="iconShadowStyle"
     )
     path(
+      ref="icon"
       id="icon"
       :d="iconPath"
       :fill="iconColor"
@@ -91,6 +92,10 @@ export default {
       handler(newValue) {
         if (newValue) this.iconWidth = this.leftText ? 15 : 10;
         else this.iconWidth = 0;
+        this.$nextTick(() => {
+          const { height } = this.$refs.icon.getBBox();
+          this.$emit('update:iconScale', +(13 / height) || 1);
+        });
       },
       immediate: true,
     },

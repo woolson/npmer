@@ -32,6 +32,8 @@ export default {
     submit: 'Submit',
     left: 'Left',
     right: 'Right',
+    help: 'Help',
+    helpIconPath: 'Paste attribute [d] of tag [path], you can find it in element svg.',
   },
   zh: {
     leftBgColor: '左背景色',
@@ -64,5 +66,7 @@ export default {
     submit: '确定',
     left: '左',
     right: '右',
+    help: '帮助',
+    helpIconPath: '可以粘贴svg元素中的【path】标签的【d】属性值。',
   },
 }[lang];

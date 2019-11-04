@@ -23,8 +23,7 @@ div(id="app")
         tag-svg(
           ref="content"
           v-bind="options"
-          :leftWidth="leftWidth"
-          :rightWidth="rightWidth"
+          :iconScale.sync="options.iconScale"
         )
         div.tag
           div.tag__left {{options.leftText}}
@@ -59,18 +58,26 @@ div(id="app")
             v-model="options.rightText"
             clearable
           )
-        el-form-item.u-bb(
-          v-show="options.iconIndex === 13"
+        el-form-item.u-bb.u-flex(
+          v-show="options.iconIndex === 0"
           :label="TEXT.iconPath"
         )
           el-input(v-model="options.iconPath" clearable)
+            el-popover(
+              slot="append"
+              placement="bottom-end"
+              :title="TEXT.help"
+              width="200"
+              trigger="hover"
+              :content="TEXT.helpIconPath"
+            )
+              i.el-icon-question(slot="reference")
         div.options__row.u-bb
           el-form-item(:label="TEXT.iconScale")
             el-input(
               v-model="options.iconScale"
               type="number"
               step="0.001"
-              min="0"
             )
           el-form-item(:label="TEXT.iconPosition")
             el-radio-group(v-model="options.iconPosition" fill="#C43030")
@@ -82,14 +89,12 @@ div(id="app")
               v-model="options.iconX"
               type="number"
               step="1"
-              min="0"
             )
           el-form-item(:label="TEXT.iconYOffset")
             el-input(
               v-model="options.iconY"
               type="number"
               step="1"
-              min="0"
             )
         div.options__row.u-bb
           div.options__switch
@@ -171,20 +176,22 @@ export default {
 
   data: () => ({
     TEXT: Text,
-    icons: [...Icons, { name: 'Custom' }],
+    icons: [{ name: 'Custom' }, ...Icons],
     options: {
-      roundedAngle: true,
-      textShadow: true,
-      gradient: true,
+      roundedAngle: false,
+      textShadow: false,
+      gradient: false,
       leftText: 'welcome',
       rightText: 'programmer',
-      iconIndex: 13,
-      iconColor: '#E05D44',
+      iconIndex: 0,
+      iconColor: '#FFFFFF',
       leftBgColor: '#555555',
       rightBgColor: '#44CC11',
       iconPosition: 'left',
       iconY: 3,
       iconX: 5,
+      leftWidth: 0,
+      rightWidth: 0,
     },
     colors: [
       '#E05D44',
@@ -196,29 +203,17 @@ export default {
     ],
     link: '',
     markdownLink: '',
-    leftWidth: 0,
-    rightWidth: 0,
-    iconPath: '',
-    iconScale: 0,
     loading: false,
     customPath: '',
-    showCustom: false,
     customScale: 0.13,
   }),
-
-  mounted() {
-    // setTimeout(() => {
-    //   this.$set(this.options, 'iconIndex', null);
-    //   this.$set(this.options, 'iconColor', '#FFFFFF');
-    // }, 3000);
-  },
 
   watch: {
     'options.leftText': {
       handler() {
         this.$nextTick(() => {
-          const $leftText = document.querySelector('.tag__left');
-          this.leftWidth = $leftText.offsetWidth;
+          const { offsetWidth } = document.querySelector('.tag__left');
+          this.$set(this.options, 'leftWidth', offsetWidth);
         });
       },
       immediate: true,
@@ -226,8 +221,8 @@ export default {
     'options.rightText': {
       handler() {
         this.$nextTick(() => {
-          const $rightWidth = document.querySelector('.tag__right');
-          this.rightWidth = $rightWidth.offsetWidth;
+          const { offsetWidth } = document.querySelector('.tag__right');
+          this.$set(this.options, 'rightWidth', offsetWidth);
         });
       },
       immediate: true,
@@ -241,7 +236,8 @@ export default {
         } = this.icons[newValue] || {};
 
         if (name === 'Custom') {
-          this.$set(this.options, 'iconScale', 0.013);
+          this.$set(this.options, 'iconPath', '');
+          this.$set(this.options, 'iconScale', 1);
         } else {
           this.$set(this.options, 'iconPath', path || '');
           this.$set(this.options, 'iconScale', scale || 0);
@@ -266,11 +262,6 @@ export default {
       link.href = `data:image/svg+xml;charset=utf-8,${dataUrl}`;
       link.click();
     },
-    onCustom() {
-      this.$set(this.options, 'iconPath', this.customPath || '');
-      this.$set(this.options, 'iconScale', this.customScale / 10 || 0);
-      this.showCustom = false;
-    },
     async createLink() {
       try {
         this.loading = true;
@@ -284,6 +275,8 @@ export default {
           rounded,
           iconIndex,
           iconColor,
+          iconPath,
+          iconPosition,
         } = this.options;
         const names = [
           leftText,
@@ -296,15 +289,16 @@ export default {
         ];
         // 名称格式
         // 左文字-左底色-右文字-右底色-图标名称-图标颜色-是否渐变-是否文字阴影-是否圆角
-        // leftText-leftColor-rightText-rightColor-iconName-iconColor-gradient-textShadow-rounded
-        if (iconIndex) {
+        // eslint-disable-next-line
+        // leftText-leftColor-rightText-rightColor-iconName-iconColor-iconPosition-rounded-gradient-textShadow
+        if (iconIndex !== '' && iconPath !== '') {
           let name = '';
-          if (iconIndex === 13) {
+          if (iconIndex === 0) {
             name = `custom${Date.now()}`;
           } else {
             name = this.icons[iconIndex].name.toLowerCase();
           }
-          names.splice(4, 0, name, iconColor.replace('#', '').toLowerCase());
+          names.splice(4, 0, name, iconColor.replace('#', '').toLowerCase(), iconPosition);
         }
         // console.log('[name]', `${names.join('-')}.svg`)
         const response = await fetch('https://woolson.cn/npmer/api/fetch', {
@@ -365,6 +359,9 @@ body
 .el-form-item
   margin-bottom 0 !important
   padding 10px 0
+
+.el-form-item__content
+  display flex
 
 .el-radio-button__inner:hover
   color $main
