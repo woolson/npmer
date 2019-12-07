@@ -7,9 +7,12 @@ div.options__color
       :style="{background: color}"
       @click="$emit('input', color)"
     )
+  span •••
   el-color-picker(
+    :value="value"
     @change="$emit('input', $event)"
     :predefine="defaultColors"
+    size="mini"
   )
 </template>
 
@@ -39,14 +42,19 @@ export default {
   flex 1
   display flex
   align-items center
-  justify-content space-between
+  justify-content flex-start
   >>> .el-form-item__content
     display flex
     align-items center
     margin-left 0 !important
   >>> .el-color-picker
     height auto
-    margin-left auto
+    margin-right auto
+    height 24px
+  >>> .el-color-picker__trigger
+    padding 0
+    width 24px
+    height 24px
 
 .options__color ul
   // box-shadow 0 0 1px rgba(black, 0.15)

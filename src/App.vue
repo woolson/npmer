@@ -125,16 +125,28 @@ div(id="app")
             v-model="options.iconColor"
             :colors="['#FFFFFF', ...colors]"
           )
-        el-form-item.options__color.u-bb(:label="TEXT.leftBgColor")
-          color-pick(
-            v-model="options.leftBgColor"
-            :colors="['#555555', ...colors]"
-          )
-        el-form-item.options__color.u-bb(:label="TEXT.rightBgColor")
-          color-pick(
-            v-model="options.rightBgColor"
-            :colors="['#555555', ...colors]"
-          )
+        div.options__row.u-bb
+          el-form-item.options__color(:label="TEXT.leftTextColor")
+            color-pick(
+              v-model="options.leftTextColor"
+              :colors="['#FFFFFF', '#444']"
+            )
+          el-form-item.options__color(:label="TEXT.leftBgColor")
+            color-pick(
+              v-model="options.leftBgColor"
+              :colors="['#555555', ...colors]"
+            )
+        div.options__row.u-bb
+          el-form-item.options__color(:label="TEXT.rightTextColor")
+            color-pick(
+              v-model="options.rightTextColor"
+              :colors="['#FFFFFF', '#444']"
+            )
+          el-form-item.options__color(:label="TEXT.rightBgColor")
+            color-pick(
+              v-model="options.rightBgColor"
+              :colors="['#555555', ...colors]"
+            )
         el-form-item.u-bb(:label="TEXT.link")
           el-input(v-model="link" readonly)
             template(slot="append")
@@ -182,16 +194,18 @@ export default {
       textShadow: false,
       gradient: false,
       leftText: 'welcome',
+      leftTextColor: '#FFFFFF',
+      leftWidth: 0,
+      leftBgColor: '#555555',
       rightText: 'programmer',
+      rightTextColor: '#FFFFFF',
+      rightWidth: 0,
+      rightBgColor: '#44CC11',
       iconIndex: 0,
       iconColor: '#FFFFFF',
-      leftBgColor: '#555555',
-      rightBgColor: '#44CC11',
       iconPosition: 'left',
       iconY: 3,
       iconX: 5,
-      leftWidth: 0,
-      rightWidth: 0,
     },
     colors: [
       '#E05D44',
@@ -212,17 +226,21 @@ export default {
     'options.leftText': {
       handler() {
         this.$nextTick(() => {
-          const { offsetWidth } = document.querySelector('.tag__left');
+          let { offsetWidth } = document.querySelector('.tag__left');
+          if (this.options.leftText === '') {
+            offsetWidth = 0;
+          }
           this.$set(this.options, 'leftWidth', offsetWidth);
         });
       },
       immediate: true,
     },
+    'options.iconPosition': 'updateRightWidth',
+    'options.iconPath': 'updateRightWidth',
     'options.rightText': {
       handler() {
         this.$nextTick(() => {
-          const { offsetWidth } = document.querySelector('.tag__right');
-          this.$set(this.options, 'rightWidth', offsetWidth);
+          this.updateRightWidth();
         });
       },
       immediate: true,
@@ -255,6 +273,18 @@ export default {
   },
 
   methods: {
+    updateRightWidth() {
+      const { rightText, iconPath, iconPosition } = this.options;
+      let { offsetWidth } = document.querySelector('.tag__right');
+      if (rightText === '') {
+        offsetWidth = 0;
+        if (iconPosition === 'right' && iconPath !== '') {
+          offsetWidth = 7;
+        }
+      }
+
+      this.$set(this.options, 'rightWidth', offsetWidth);
+    },
     async downloadImg() {
       const dataUrl = this.$refs.content.$el.outerHTML;
       const link = document.createElement('a');
@@ -267,8 +297,10 @@ export default {
         this.loading = true;
         const {
           leftText,
+          leftTextColor,
           leftBgColor,
           rightText,
+          rightTextColor,
           rightBgColor,
           gradient,
           textShadow,
@@ -280,15 +312,17 @@ export default {
         } = this.options;
         const names = [
           leftText,
+          leftTextColor.replace('#', '').toLowerCase(),
           leftBgColor.replace('#', '').toLowerCase(),
           rightText,
+          rightTextColor.replace('#', '').toLowerCase(),
           rightBgColor.replace('#', '').toLowerCase(),
           rounded ? 'rounded' : 'square',
           gradient ? 'gradient' : 'flat',
           textShadow ? 'shadow' : 'plain',
         ];
         // 名称格式
-        // 左文字-左底色-右文字-右底色-图标名称-图标颜色-是否渐变-是否文字阴影-是否圆角
+        // 左文字-左文字色-左底色-右文字-右文字色-右底色-图标名称-图标颜色-是否渐变-是否文字阴影-是否圆角
         // eslint-disable-next-line
         // leftText-leftColor-rightText-rightColor-iconName-iconColor-iconPosition-rounded-gradient-textShadow
         if (iconIndex !== '' && iconPath !== '') {
@@ -356,6 +390,9 @@ body
 .u-mb10
   margin-bottom 10px !important
 
+.u-mr10
+  margin-right 10px !important
+
 .el-form-item
   margin-bottom 0 !important
   padding 10px 0
@@ -373,7 +410,7 @@ body
   font-family $font
   color #2c3e50
   width 100vw
-  max-width 600px
+  max-width 620px
   min-width 300px
   min-height 100vh
   box-sizing border-box
@@ -389,7 +426,7 @@ body
 .options__row
   padding 10px 0
   display flex
-  span
+  > span
     flex 1
     text-align center
     font-size 14px
@@ -402,15 +439,21 @@ body
     &:last-child > input
       border-top-left-radius 0
       border-bottom-left-radius 0
+  .el-form-item
+    flex 1
+
+.options__color
+  flex 1
 
 .options__switch
   flex 1
   display flex
   align-items center
-  justify-content space-between
+  // justify-content space-between
   padding 10px
   label
     font-size 14px
+    margin-right 10px
   > div
     margin-right 15px
 

@@ -45,6 +45,7 @@ svg(
     ) {{leftText}}
     text(
       :x="leftWidth / 2 + (leftIcon ? iconWidth : 0)"
+      :fill="leftTextColor"
       y="14"
     ) {{leftText}}
     text(
@@ -56,6 +57,7 @@ svg(
     ) {{rightText}}
     text(
       :x="+leftWidth + rightWidth / 2 + iconWidth"
+      :fill="rightTextColor"
       y="14"
     ) {{rightText}}
 </template>
@@ -66,11 +68,12 @@ export default {
 
   props: {
     leftText: String,
+    leftTextColor: String,
     leftWidth: Number,
-    leftColor: String,
-    rightText: String,
-    rightWidth: Number,
     leftBgColor: String,
+    rightText: String,
+    rightTextColor: String,
+    rightWidth: Number,
     rightBgColor: String,
     roundedAngle: Boolean,
     gradient: Boolean,
@@ -113,7 +116,9 @@ export default {
       return `M0 0h${this.leftWidth + (this.leftIcon ? this.iconWidth : 0)}v20H0z`;
     },
     rightPathD() {
-      return `M${this.leftWidth + (this.leftIcon ? this.iconWidth : 0)} 0h${this.rightWidth + (this.leftIcon ? 0 : this.iconWidth)}v20H${this.leftWidth + (this.leftIcon ? this.iconWidth : 0)}z`;
+      const leftPosition = this.leftWidth + (this.leftIcon ? this.iconWidth : 0);
+      const rightPosition = this.rightWidth + (this.leftIcon ? 0 : this.iconWidth);
+      return `M${leftPosition} 0h${rightPosition}v20H${leftPosition}z`;
     },
     bgPathD() {
       return `M0 0h${this.width}v20H0z`;
