@@ -6,10 +6,12 @@ div.body
 
 <script>
 import NpmerHead from '~/components/npmer-head.vue'
+import NpmerFoot from '~/components/npmer-foot.vue'
 
 export default {
   components: {
-    NpmerHead
+    NpmerHead,
+    NpmerFoot
   }
 }
 </script>

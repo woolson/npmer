@@ -26,13 +26,19 @@ div.market
     :current-page="pageIndex"
     @current-change="pageIndex = $event"
   )
+  //- npmer-foot
 </template>
 
 <script>
 import TEXT from '~/assets/js/text'
 import axios from '~/plugins/axios'
+import NpmerFoot from '~/components/npmer-foot.vue'
 
 export default {
+  components: {
+    NpmerFoot
+  },
+
   data () {
     return {
       TEXT,
@@ -121,7 +127,7 @@ export default {
   padding 10px 0
   border-radius 5px
   margin-bottom 20px
-  box-shadow 0 0 2px $border-color
+  box-shadow 0 0 2px $color-border
   &:hover i
     opacity 1 !important
   .item__img

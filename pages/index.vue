@@ -151,6 +151,7 @@ main.home
           @click="createLink"
           :loading="loading"
         ) {{$t('createLink')}}
+  //- npmer-foot
 </template>
 
 <script>
@@ -159,11 +160,13 @@ import TagSvg from '~/components/tag-svg.vue'
 import ColorPick from '~/components/color-pick.vue'
 import Icons from '~/assets/js/icons'
 import Text from '~/assets/js/text'
+import NpmerFoot from '~/components/npmer-foot.vue'
 
 export default {
   components: {
-    'tag-svg': TagSvg,
-    'color-pick': ColorPick
+    TagSvg,
+    ColorPick,
+    NpmerFoot
   },
 
   data: () => ({
@@ -430,7 +433,7 @@ main
     padding 10px 20px
     border-radius 10px
     margin-bottom 20px
-    box-shadow 0 0 2px $border-color
+    box-shadow 0 0 2px $color-border
 
 .home__preview
   display flex

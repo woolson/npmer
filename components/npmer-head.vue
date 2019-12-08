@@ -47,10 +47,10 @@ export default {
   width 100vw
   display flex
   justify-content center
-  border-bottom 1px solid $border-color
+  border-bottom 1px solid $color-border
   background hsla(0,0%,100%,.9)
   backdrop-filter saturate(180%) blur(20px)
-  box-shadow 0 0 5px $border-color
+  box-shadow 0 0 5px $color-border
 
 .head__content
   display flex
