@@ -1,22 +1,22 @@
 <template lang="pug">
 div.market
   input.market__search(
-    placeholder="搜索"
+    :placeholder="$t('search')"
   )
-  h1.market__title Trend
+  h1.market__title {{$t('trend')}}
   ul.market__list
     li.list__item(v-for="item in list")
       div.item__img
         img(:src="encode(baseUrl + item.path)")
       div.item__option
-        el-tooltip(content="复制链接" placement="top")
+        el-tooltip(:content="$t('copy')" placement="top")
           i.el-icon-link(
             v-clipboard="encode(baseUrl + item.path)"
             @click="$notify.success({title: TEXT.copy + TEXT.success})"
           )
         //- el-tooltip(content="自定义" placement="top")
         //-   i.el-icon-set-up
-        el-tooltip(content="点赞" placement="top")
+        el-tooltip(:content="$t('star')" placement="top")
           i.el-icon-star-off
             span {{item.star}}
   el-pagination(

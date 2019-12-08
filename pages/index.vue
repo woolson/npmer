@@ -1,7 +1,7 @@
 <template lang="pug">
 main.home
   section.home__preview
-    label {{TEXT.preview}}
+    label {{$t('preview')}}
     tag-svg(
       ref="content"
       v-bind="options"
@@ -17,13 +17,13 @@ main.home
       label-width="100px"
     )
       div.options__row
-        span {{TEXT.icon}}
-        span {{TEXT.leftText}}
-        span {{TEXT.rightText}}
+        span {{$t('icon')}}
+        span {{$t('leftText')}}
+        span {{$t('rightText')}}
       div.options__row.u-bb
         el-select(
           v-model="options.iconIndex"
-          :placeholder="TEXT.select"
+          :placeholder="$t('select')"
           clearable
         )
           el-option(
@@ -42,37 +42,37 @@ main.home
         )
       el-form-item.u-bb.u-flex(
         v-show="options.iconIndex === 0"
-        :label="TEXT.iconPath"
+        :label="$t('iconPath')"
       )
         el-input(v-model="options.iconPath" clearable)
           el-popover(
             slot="append"
             placement="bottom-end"
-            :title="TEXT.help"
+            :title="$t('help')"
             width="200"
             trigger="hover"
-            :content="TEXT.helpIconPath"
+            :content="$t('helpIconPath')"
           )
             i.el-icon-question(slot="reference")
       div.options__row.u-bb
-        el-form-item(:label="TEXT.iconScale")
+        el-form-item(:label="$t('iconScale')")
           el-input(
             v-model="options.iconScale"
             type="number"
             step="0.001"
           )
-        el-form-item(:label="TEXT.iconPosition")
+        el-form-item(:label="$t('iconPosition')")
           el-radio-group(v-model="options.iconPosition" fill="#C43030")
-            el-radio-button(label="left") {{TEXT.left}}
-            el-radio-button(label="right") {{TEXT.right}}
+            el-radio-button(label="left") {{$t('left')}}
+            el-radio-button(label="right") {{$t('right')}}
       div.options__row.u-bb
-        el-form-item(:label="TEXT.iconXOffset")
+        el-form-item(:label="$t('iconXOffset')")
           el-input(
             v-model="options.iconX"
             type="number"
             step="1"
           )
-        el-form-item(:label="TEXT.iconYOffset")
+        el-form-item(:label="$t('iconYOffset')")
           el-input(
             v-model="options.iconY"
             type="number"
@@ -80,77 +80,77 @@ main.home
           )
       div.options__row.u-bb
         div.options__switch
-          label {{TEXT.roundedAngle}}
+          label {{$t('roundedAngle')}}
           el-switch(
             v-model="options.roundedAngle"
             active-color="#13ce66"
             inactive-color="#ff4949"
           )
         div.options__switch
-          label {{TEXT.textShadow}}
+          label {{$t('textShadow')}}
           el-switch(
             v-model="options.textShadow"
             active-color="#13ce66"
             inactive-color="#ff4949"
           )
         div.options__switch
-          label {{TEXT.gradient}}
+          label {{$t('gradient')}}
           el-switch(
             v-model="options.gradient"
             active-color="#13ce66"
             inactive-color="#ff4949"
           )
       el-form-item.u-bb(
-        :label="TEXT.iconColor"
+        :label="$t('iconColor')"
         v-show="options.iconPath")
         color-pick(
           v-model="options.iconColor"
           :colors="['#FFFFFF', ...colors]"
         )
       div.options__row.u-bb
-        el-form-item.options__color(:label="TEXT.leftTextColor")
+        el-form-item.options__color(:label="$t('leftTextColor')")
           color-pick(
             v-model="options.leftTextColor"
             :colors="['#FFFFFF', '#444']"
           )
-        el-form-item.options__color(:label="TEXT.leftBgColor")
+        el-form-item.options__color(:label="$t('leftBgColor')")
           color-pick(
             v-model="options.leftBgColor"
             :colors="['#555555', ...colors]"
           )
       div.options__row.u-bb
-        el-form-item.options__color(:label="TEXT.rightTextColor")
+        el-form-item.options__color(:label="$t('rightTextColor')")
           color-pick(
             v-model="options.rightTextColor"
             :colors="['#FFFFFF', '#444']"
           )
-        el-form-item.options__color(:label="TEXT.rightBgColor")
+        el-form-item.options__color(:label="$t('rightBgColor')")
           color-pick(
             v-model="options.rightBgColor"
             :colors="['#555555', ...colors]"
           )
-      el-form-item.u-bb(:label="TEXT.link")
+      el-form-item.u-bb(:label="$t('link')")
         el-input(v-model="link" readonly)
           template(slot="append")
             el-button(
               v-clipboard="link"
-              @success="$notify.success({title: TEXT.copy + TEXT.success})"
-            ) {{TEXT.copy}}
-      el-form-item.u-bb(:label="TEXT.markdown")
+              @success="$notify.success({title: $t('copy') + $t('success')})"
+            ) {{$t('copy')}}
+      el-form-item.u-bb(:label="$t('markdown')")
         el-input(v-model="markdownLink" readonly)
           template(slot="append")
             el-button(
               v-clipboard="markdownLink"
-              @success="$notify.success({title: TEXT.copy + TEXT.success})"
-            ) {{TEXT.copy}}
+              @success="$notify.success({title: $t('copy') + $t('success')})"
+            ) {{$t('copy')}}
       div.options__button
         el-button.download(
           @click="downloadImg"
-        ) {{TEXT.download}}
+        ) {{$t('download')}}
         el-button.copy(
           @click="createLink"
           :loading="loading"
-        ) {{TEXT.createLink}}
+        ) {{$t('createLink')}}
 </template>
 
 <script>

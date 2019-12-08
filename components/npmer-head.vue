@@ -1,10 +1,20 @@
 <template lang="pug">
 div.head
   div.head__content
-    span.head__title {{TEXT.title}}
+    span.head__title {{$t('title')}}
     div.head__pages
-      nuxt-link(to="/") 首页
-      nuxt-link(to="/market") 市场
+      nuxt-link(to="/") {{$t('home')}}
+      nuxt-link(to="/market") {{$t('market')}}
+    div.head__lang
+      span(
+        :class="{active: $i18n.locale === 'zh'}"
+        @click="$i18n.locale = 'zh'"
+      ) 中
+      i &nbsp;/&nbsp;
+      span(
+        :class="{active: $i18n.locale === 'en'}"
+        @click="$i18n.locale = 'en'"
+      ) EN
     div.head__github
       //- iframe(
       //-   src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer-page&type=star&count=true"
@@ -45,7 +55,7 @@ export default {
 .head__content
   display flex
   align-items center
-  padding 10px 0
+  padding 15px 0
   width $body-width
 
 .head__title
@@ -71,6 +81,17 @@ export default {
       color $color-main
       border-bottom 2px solid $color-main
 
-.head__github
+.head__lang
   margin-left auto
+  span
+    &.active
+      color $color-main
+      font-weight bold
+    &:hover
+      cursor pointer
+      color $color-main
+      text-decoration underline
+
+.head__github
+  margin-left 20px
 </style>

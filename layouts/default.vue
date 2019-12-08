@@ -1,7 +1,7 @@
 <template lang="pug">
 div.body
   npmer-head
-  nuxt
+  nuxt(keep-alive)
 </template>
 
 <script>
