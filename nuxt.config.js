@@ -17,8 +17,9 @@ export default {
   loading: { color: '#fff' },
   /** Global CSS */
   css: [
-    'element-ui/lib/theme-chalk/index.css',
-    'assets/css/index.styl'
+    // 'element-ui/lib/theme-chalk/index.css',
+    'assets/css/element/index.css',
+    'assets/stylus/index.styl'
   ],
   /** Plugins to load before mounting the App */
   plugins: [
@@ -37,13 +38,14 @@ export default {
     '@nuxtjs/style-resources'
   ],
   styleResources: {
-    stylus: 'assets/css/variables.styl'
+    stylus: 'assets/stylus/variables.styl'
   },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    baseURL: 'https://woolson.cn/npmer/api',
   },
   /** Build configuration */
   build: {

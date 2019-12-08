@@ -1,17 +1,18 @@
 <template lang="pug">
 div.head
-  span.head__title {{TEXT.title}}
-  div.head__pages
-    nuxt-link(to="/") 首页
-    nuxt-link(to="/market") 市场
-  div.head__github
-    iframe(
-      src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer-page&type=star&count=true"
-      frameborder="0"
-      scrolling="0"
-      width="100px"
-      height="20px"
-    )
+  div.head__content
+    span.head__title {{TEXT.title}}
+    div.head__pages
+      nuxt-link(to="/") 首页
+      nuxt-link(to="/market") 市场
+    div.head__github
+      //- iframe(
+      //-   src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer-page&type=star&count=true"
+      //-   frameborder="0"
+      //-   scrolling="0"
+      //-   width="100px"
+      //-   height="20px"
+      //- )
 </template>
 
 <script>
@@ -30,12 +31,22 @@ export default {
 
 <style lang="stylus" scoped>
 .head
+  position fixed
+  top 0
+  left 0
+  width 100vw
   display flex
-  align-items center
-  padding 10px calc(50% - 360px)
+  justify-content center
   border-bottom 1px solid $border-color
   background hsla(0,0%,100%,.9)
   backdrop-filter saturate(180%) blur(20px)
+  box-shadow 0 0 5px $border-color
+
+.head__content
+  display flex
+  align-items center
+  padding 10px 0
+  width $body-width
 
 .head__title
   padding 10px 20px
@@ -48,10 +59,10 @@ export default {
   font-weight bold
 
 .head__pages
-  margin-left 10px
+  margin-left 20px
   > a
     margin-left 20px
-    color $text-main
+    color $color-text
     font-size 18px
     font-weight bold
     line-height 38px

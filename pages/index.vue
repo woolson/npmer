@@ -1,158 +1,156 @@
 <template lang="pug">
-div.home
-  main
-    section.preview
-      div
-        label {{TEXT.preview}}
-        tag-svg(
-          ref="content"
-          v-bind="options"
-          :iconScale.sync="options.iconScale"
+main.home
+  section.home__preview
+    label {{TEXT.preview}}
+    tag-svg(
+      ref="content"
+      v-bind="options"
+      :iconScale.sync="options.iconScale"
+    )
+    div.tag
+      div.tag__left {{options.leftText}}
+      div.tag__right {{options.rightText}}
+  section.home__options
+    el-form(
+      ref="options"
+      :model="options"
+      label-width="100px"
+    )
+      div.options__row
+        span {{TEXT.icon}}
+        span {{TEXT.leftText}}
+        span {{TEXT.rightText}}
+      div.options__row.u-bb
+        el-select(
+          v-model="options.iconIndex"
+          :placeholder="TEXT.select"
+          clearable
         )
-        div.tag
-          div.tag__left {{options.leftText}}
-          div.tag__right {{options.rightText}}
-    section.options
-      el-form(
-        ref="options"
-        :model="options"
-        label-width="100px"
+          el-option(
+            v-for="item,index in icons"
+            :key="item.name"
+            :label="item.name"
+            :value="index"
+          )
+        el-input(
+          v-model="options.leftText"
+          clearable
+        )
+        el-input(
+          v-model="options.rightText"
+          clearable
+        )
+      el-form-item.u-bb.u-flex(
+        v-show="options.iconIndex === 0"
+        :label="TEXT.iconPath"
       )
-        div.options__row
-          span {{TEXT.icon}}
-          span {{TEXT.leftText}}
-          span {{TEXT.rightText}}
-        div.options__row.u-bb
-          el-select(
-            v-model="options.iconIndex"
-            :placeholder="TEXT.select"
-            clearable
+        el-input(v-model="options.iconPath" clearable)
+          el-popover(
+            slot="append"
+            placement="bottom-end"
+            :title="TEXT.help"
+            width="200"
+            trigger="hover"
+            :content="TEXT.helpIconPath"
           )
-            el-option(
-              v-for="item,index in icons"
-              :key="item.name"
-              :label="item.name"
-              :value="index"
-            )
+            i.el-icon-question(slot="reference")
+      div.options__row.u-bb
+        el-form-item(:label="TEXT.iconScale")
           el-input(
-            v-model="options.leftText"
-            clearable
+            v-model="options.iconScale"
+            type="number"
+            step="0.001"
           )
+        el-form-item(:label="TEXT.iconPosition")
+          el-radio-group(v-model="options.iconPosition" fill="#C43030")
+            el-radio-button(label="left") {{TEXT.left}}
+            el-radio-button(label="right") {{TEXT.right}}
+      div.options__row.u-bb
+        el-form-item(:label="TEXT.iconXOffset")
           el-input(
-            v-model="options.rightText"
-            clearable
+            v-model="options.iconX"
+            type="number"
+            step="1"
           )
-        el-form-item.u-bb.u-flex(
-          v-show="options.iconIndex === 0"
-          :label="TEXT.iconPath"
+        el-form-item(:label="TEXT.iconYOffset")
+          el-input(
+            v-model="options.iconY"
+            type="number"
+            step="1"
+          )
+      div.options__row.u-bb
+        div.options__switch
+          label {{TEXT.roundedAngle}}
+          el-switch(
+            v-model="options.roundedAngle"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          )
+        div.options__switch
+          label {{TEXT.textShadow}}
+          el-switch(
+            v-model="options.textShadow"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          )
+        div.options__switch
+          label {{TEXT.gradient}}
+          el-switch(
+            v-model="options.gradient"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          )
+      el-form-item.u-bb(
+        :label="TEXT.iconColor"
+        v-show="options.iconPath")
+        color-pick(
+          v-model="options.iconColor"
+          :colors="['#FFFFFF', ...colors]"
         )
-          el-input(v-model="options.iconPath" clearable)
-            el-popover(
-              slot="append"
-              placement="bottom-end"
-              :title="TEXT.help"
-              width="200"
-              trigger="hover"
-              :content="TEXT.helpIconPath"
-            )
-              i.el-icon-question(slot="reference")
-        div.options__row.u-bb
-          el-form-item(:label="TEXT.iconScale")
-            el-input(
-              v-model="options.iconScale"
-              type="number"
-              step="0.001"
-            )
-          el-form-item(:label="TEXT.iconPosition")
-            el-radio-group(v-model="options.iconPosition" fill="#C43030")
-              el-radio-button(label="left") {{TEXT.left}}
-              el-radio-button(label="right") {{TEXT.right}}
-        div.options__row.u-bb
-          el-form-item(:label="TEXT.iconXOffset")
-            el-input(
-              v-model="options.iconX"
-              type="number"
-              step="1"
-            )
-          el-form-item(:label="TEXT.iconYOffset")
-            el-input(
-              v-model="options.iconY"
-              type="number"
-              step="1"
-            )
-        div.options__row.u-bb
-          div.options__switch
-            label {{TEXT.roundedAngle}}
-            el-switch(
-              v-model="options.roundedAngle"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            )
-          div.options__switch
-            label {{TEXT.textShadow}}
-            el-switch(
-              v-model="options.textShadow"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            )
-          div.options__switch
-            label {{TEXT.gradient}}
-            el-switch(
-              v-model="options.gradient"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            )
-        el-form-item.u-bb(
-          :label="TEXT.iconColor"
-          v-show="options.iconPath")
+      div.options__row.u-bb
+        el-form-item.options__color(:label="TEXT.leftTextColor")
           color-pick(
-            v-model="options.iconColor"
-            :colors="['#FFFFFF', ...colors]"
+            v-model="options.leftTextColor"
+            :colors="['#FFFFFF', '#444']"
           )
-        div.options__row.u-bb
-          el-form-item.options__color(:label="TEXT.leftTextColor")
-            color-pick(
-              v-model="options.leftTextColor"
-              :colors="['#FFFFFF', '#444']"
-            )
-          el-form-item.options__color(:label="TEXT.leftBgColor")
-            color-pick(
-              v-model="options.leftBgColor"
-              :colors="['#555555', ...colors]"
-            )
-        div.options__row.u-bb
-          el-form-item.options__color(:label="TEXT.rightTextColor")
-            color-pick(
-              v-model="options.rightTextColor"
-              :colors="['#FFFFFF', '#444']"
-            )
-          el-form-item.options__color(:label="TEXT.rightBgColor")
-            color-pick(
-              v-model="options.rightBgColor"
-              :colors="['#555555', ...colors]"
-            )
-        el-form-item.u-bb(:label="TEXT.link")
-          el-input(v-model="link" readonly)
-            template(slot="append")
-              el-button(
-                v-clipboard="link"
-                @success="$notify.success({title: TEXT.copy + TEXT.success})"
-              ) {{TEXT.copy}}
-        el-form-item.u-bb(:label="TEXT.markdown")
-          el-input(v-model="markdownLink" readonly)
-            template(slot="append")
-              el-button(
-                v-clipboard="markdownLink"
-                @success="$notify.success({title: TEXT.copy + TEXT.success})"
-              ) {{TEXT.copy}}
-        div.options__button
-          el-button.download(
-            @click="downloadImg"
-          ) {{TEXT.download}}
-          el-button.copy(
-            @click="createLink"
-            :loading="loading"
-          ) {{TEXT.createLink}}
+        el-form-item.options__color(:label="TEXT.leftBgColor")
+          color-pick(
+            v-model="options.leftBgColor"
+            :colors="['#555555', ...colors]"
+          )
+      div.options__row.u-bb
+        el-form-item.options__color(:label="TEXT.rightTextColor")
+          color-pick(
+            v-model="options.rightTextColor"
+            :colors="['#FFFFFF', '#444']"
+          )
+        el-form-item.options__color(:label="TEXT.rightBgColor")
+          color-pick(
+            v-model="options.rightBgColor"
+            :colors="['#555555', ...colors]"
+          )
+      el-form-item.u-bb(:label="TEXT.link")
+        el-input(v-model="link" readonly)
+          template(slot="append")
+            el-button(
+              v-clipboard="link"
+              @success="$notify.success({title: TEXT.copy + TEXT.success})"
+            ) {{TEXT.copy}}
+      el-form-item.u-bb(:label="TEXT.markdown")
+        el-input(v-model="markdownLink" readonly)
+          template(slot="append")
+            el-button(
+              v-clipboard="markdownLink"
+              @success="$notify.success({title: TEXT.copy + TEXT.success})"
+            ) {{TEXT.copy}}
+      div.options__button
+        el-button.download(
+          @click="downloadImg"
+        ) {{TEXT.download}}
+        el-button.copy(
+          @click="createLink"
+          :loading="loading"
+        ) {{TEXT.createLink}}
 </template>
 
 <script>
@@ -360,10 +358,10 @@ export default {
   padding 0 !important
 
 .home
-  max-width $body-width
-  min-width 300px
   box-sizing border-box
+  background $background-color
   margin 0 auto
+  padding-top 100px
   display flex
   flex-direction column
   justify-content flex-start
@@ -421,34 +419,31 @@ input:focus
     border-radius 6px 0 0 0
 
 main
-  width 100%
-  box-sizing border-box
   z-index 2
   background white
   border-radius 20px
+  height 100vh
+  box-sizing border-box
   > section
-    background #F8F8FA
+    width 680px
+    background white
     padding 10px 20px
     border-radius 10px
-    margin-top 20px
-    // box-shadow 0 0 15px rgba(black, .1)
+    margin-bottom 20px
+    box-shadow 0 0 2px $border-color
 
-.preview
-  padding 20px 0
+.home__preview
+  display flex
+  flex-direction column
+  align-items center
+  justify-content center
+  padding-bottom 20px
+  box-sizing border-box
   label
     margin-bottom 15px
     font-size 20px
-  > div
-    display flex
-    flex-direction column
-    justify-content center
-    align-items center
-    flex 1
-    text-align center
-    svg
-      transform scale(1.1)
 
-.tag
+.home__preview .tag
   display flex
   height 0px
   overflow hidden
@@ -463,8 +458,10 @@ main
 .tag__left
   margin-right -1px
 
-.options .el-select
-  width 100%
+.home__options
+  box-sizing border-box
+  .el-select
+    width 100%
 
 .options__button
   text-align center
