@@ -1,21 +1,5 @@
 <template lang="pug">
-div(id="app")
-  header {{TEXT.title}}
-  div.github-info
-    iframe(
-      src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer-page&type=star&count=true"
-      frameborder="0"
-      scrolling="0"
-      width="100px"
-      height="20px"
-    )
-    iframe(
-      src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer-page&type=fork&count=true"
-      frameborder="0"
-      scrolling="0"
-      width="100px"
-      height="20px"
-    )
+div.home
   main
     section.preview
       div
@@ -172,18 +156,16 @@ div(id="app")
 </template>
 
 <script>
-import 'whatwg-fetch';
-import TagSvg from './tag-svg.vue';
-import ColorPick from './color-pick.vue';
-import Icons from './icons';
-import Text from './text';
+// import 'whatwg-fetch'
+import TagSvg from '~/components/tag-svg.vue'
+import ColorPick from '~/components/color-pick.vue'
+import Icons from '~/assets/js/icons'
+import Text from '~/assets/js/text'
 
 export default {
-  name: 'app',
-
   components: {
     'tag-svg': TagSvg,
-    'color-pick': ColorPick,
+    'color-pick': ColorPick
   },
 
   data: () => ({
@@ -205,7 +187,7 @@ export default {
       iconColor: '#FFFFFF',
       iconPosition: 'left',
       iconY: 3,
-      iconX: 5,
+      iconX: 5
     },
     colors: [
       '#E05D44',
@@ -213,88 +195,88 @@ export default {
       '#44CC11',
       '#46BC99',
       '#007EC6',
-      '#7289DA',
+      '#7289DA'
     ],
     link: '',
     markdownLink: '',
     loading: false,
     customPath: '',
-    customScale: 0.13,
+    customScale: 0.13
   }),
 
   watch: {
     'options.leftText': {
-      handler() {
+      handler () {
         this.$nextTick(() => {
-          let { offsetWidth } = document.querySelector('.tag__left');
+          let { offsetWidth } = document.querySelector('.tag__left')
           if (this.options.leftText === '') {
-            offsetWidth = 0;
+            offsetWidth = 0
           }
-          this.$set(this.options, 'leftWidth', offsetWidth);
-        });
+          this.$set(this.options, 'leftWidth', offsetWidth)
+        })
       },
-      immediate: true,
+      immediate: true
     },
     'options.iconPosition': 'updateRightWidth',
     'options.iconPath': 'updateRightWidth',
     'options.rightText': {
-      handler() {
+      handler () {
         this.$nextTick(() => {
-          this.updateRightWidth();
-        });
+          this.updateRightWidth()
+        })
       },
-      immediate: true,
+      immediate: true
     },
     'options.iconIndex': {
-      handler(newValue) {
+      handler (newValue) {
         const {
           scale,
           path,
-          name,
-        } = this.icons[newValue] || {};
+          name
+        } = this.icons[newValue] || {}
 
         if (name === 'Custom') {
-          this.$set(this.options, 'iconPath', '');
-          this.$set(this.options, 'iconScale', 1);
+          this.$set(this.options, 'iconPath', '')
+          this.$set(this.options, 'iconScale', 1)
         } else {
-          this.$set(this.options, 'iconPath', path || '');
-          this.$set(this.options, 'iconScale', scale || 0);
+          this.$set(this.options, 'iconPath', path || '')
+          this.$set(this.options, 'iconScale', scale || 0)
         }
       },
-      immediate: true,
+      immediate: true
     },
     options: {
-      handler() {
-        this.link = '';
-        this.markdownLink = '';
+      handler () {
+        this.link = ''
+        this.markdownLink = ''
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
 
   methods: {
-    updateRightWidth() {
-      const { rightText, iconPath, iconPosition } = this.options;
-      let { offsetWidth } = document.querySelector('.tag__right');
+    updateRightWidth () {
+      const { rightText, iconPath, iconPosition } = this.options
+      let { offsetWidth } = document.querySelector('.tag__right')
       if (rightText === '') {
-        offsetWidth = 0;
+        offsetWidth = 0
         if (iconPosition === 'right' && iconPath !== '') {
-          offsetWidth = 7;
+          offsetWidth = 7
         }
       }
 
-      this.$set(this.options, 'rightWidth', offsetWidth);
+      this.$set(this.options, 'rightWidth', offsetWidth)
     },
-    async downloadImg() {
-      const dataUrl = this.$refs.content.$el.outerHTML;
-      const link = document.createElement('a');
-      link.download = 'npm-logo.svg';
-      link.href = `data:image/svg+xml;charset=utf-8,${dataUrl}`;
-      link.click();
+    downloadImg () {
+      const dataUrl = this.$refs.content.$el.outerHTML
+      const link = document.createElement('a')
+      link.download = 'npm-logo.svg'
+      link.href = `data:image/svg+xmlcharset=utf-8,${dataUrl}`
+      link.click()
     },
-    async createLink() {
+    async createLink () {
       try {
-        this.loading = true;
+        this.loading = true
         const {
           leftText,
           leftTextColor,
@@ -308,8 +290,8 @@ export default {
           iconIndex,
           iconColor,
           iconPath,
-          iconPosition,
-        } = this.options;
+          iconPosition
+        } = this.options
         const names = [
           leftText,
           leftTextColor.replace('#', '').toLowerCase(),
@@ -319,80 +301,51 @@ export default {
           rightBgColor.replace('#', '').toLowerCase(),
           rounded ? 'rounded' : 'square',
           gradient ? 'gradient' : 'flat',
-          textShadow ? 'shadow' : 'plain',
-        ];
+          textShadow ? 'shadow' : 'plain'
+        ]
         // 名称格式
         // 左文字-左文字色-左底色-右文字-右文字色-右底色-图标名称-图标颜色-是否渐变-是否文字阴影-是否圆角
         // eslint-disable-next-line
         // leftText-leftColor-rightText-rightColor-iconName-iconColor-iconPosition-rounded-gradient-textShadow
         if (iconIndex !== '' && iconPath !== '') {
-          let name = '';
+          let name = ''
           if (iconIndex === 0) {
-            name = `custom${Date.now()}`;
+            name = `custom${Date.now()}`
           } else {
-            name = this.icons[iconIndex].name.toLowerCase();
+            name = this.icons[iconIndex].name.toLowerCase()
           }
-          names.splice(4, 0, name, iconColor.replace('#', '').toLowerCase(), iconPosition);
+          names.splice(4, 0, name, iconColor.replace('#', '').toLowerCase(), iconPosition)
         }
         // console.log('[name]', `${names.join('-')}.svg`)
         const response = await fetch('https://woolson.cn/npmer/api/fetch', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             name: encodeURI(`${names.join('-')}.svg`),
-            content: this.$refs.content.$el.outerHTML,
-          }),
-        }).then(res => res.json());
-        this.link = response.url;
-        this.markdownLink = `![${leftText}](${response.url})`;
-        this.loading = false;
+            content: this.$refs.content.$el.outerHTML
+          })
+        }).then(res => res.json())
+        this.link = response.url
+        this.markdownLink = `![${leftText}](${response.url})`
+        this.loading = false
         this.$notify.success({
-          title: this.TEXT.createLink + this.TEXT.success,
-        });
+          title: this.TEXT.createLink + this.TEXT.success
+        })
       } catch (err) {
         // eslint-disable-next-line
-        console.error(err);
+        console.error(err)
         this.$notify.error({
-          title: this.TEXT.errorMsg,
-        });
+          title: this.TEXT.errorMsg
+        })
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="stylus">
-$main = #C43030
-$font = "Source Sans Pro", "Helvetica Neue", Arial, sans-serif
-
-html
-body
-  padding 0
-  margin 0
-
-.u-bb
-  position relative
-  &:after
-    bottom 0
-    content ' '
-    position absolute
-    left 0
-    width 100%
-    height 1px
-    z-index 0
-    transition all .2s
-    background #EFEFEF
-    transform scaleY(0.5)
-    transform-origin 50%100%
-
-.u-mb10
-  margin-bottom 10px !important
-
-.u-mr10
-  margin-right 10px !important
-
 .el-form-item
   margin-bottom 0 !important
   padding 10px 0
@@ -401,25 +354,21 @@ body
   display flex
 
 .el-radio-button__inner:hover
-  color $main
+  color $color-main
 
 .options__row > .el-form-item
   padding 0 !important
 
-#app
-  font-family $font
-  color #2c3e50
-  width 100vw
-  max-width 620px
+.home
+  max-width $body-width
   min-width 300px
-  min-height 100vh
   box-sizing border-box
   margin 0 auto
   display flex
   flex-direction column
   justify-content flex-start
   align-items center
-  // border 10px solid $main
+  // border 10px solid $color-main
   border-radius 38px
   padding-bottom 20px
 
@@ -458,27 +407,12 @@ body
     margin-right 15px
 
 input:focus
-  border-color $main!important
+  border-color $color-main !important
 
 .el-select-dropdown__item
   font-family $font
   &.selected
-    color $main
-
-header
-  margin-top 20px
-  padding 15px 40px
-  background $main
-  color white
-  line-height 1
-  text-align center
-  border-radius 5px
-  position relative
-  font-size 20px
-
-.github-info
-  margin-top 20px
-  display flex
+    color $color-main
 
 .header__right
   margin-right -10px
@@ -543,8 +477,8 @@ main
 .download
   min-width 120px
   &:hover
-    border-color $main
-    color $main
+    border-color $color-main
+    color $color-main
     background #F3D6D6
 
 footer

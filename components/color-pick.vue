@@ -18,12 +18,21 @@ div.options__color
 
 <script>
 export default {
-  name: 'color-pick',
+  name: 'ColorPick',
 
   props: {
-    value: String,
-    label: String,
-    colors: Array,
+    value: {
+      type: String,
+      default: ''
+    },
+    label: {
+      type: String,
+      default: ''
+    },
+    colors: {
+      type: Array,
+      default: () => []
+    }
   },
 
   data: () => ({
@@ -31,10 +40,10 @@ export default {
       '#9F9F9F',
       '#666666',
       '#FE7D37',
-      '#97CA00',
-    ],
-  }),
-};
+      '#97CA00'
+    ]
+  })
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -84,4 +93,3 @@ export default {
         box-shadow 0 0 5px rgba(black, .4)
         border-radius 3px
 </style>
-
