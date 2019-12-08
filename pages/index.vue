@@ -134,14 +134,20 @@ main.home
           template(slot="append")
             el-button(
               v-clipboard="link"
-              @success="$notify.success({title: $t('copy') + $t('success')})"
+              @success="$notify.success({\
+                title: $t('copy') + $t('success'),\
+                position: 'bottom-right'\
+              })"
             ) {{$t('copy')}}
       el-form-item.u-bb(:label="$t('markdown')")
         el-input(v-model="markdownLink" readonly)
           template(slot="append")
             el-button(
               v-clipboard="markdownLink"
-              @success="$notify.success({title: $t('copy') + $t('success')})"
+              @success="$notify.success({\
+                title: $t('copy') + $t('success'),\
+                position: 'bottom-right'\
+              })"
             ) {{$t('copy')}}
       div.options__button
         el-button.download(
@@ -330,13 +336,15 @@ export default {
         this.markdownLink = `![${leftText}](${response.url})`
         this.loading = false
         this.$notify.success({
-          title: this.$t('createLink') + this.$t('success')
+          title: this.$t('createLink') + this.$t('success'),
+          position: 'bottom-right'
         })
       } catch (err) {
         // eslint-disable-next-line
         console.error(err)
         this.$notify.error({
-          title: this.$t('errorMsg')
+          title: this.$t('errorMsg'),
+          position: 'bottom-right'
         })
       }
     }

@@ -12,7 +12,10 @@ div.market
         el-tooltip(:content="$t('copy')" placement="top")
           i.el-icon-link(
             v-clipboard="encode(baseUrl + item.path)"
-            @click="$notify.success({title: TEXT.copy + TEXT.success})"
+            @click="$notify.success({\
+              title: $t('copy') + $t('success'),\
+              position: 'bottom-right'\
+            })"
           )
         //- el-tooltip(content="自定义" placement="top")
         //-   i.el-icon-set-up
