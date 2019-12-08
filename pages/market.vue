@@ -30,7 +30,6 @@ div.market
 </template>
 
 <script>
-import TEXT from '~/assets/js/text'
 import axios from '~/plugins/axios'
 import NpmerFoot from '~/components/npmer-foot.vue'
 
@@ -41,7 +40,6 @@ export default {
 
   data () {
     return {
-      TEXT,
       pageIndex: 1,
       baseUrl: 'https://woolson.gitee.io/npmer-badge/',
       data: [

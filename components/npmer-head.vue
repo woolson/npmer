@@ -5,6 +5,14 @@ div.head
     div.head__pages
       nuxt-link(to="/") {{$t('home')}}
       nuxt-link(to="/market") {{$t('market')}}
+    div.head__github
+      iframe(
+        src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer-page&type=star&count=true"
+        frameborder="0"
+        scrolling="0"
+        width="100px"
+        height="20px"
+      )
     div.head__lang
       span(
         :class="{active: $i18n.locale === 'zh'}"
@@ -15,29 +23,7 @@ div.head
         :class="{active: $i18n.locale === 'en'}"
         @click="$i18n.locale = 'en'"
       ) EN
-    div.head__github
-      //- iframe(
-      //-   src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer-page&type=star&count=true"
-      //-   frameborder="0"
-      //-   scrolling="0"
-      //-   width="100px"
-      //-   height="20px"
-      //- )
 </template>
-
-<script>
-import Text from '~/assets/js/text'
-
-export default {
-  name: 'NpmerHead',
-
-  data () {
-    return {
-      TEXT: Text
-    }
-  }
-}
-</script>
 
 <style lang="stylus" scoped>
 .head
@@ -81,8 +67,11 @@ export default {
       color $color-main
       border-bottom 2px solid $color-main
 
-.head__lang
+.head__github
   margin-left auto
+
+.head__lang
+  margin-left 5px
   span
     &.active
       color $color-main
@@ -92,6 +81,4 @@ export default {
       color $color-main
       text-decoration underline
 
-.head__github
-  margin-left 20px
 </style>

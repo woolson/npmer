@@ -159,7 +159,6 @@ main.home
 import TagSvg from '~/components/tag-svg.vue'
 import ColorPick from '~/components/color-pick.vue'
 import Icons from '~/assets/js/icons'
-import Text from '~/assets/js/text'
 import NpmerFoot from '~/components/npmer-foot.vue'
 
 export default {
@@ -170,7 +169,6 @@ export default {
   },
 
   data: () => ({
-    TEXT: Text,
     icons: [{ name: 'Custom' }, ...Icons],
     options: {
       roundedAngle: false,
@@ -332,13 +330,13 @@ export default {
         this.markdownLink = `![${leftText}](${response.url})`
         this.loading = false
         this.$notify.success({
-          title: this.TEXT.createLink + this.TEXT.success
+          title: this.$t('createLink') + this.$t('success')
         })
       } catch (err) {
         // eslint-disable-next-line
         console.error(err)
         this.$notify.error({
-          title: this.TEXT.errorMsg
+          title: this.$t('errorMsg')
         })
       }
     }
