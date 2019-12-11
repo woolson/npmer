@@ -431,7 +431,7 @@ main
   z-index 2
   background white
   border-radius 20px
-  height 100vh
+  min-height 100vh
   box-sizing border-box
   > section
     width 680px

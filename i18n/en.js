@@ -1,4 +1,6 @@
 export default {
+  about: 'About',
+  updateLog: 'Update Log',
   home: 'Home',
   market: 'Market',
   search: 'Search',

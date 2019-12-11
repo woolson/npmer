@@ -2,6 +2,7 @@
 div.body
   npmer-head
   nuxt(keep-alive)
+  npmer-foot
 </template>
 
 <script>

@@ -1,4 +1,6 @@
 export default {
+  about: '关于',
+  updateLog: '更新记录',
   home: '首页',
   market: '市场',
   search: '搜索',
