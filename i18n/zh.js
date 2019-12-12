@@ -39,5 +39,6 @@ export default {
   left: '左',
   right: '右',
   help: '帮助',
-  helpIconPath: '可以粘贴svg元素中的【path】标签的【d】属性值。'
+  helpIconPath: '可以粘贴svg元素中的【path】标签的【d】属性值。',
+  shouldLogin: '你需要先登录，才能执行此操作！'
 }

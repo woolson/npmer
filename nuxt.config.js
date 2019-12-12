@@ -1,6 +1,9 @@
 
 export default {
   mode: 'spa',
+  server: {
+    port: 3001
+  },
   /** Headers of the page */
   head: {
     title: 'NPMer Badge',
@@ -35,6 +38,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/proxy',
     '@nuxtjs/pwa',
     '@nuxtjs/style-resources'
   ],
@@ -46,7 +50,13 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'https://woolson.cn/npmer/api',
+    // baseURL: 'https://woolson.cn/npmer/api',
+    baseURL: 'http://localhost:3000/npmer/api',
+  },
+  proxy: {
+    '/npmer': {
+      target: 'http://localhost:3000/',
+    }
   },
   /** Build configuration */
   build: {

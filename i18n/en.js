@@ -39,5 +39,6 @@ export default {
   left: 'Left',
   right: 'Right',
   help: 'Help',
-  helpIconPath: 'Paste attribute [d] of tag [path], you can find it in element svg.'
+  helpIconPath: 'Paste attribute [d] of tag [path], you can find it in element svg.',
+  shouldLogin: 'You should login before this option!'
 }

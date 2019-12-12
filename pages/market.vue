@@ -1,17 +1,19 @@
 <template lang="pug">
 div.market
   input.market__search(
+    v-model="keyword"
+    @keyup.13="fetchTrend"
     :placeholder="$t('search')"
   )
   h1.market__title {{$t('trend')}}
   ul.market__list
-    li.list__item(v-for="item in list")
+    li.list__item(v-for="item,index in data")
       div.item__img
-        img(:src="encode(baseUrl + item.path)")
+        img(:src="encode(baseUrl + item.name)")
       div.item__option
         el-tooltip(:content="$t('copy')" placement="top")
           i.el-icon-link(
-            v-clipboard="encode(baseUrl + item.path)"
+            v-clipboard="encode(baseUrl + item.name)"
             @click="$notify.success({\
               title: $t('copy') + $t('success'),\
               position: 'bottom-right'\
@@ -21,21 +23,25 @@ div.market
         //- el-tooltip(content="自定义" placement="top")
         //-   i.el-icon-set-up
         el-tooltip(:content="$t('star')" placement="top")
-          i.el-icon-star-off
+          i(
+            :class="item.stared ? 'el-icon-star-on' : 'el-icon-star-off'"
+            @click="star(index)"
+          )
             span {{$t('star')}}
-            span {{item.star}}
+            span {{item.stars}}
   el-pagination(
     background
     layout="prev, pager, next"
-    :total="data.length"
-    :current-page="pageIndex"
-    @current-change="pageIndex = $event"
+    :page-size="pageSize"
+    :total="totalNum"
+    :current-page="pageNum"
+    @current-change="pageNum = $event"
   )
   //- npmer-foot
 </template>
 
 <script>
-// import axios from '~/plugins/axios'
+import axios from '~/plugins/axios'
 import NpmerFoot from '~/components/npmer-foot.vue'
 
 export default {
@@ -45,17 +51,17 @@ export default {
 
   data () {
     return {
-      pageIndex: 1,
       baseUrl: 'https://woolson.gitee.io/npmer-badge/',
+      keyword: '',
+      pageNum: 1,
+      pageSize: 50,
+      totalNum: 0,
       data: []
     }
   },
 
-  computed: {
-    list () {
-      const start = (this.pageIndex - 1) * 10
-      return this.data.slice(start, start + 32)
-    }
+  watch: {
+    pageNum: 'fetchTrend'
   },
 
   mounted () {
@@ -64,12 +70,38 @@ export default {
 
   methods: {
     async fetchTrend () {
-      this.data = [
-        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 },
-        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 },
-        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 },
-        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 }
-      ]
+      const resData = await axios({
+        url: '/npmer/api/badge',
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          keyword: this.keyword
+        }
+      })
+      this.data = resData.data
+      this.totalNum = resData.total
+    },
+    async star (index) {
+      try {
+        if (!this.account) {
+          this.$message.error(this.$t('shouldLogin'))
+          return
+        }
+        await axios({
+          url: '/npmer/api/badge/star',
+          method: 'POST',
+          data: {
+            badgeId: this.data[index].id
+          }
+        })
+        const badge = this.data[index]
+        badge.stars += 1
+        badge.stared = true
+        this.$set(this.data, index, badge)
+        this.$message.success(this.$t('success'))
+      } catch (err) {
+        this.$message.error(err.message)
+      }
     },
     encode (value) {
       return encodeURI(value)

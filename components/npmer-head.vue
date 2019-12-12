@@ -44,7 +44,7 @@ div.head
   padding 15px 50px
   box-sizing border-box
   align-items center
-  z-index 99999
+  z-index 3
 
 .head__title
   padding 10px 20px

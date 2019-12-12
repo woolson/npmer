@@ -162,6 +162,7 @@ main.home
 
 <script>
 // import 'whatwg-fetch'
+import axios from '~/plugins/axios'
 import TagSvg from '~/components/tag-svg.vue'
 import ColorPick from '~/components/color-pick.vue'
 import Icons from '~/assets/js/icons'
@@ -322,30 +323,26 @@ export default {
           names.splice(4, 0, name, iconColor.replace('#', '').toLowerCase(), iconPosition)
         }
         // console.log('[name]', `${names.join('-')}.svg`)
-        const response = await fetch('https://woolson.cn/npmer/api/fetch', {
+        const badgeLink = await axios({
+          url: '/npmer/api/badge',
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
+          data: {
             name: encodeURI(`${names.join('-')}.svg`),
             content: this.$refs.content.$el.outerHTML
-          })
-        }).then(res => res.json())
-        this.link = response.url
-        this.markdownLink = `![${leftText}](${response.url})`
-        this.loading = false
-        this.$notify.success({
-          title: this.$t('createLink') + this.$t('success'),
-          position: 'bottom-right'
+          }
         })
+        this.link = badgeLink
+        this.markdownLink = `![${leftText}](${badgeLink})`
+        this.loading = false
+        this.$message.success(this.$t('createLink') + this.$t('success'))
       } catch (err) {
         // eslint-disable-next-line
-        console.error(err)
-        this.$notify.error({
-          title: this.$t('errorMsg'),
-          position: 'bottom-right'
-        })
+        console.log(err)
+        this.loading = false
+        this.$message.error(this.$t(err.message))
       }
     }
   }
