@@ -39,6 +39,7 @@ div.foot
   &:first-child
     margin-left calc(50% - 340px)
   li
+    color white
     font-size 14px
     a
       color white

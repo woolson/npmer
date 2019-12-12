@@ -27,10 +27,18 @@ div.head
       v-if="!account"
       @click="login"
     ) {{$t('login')}}
-    img(
+    el-popover(
       v-else
-      :src="account.avatarUrl"
+      placement="bottom-end"
+      width="80"
+      trigger="click"
     )
+      img(slot="reference" :src="account.avatarUrl")
+      ul.head_user-info
+        li.el-icon-user-solid
+          a(:href="account.htmlUrl") {{account.login}}
+        li.el-icon-star-on
+          nuxt-link(to="/user/stared") {{$t('stared')}}
 </template>
 
 <script>
@@ -120,4 +128,21 @@ export default {
     width 35px
     border-radius 50%
     border 2px solid $color-border
+
+.head_user-info
+  display flex
+  flex-direction column
+  li
+    font-size 14px
+    line-height 30px
+    font-weight bold
+    padding 0 5px
+    border-radius 5px
+    cursor pointer
+    a
+      margin-left 5px
+      color $color-text
+      text-decoration none
+    &:hover
+      background rgba($color-main, .1)
 </style>
