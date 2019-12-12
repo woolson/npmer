@@ -5,7 +5,7 @@ div.market
     @keyup.13="fetchTrend"
     :placeholder="$t('search')"
   )
-  h1.market__title {{$t('trend')}}
+  h1.market__title
   ul.market__list
     li.list__item(v-for="item,index in data")
       div.item__img
@@ -22,13 +22,16 @@ div.market
             span {{$t('copy')}}
         //- el-tooltip(content="自定义" placement="top")
         //-   i.el-icon-set-up
-        el-tooltip(:content="$t('star')" placement="top")
+        el-tooltip(
+          :content="item.stared ? $t('stared') : $t('star')"
+          placement="top"
+        )
           i(
             :class="item.stared ? 'el-icon-star-on' : 'el-icon-star-off'"
             @click="star(index)"
           )
-            span {{$t('star')}}
-            span {{item.stars}}
+            span {{item.stared ? $t('stared') : $t('star')}}
+            span(v-if="item.stars > 0") {{item.stars}}
   el-pagination(
     background
     layout="prev, pager, next"
@@ -41,6 +44,7 @@ div.market
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from '~/plugins/axios'
 import NpmerFoot from '~/components/npmer-foot.vue'
 
@@ -58,6 +62,10 @@ export default {
       totalNum: 0,
       data: []
     }
+  },
+
+  computed: {
+    ...mapState(['account'])
   },
 
   watch: {
@@ -87,6 +95,8 @@ export default {
           this.$message.error(this.$t('shouldLogin'))
           return
         }
+        const badge = this.data[index]
+        if (badge.stared) { return }
         await axios({
           url: '/npmer/api/badge/star',
           method: 'POST',
@@ -94,7 +104,6 @@ export default {
             badgeId: this.data[index].id
           }
         })
-        const badge = this.data[index]
         badge.stars += 1
         badge.stared = true
         this.$set(this.data, index, badge)
@@ -137,12 +146,11 @@ export default {
   text-align center
 
 .market__title
-  width 50%
-  text-align center
+  width 100%
   margin-top 30px
   font-size 24px
   font-weight bold
-  border-bottom 1px solid rgba($color-text, .1)
+  border-bottom 1px solid darken($background-color, 4)
   line-height 50px
 
 .market__list
@@ -151,7 +159,6 @@ export default {
   // width $body-width
   display grid
   padding 0
-  margin 0
   margin 10px 0 20px 0
   grid-column-gap 20px
 
@@ -204,6 +211,8 @@ export default {
       opacity .3
       display flex
       align-items center
+      &.el-icon-star-on
+        cursor not-allowed
       &.el-icon-link
       &.el-icon-set-up
         opacity 0

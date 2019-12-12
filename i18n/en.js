@@ -1,4 +1,6 @@
 export default {
+  tip: 'Tip',
+  login: 'Login',
   about: 'About',
   updateLog: 'Update Log',
   home: 'Home',
@@ -7,7 +9,8 @@ export default {
   leftBgColor: 'L-Bg Color',
   rightBgColor: 'R-Bg Color',
   copy: 'Copy ',
-  star: 'Star',
+  star: 'Like',
+  stared: 'Liked',
   trend: 'Trend',
   createLink: 'Create Link ',
   download: 'Download',
@@ -40,5 +43,6 @@ export default {
   right: 'Right',
   help: 'Help',
   helpIconPath: 'Paste attribute [d] of tag [path], you can find it in element svg.',
-  shouldLogin: 'You should login before this option!'
+  shouldLogin: 'You should login before this option!',
+  githubTip: 'Will you to login with GitHub, continue?'
 }

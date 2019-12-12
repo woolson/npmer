@@ -22,7 +22,35 @@ div.head
       :class="{active: $i18n.locale === 'en'}"
       @click="$i18n.locale = 'en'"
     ) EN
+  div.head__login
+    span(
+      v-if="!account"
+      @click="login"
+    ) {{$t('login')}}
+    img(
+      v-else
+      :src="account.avatarUrl"
+    )
 </template>
+
+<script>
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState(['account'])
+  },
+
+  methods: {
+    async login () {
+      await this.$alert(this.$t('githubTip'), this.$t('tip'), {
+        confirmButtonText: this.$t('submit')
+      })
+      location.href = 'https://github.com/login/oauth/authorize?client_id=c03fba868563cbf34940&redirect_uri=http://localhost:3000/npmer/api/github/callback&state=123123sadh1as12'
+    }
+  }
+}
+</script>
 
 <style lang="stylus" scoped>
 
@@ -48,7 +76,7 @@ div.head
 
 .head__title
   padding 10px 20px
-  background $color-main
+  background linear-gradient(139deg, #ff4b01, #c12127)
   color white
   line-height 1
   text-align center
@@ -82,4 +110,14 @@ div.head
       color $color-main
       text-decoration underline
 
+.head__login
+  margin-left 20px
+  cursor pointer
+  &:hover
+    color $color-main
+  img
+    height 35px
+    width 35px
+    border-radius 50%
+    border 2px solid $color-border
 </style>

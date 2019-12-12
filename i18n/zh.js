@@ -1,4 +1,6 @@
 export default {
+  tip: '提示',
+  login: '登录',
   about: '关于',
   updateLog: '更新记录',
   home: '首页',
@@ -7,7 +9,8 @@ export default {
   leftBgColor: '左背景色',
   rightBgColor: '右背景色',
   copy: '复制',
-  star: '赞',
+  star: '喜欢',
+  stared: '已喜欢',
   trend: '受欢迎',
   createLink: '生成链接',
   download: '下载',
@@ -40,5 +43,6 @@ export default {
   right: '右',
   help: '帮助',
   helpIconPath: '可以粘贴svg元素中的【path】标签的【d】属性值。',
-  shouldLogin: '你需要先登录，才能执行此操作！'
+  shouldLogin: '你需要先登录，才能执行此操作！',
+  githubTip: '将使用Github进行登录，是否继续？'
 }

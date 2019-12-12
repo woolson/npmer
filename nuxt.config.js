@@ -17,7 +17,11 @@ export default {
     ]
   },
   /** Customize the progress-bar color */
-  loading: { color: '#fff' },
+  loading: {
+    continuous: true,
+    height: '5px',
+    color: 'linear-gradient(139deg, #fb8817, #ff4b01, #c12127, #e02aff) 3'
+  },
   /** Global CSS */
   css: [
     // 'element-ui/lib/theme-chalk/index.css',
