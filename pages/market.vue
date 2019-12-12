@@ -35,7 +35,7 @@ div.market
 </template>
 
 <script>
-import axios from '~/plugins/axios'
+// import axios from '~/plugins/axios'
 import NpmerFoot from '~/components/npmer-foot.vue'
 
 export default {
@@ -47,12 +47,7 @@ export default {
     return {
       pageIndex: 1,
       baseUrl: 'https://woolson.gitee.io/npmer-badge/',
-      data: [
-        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 },
-        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 },
-        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 },
-        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 }
-      ]
+      data: []
     }
   },
 
@@ -69,8 +64,12 @@ export default {
 
   methods: {
     async fetchTrend () {
-      const resData = await axios.get('https://gitee.com/api/v5/repos/woolson/npmer-badge/git/trees/7028b7065d26265b2c5a8fd5f5c15589e1c85eee?access_token=6b12b7cf077e0666f6447aacb83edf83')
-      this.data = resData.data.tree
+      this.data = [
+        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 },
+        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 },
+        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 },
+        { path: 'Make with-fb5656--ebebeb-heart-f43232-right-square-flat-plain.svg', star: 10 }
+      ]
     },
     encode (value) {
       return encodeURI(value)
