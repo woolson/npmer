@@ -16,6 +16,13 @@ div.foot
 </template>
 
 <style lang="stylus" scoped>
+@media screen and (max-width: 767px)
+  .foot
+    flex-direction column
+  .foot__section
+    margin-left 15px !important
+    margin-bottom 30px !important
+
 .foot
   width 100vw
   background #333

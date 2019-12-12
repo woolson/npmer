@@ -62,24 +62,27 @@ export default {
 
 <style lang="stylus" scoped>
 
-@media screen and (max-width: 767px)
-  .head__title
-    display none
+// @media screen and (max-width: 767px)
+//   .head__title
+//   .head__github
+//     display none
+//   .head__title
+//     margin-left auto
 
 .head
   position fixed
   top 0
   left 0
   width 100vw
+  min-width 770px
   display flex
-  justify-content center
+  align-items center
   border-bottom 1px solid $color-border
   background hsla(0,0%,100%,.8)
   backdrop-filter saturate(180%) blur(20px)
   box-shadow 0 0 5px $color-shadow
   padding 15px 50px
   box-sizing border-box
-  align-items center
   z-index 3
 
 .head__title

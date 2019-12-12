@@ -3,7 +3,7 @@ import axios from 'axios'
 /** 接口地址 */
 const BaseURL = process.env.NODE_ENV === 'production'
   ? 'https://woolson.cn'
-  : 'http://localhost:3001'
+  : 'http://192.168.1.4:3001'
 
 /** 接口错误信息 */
 const ErrMsg = {
