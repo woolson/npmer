@@ -61,14 +61,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-// @media screen and (max-width: 767px)
-//   .head__title
-//   .head__github
-//     display none
-//   .head__title
-//     margin-left auto
-
 .head
   position fixed
   top 0

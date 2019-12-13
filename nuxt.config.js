@@ -19,9 +19,7 @@ export default {
   },
   /** Customize the progress-bar color */
   loading: {
-    continuous: true,
-    height: '5px',
-    color: 'linear-gradient(139deg, #fb8817, #ff4b01, #c12127, #e02aff) 3'
+    css: false
   },
   /** Global CSS */
   css: [

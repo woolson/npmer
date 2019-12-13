@@ -3,6 +3,7 @@ div.user__star
   badge-list(:data="data" :canLike="false")
   el-pagination(
     background
+    :hide-on-single-page="true"
     layout="prev, pager, next"
     :page-size="pageSize"
     :total="totalNum"
@@ -16,6 +17,12 @@ import axios from '~/plugins/axios'
 import BadgeList from '~/components/badge-list.vue'
 
 export default {
+  head () {
+    return {
+      title: this.$t('star') + ' - NPMer'
+    }
+  },
+
   components: {
     BadgeList
   },

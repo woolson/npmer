@@ -26,6 +26,7 @@ ul.badge__list
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from '~/plugins/axios'
 
 export default {
@@ -44,6 +45,10 @@ export default {
     return {
       baseUrl: 'https://woolson.gitee.io/npmer-badge/'
     }
+  },
+
+  computed: {
+    ...mapState(['account'])
   },
 
   methods: {

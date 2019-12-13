@@ -3,28 +3,23 @@ div.foot
   ul.foot__section
     li {{$t('link')}}
     li
-      a(href="https://github.com/woolson/") Woolson Lee
+      a(href="https://github.com/woolson/") Woolson Lee Github
     li
       a(href="https://github.com/woolson/npmer-page") GitHub - Repository
   ul.foot__section
     li {{$t('about')}}
     li
-      nuxt-link(to="/update") {{$t('updateLog')}}
+      a(href="https://blog.woolson.cn/") Woolson Lee Blog
     li
       span Make with
       span.foot__heart ❤︎
 </template>
 
 <style lang="stylus" scoped>
-@media screen and (max-width: 767px)
-  .foot
-    flex-direction column
-  .foot__section
-    margin-left 15px !important
-    margin-bottom 30px !important
-
 .foot
   width 100vw
+  min-width 770px
+  max-height 155px
   background #333
   margin-top auto
   padding 20px 0 50px 0
@@ -33,6 +28,7 @@ div.foot
   color white
   border-top 1px solid $color-border
   display flex
+  box-sizing border-box
 
 .foot__section
   padding 0

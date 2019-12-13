@@ -11,6 +11,7 @@ div.market
   badge-list(:data="data")
   el-pagination(
     background
+    :hide-on-single-page="true"
     layout="prev, pager, next"
     :page-size="pageSize"
     :total="totalNum"
@@ -21,7 +22,6 @@ div.market
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import axios from '~/plugins/axios'
 import NpmerFoot from '~/components/npmer-foot.vue'
 import BadgeList from '~/components/badge-list.vue'
@@ -46,10 +46,6 @@ export default {
       totalNum: 0,
       data: []
     }
-  },
-
-  computed: {
-    ...mapState(['account'])
   },
 
   watch: {
@@ -82,7 +78,6 @@ export default {
   display flex
   flex-direction column
   align-items center
-  min-height 100vh
   padding 0 50px 50px
   background $background-color
 
