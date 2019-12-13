@@ -22,7 +22,7 @@ div.foot
   max-height 155px
   background #333
   margin-top auto
-  padding 20px 0 50px 0
+  padding 20px 50px 50px
   text-align center
   font-family Roboto
   color white
@@ -39,8 +39,8 @@ div.foot
   align-items flex-start
   width 250px
   line-height 1.7
-  &:first-child
-    margin-left calc(50% - 340px)
+  // &:first-child
+  //   margin-left calc(50% - 480px)
   li
     color white
     font-size 14px

@@ -20,7 +20,7 @@ main.home
         span {{$t('icon')}}
         span {{$t('leftText')}}
         span {{$t('rightText')}}
-      div.options__row.u-bb
+      div.options__row
         el-select(
           v-model="options.iconIndex"
           :placeholder="$t('select')"
@@ -40,7 +40,7 @@ main.home
           v-model="options.rightText"
           clearable
         )
-      el-form-item.u-bb.u-flex(
+      el-form-item.u-flex(
         v-show="options.iconIndex === 0"
         :label="$t('iconPath')"
       )
@@ -54,7 +54,7 @@ main.home
             :content="$t('helpIconPath')"
           )
             i.el-icon-question(slot="reference")
-      div.options__row.u-bb
+      div.options__row
         el-form-item(:label="$t('iconScale')")
           el-input(
             v-model="options.iconScale"
@@ -65,7 +65,7 @@ main.home
           el-radio-group(v-model="options.iconPosition" fill="#C43030")
             el-radio-button(label="left") {{$t('left')}}
             el-radio-button(label="right") {{$t('right')}}
-      div.options__row.u-bb
+      div.options__row
         el-form-item(:label="$t('iconXOffset')")
           el-input(
             v-model="options.iconX"
@@ -78,7 +78,7 @@ main.home
             type="number"
             step="1"
           )
-      div.options__row.u-bb
+      div.options__row
         div.options__switch
           label {{$t('roundedAngle')}}
           el-switch(
@@ -100,14 +100,14 @@ main.home
             active-color="#13ce66"
             inactive-color="#ff4949"
           )
-      el-form-item.u-bb(
+      el-form-item(
         :label="$t('iconColor')"
         v-show="options.iconPath")
         color-pick(
           v-model="options.iconColor"
           :colors="['#FFFFFF', ...colors]"
         )
-      div.options__row.u-bb
+      div.options__row
         el-form-item.options__color(:label="$t('leftTextColor')")
           color-pick(
             v-model="options.leftTextColor"
@@ -118,7 +118,7 @@ main.home
             v-model="options.leftBgColor"
             :colors="['#555555', ...colors]"
           )
-      div.options__row.u-bb
+      div.options__row
         el-form-item.options__color(:label="$t('rightTextColor')")
           color-pick(
             v-model="options.rightTextColor"
@@ -129,7 +129,7 @@ main.home
             v-model="options.rightBgColor"
             :colors="['#555555', ...colors]"
           )
-      el-form-item.u-bb(:label="$t('link')")
+      el-form-item(:label="$t('link')")
         el-input(v-model="link" readonly)
           template(slot="append")
             el-button(
@@ -139,7 +139,7 @@ main.home
                 position: 'bottom-right'\
               })"
             ) {{$t('copy')}}
-      el-form-item.u-bb(:label="$t('markdown')")
+      el-form-item(:label="$t('markdown')")
         el-input(v-model="markdownLink" readonly)
           template(slot="append")
             el-button(
@@ -369,21 +369,8 @@ export default {
 .options__row > .el-form-item
   padding 0 !important
 
-.home
-  box-sizing border-box
-  background $background-color
-  margin 0 auto
-  padding-top 100px
-  display flex
-  flex-direction column
-  justify-content flex-start
-  align-items center
-  // border 10px solid $color-main
-  border-radius 38px
-  padding-bottom 20px
-
 .options__row
-  padding 10px 0
+  padding 10px 20px
   display flex
   > span
     flex 1
@@ -431,15 +418,20 @@ input:focus
     border-radius 6px 0 0 0
 
 main
-  z-index 2
-  background white
+  display flex
+  flex-direction column
+  justify-content flex-start
+  align-items center
+  padding-bottom 20px
   border-radius 20px
-  min-height 100vh
   box-sizing border-box
+  background $background-color
+  padding-top 100px
+  min-height 100vh
   > section
     width 680px
     background white
-    padding 10px 20px
+    padding 10px 0
     border-radius 10px
     margin-bottom 20px
     box-shadow 0 0 2px $color-border
@@ -474,11 +466,13 @@ main
   box-sizing border-box
   .el-select
     width 100%
+  .el-form-item
+    padding 10px 20px
 
 .options__button
   text-align center
   display flex
-  padding 10px 0
+  padding 10px 20px
   button
     flex 1
 
