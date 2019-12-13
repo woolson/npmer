@@ -1,15 +1,19 @@
 <template lang="pug">
 div.market
-  input.market__search(
+  el-input.market__search(
     v-model="keyword"
-    @keyup.13="fetchTrend"
+    clearable
     :placeholder="$t('search')"
+    @keyup.native.13="pageNum = 1; fetchTrend()"
+    @clear="pageNum = 1; fetchTrend()"
   )
   h1.market__title
   ul.market__list
     li.list__item(v-for="item,index in data")
-      div.item__img
-        img(:src="encode(baseUrl + item.name)")
+      el-image.item__img(
+        lazy
+        :src="encode(baseUrl + item.name)"
+      )
       div.item__option
         el-tooltip(:content="$t('copy')" placement="top")
           i.el-icon-link(
@@ -131,19 +135,10 @@ export default {
 .market__search
   max-width 600px
   width 100%
-  height 45px
   margin 100px 20px 0 20px
-  padding 10px 30px
-  box-sizing border-box
-  background rgba(0,0,0,.05)
-  -webkit-appearance none
-  border none
-  box-shadow inset 0 0 2px rgba(0,0,0,.1)
-  border-radius 7px
   font-size 16px
-  color $color-text
-  caret-color $color-main
-  text-align center
+  >>> input
+    text-align center
 
 .market__title
   width 100%
@@ -195,7 +190,13 @@ export default {
   &:hover i
     opacity 1 !important
   .item__img
-    line-height 100px
+    height 100px
+    display flex
+    align-items center
+    >>> img
+      height auto
+    >>> .el-image__error
+      background white
   .item__option
     margin-bottom -10px
     width 100%
