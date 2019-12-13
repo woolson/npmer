@@ -169,6 +169,12 @@ import Icons from '~/assets/js/icons'
 import NpmerFoot from '~/components/npmer-foot.vue'
 
 export default {
+  head () {
+    return {
+      title: this.$t('home') + ' - NPMer'
+    }
+  },
+
   components: {
     TagSvg,
     ColorPick,

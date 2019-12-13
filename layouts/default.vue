@@ -42,4 +42,13 @@ html
   -moz-osx-font-smoothing grayscale
   -webkit-font-smoothing antialiased
   box-sizing border-box
+
+.body
+  display flex
+  min-height 100vh
+  flex-direction column
+  > *
+    &:not(.head)
+    &:not(.foot)
+      flex 1
 </style>

@@ -31,14 +31,14 @@ div.head
       v-else
       placement="bottom-end"
       width="120"
-      trigger="click"
+      trigger="hover"
     )
       img(slot="reference" :src="account.avatarUrl")
       ul.head_user-info
         li.el-icon-user-solid
           a(:href="account.htmlUrl") {{account.name}}
         li.el-icon-star-on
-          nuxt-link(to="/user/stared") {{$t('stared')}}
+          nuxt-link(to="/account/star") {{$t('stared')}}
 </template>
 
 <script>
