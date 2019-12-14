@@ -15,7 +15,8 @@ const ErrMsg = {
 }
 const request = axios.create({
   baseURL: process.env.baseUrl,
-  https: true
+  https: true,
+  withCredentials: true
 })
 
 request.interceptors.request.use((config) => {
