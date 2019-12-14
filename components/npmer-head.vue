@@ -44,7 +44,7 @@ div.head
         nuxt-link(to="/account/uploaded")
           i.el-icon-upload
           span {{$t('uploaded')}}
-        a(href="/npmer/api/account/logout")
+        a(href="https://woolson.cn/npmer/api/account/logout")
           i.el-icon-s-promotion
           span {{$t('logout')}}
 </template>
