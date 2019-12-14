@@ -7,7 +7,7 @@ main.home
       v-bind="options"
       :iconScale.sync="options.iconScale"
     )
-    div.tag
+    div.preview__tag
       div.tag__left {{options.leftText}}
       div.tag__right {{options.rightText}}
   section.home__options
@@ -356,15 +356,56 @@ export default {
 </script>
 
 <style lang="stylus">
-.el-form-item
-  margin-bottom 0 !important
-  padding 10px 0
-
-.el-form-item__content
+main
   display flex
+  flex-direction column
+  justify-content flex-start
+  align-items center
+  padding-bottom 20px
+  border-radius 20px
+  box-sizing border-box
+  background $background-color
+  padding-top 100px
+  min-height 100vh
+  > section
+    width 680px
+    background white
+    padding 10px 0
+    border-radius 10px
+    margin-bottom 20px
+    box-shadow 0 0 2px $color-border
 
-.el-radio-button__inner:hover
-  color $color-main
+.home__preview
+  display flex
+  flex-direction column
+  align-items center
+  justify-content center
+  padding-bottom 20px
+  box-sizing border-box
+  label
+    margin-bottom 15px
+    font-size 20px
+
+.preview__tag
+  display flex
+  height 0px
+  overflow hidden
+  color transparent
+  font-family DejaVu Sans,Verdana,Geneva,sans-serif
+  div
+    user-select none
+    font-size 12px
+    color white
+    padding 3px 7px
+  .tag__left
+    margin-right -1px
+
+.home__options
+  box-sizing border-box
+  .el-select
+    width 100%
+  .el-form-item
+    padding 10px 20px
 
 .options__row > .el-form-item
   padding 0 !important
@@ -402,73 +443,6 @@ export default {
     margin-right 10px
   > div
     margin-right 15px
-
-input:focus
-  border-color $color-main !important
-
-.el-select-dropdown__item
-  font-family $font
-  &.selected
-    color $color-main
-
-.header__right
-  margin-right -10px
-  right 0
-  &:after
-    border-radius 6px 0 0 0
-
-main
-  display flex
-  flex-direction column
-  justify-content flex-start
-  align-items center
-  padding-bottom 20px
-  border-radius 20px
-  box-sizing border-box
-  background $background-color
-  padding-top 100px
-  min-height 100vh
-  > section
-    width 680px
-    background white
-    padding 10px 0
-    border-radius 10px
-    margin-bottom 20px
-    box-shadow 0 0 2px $color-border
-
-.home__preview
-  display flex
-  flex-direction column
-  align-items center
-  justify-content center
-  padding-bottom 20px
-  box-sizing border-box
-  label
-    margin-bottom 15px
-    font-size 20px
-
-.home__preview .tag
-  display flex
-  height 0px
-  overflow hidden
-  color transparent
-  font-family DejaVu Sans,Verdana,Geneva,sans-serif
-  div
-    user-select none
-    font-size 12px
-    color white
-    padding 3px 7px
-
-.tag__left
-  margin-right -1px
-
-.home__options
-  box-sizing border-box
-  .el-select
-    width 100%
-  .el-form-item
-    padding 10px 20px
-
 .options__button
   text-align center
   display flex

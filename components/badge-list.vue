@@ -1,28 +1,32 @@
 <template lang="pug">
-ul.badge__list
-  li.list__item(v-for="item,index in data")
-    el-image.item__img(
-      lazy
-      :src="encode(baseUrl + item.name)"
-    )
-    div.item__option
-      el-tooltip(:content="$t('copy')" placement="top")
-        i.el-icon-link(
-          v-clipboard="encode(baseUrl + item.name)"
-          @click="$message.success($t('copy') + $t('success'))"
-        )
-          span {{$t('copy')}}
-      el-tooltip(
-        v-if="canLike"
-        :content="item.stared ? $t('stared') : $t('star')"
-        placement="top"
+div.badge__list
+  ul.badge__list__content(v-if="data.length")
+    li.list__item(v-for="item,index in data")
+      el-image.item__img(
+        lazy
+        :src="encode(baseUrl + item.name)"
       )
-        i(
-          :class="item.stared ? 'el-icon-star-on' : 'el-icon-star-off'"
-          @click="star(index)"
+      div.item__option
+        el-tooltip(:content="$t('copy')" placement="top")
+          i.el-icon-link(
+            v-clipboard="encode(baseUrl + item.name)"
+            @click="$message.success($t('copy') + $t('success'))"
+          )
+            span {{$t('copy')}}
+        el-tooltip(
+          v-if="canLike"
+          :content="item.stared ? $t('stared') : $t('star')"
+          placement="top"
         )
-          span {{item.stared ? $t('stared') : $t('star')}}
-          span(v-if="item.stars > 0") ({{item.stars}})
+          i(
+            :class="item.stared ? 'el-icon-star-on' : 'el-icon-star-off'"
+            @click="star(index)"
+          )
+            span {{item.stared ? $t('stared') : $t('star')}}
+            span(v-if="item.stars > 0") ({{item.stars}})
+  div.badge__list__empty(v-if="!loading && !data.length")
+    img(src="~assets/img/empty.svg")
+    span {{$t('empty')}}
 </template>
 
 <script>
@@ -38,6 +42,10 @@ export default {
     canLike: {
       type: Boolean,
       default: true
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -83,27 +91,30 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.badge__list
+  width 100%
+
 @media screen and (max-width: 1909px)
-  .badge__list
+  .badge__list__content
     grid-template-columns repeat(5, 1fr)
 
 @media screen and (max-width: 1539px)
-  .badge__list
+  .badge__list__content
     grid-template-columns repeat(4, 1fr)
 
 @media screen and (max-width: 1169px)
-  .badge__list
+  .badge__list__content
     grid-template-columns repeat(3, 1fr)
 
 @media screen and (max-width: 767px)
-  .badge__list
+  .badge__list__content
     grid-template-columns repeat(2, 1fr)
 
 @media screen and (max-width: 620px)
-  .badge__list
+  .badge__list__content
     grid-template-columns repeat(1, 1fr)
 
-.badge__list
+.badge__list__content
   width 100%
   list-style none
   display grid
@@ -155,5 +166,18 @@ export default {
         color $color-main
       span
         font-size 12px
-        margin-left 3px
+        margin-left 2px
+        margin-bottom -2px
+
+.badge__list__empty
+  display flex
+  flex-direction column
+  align-items center
+  img
+    width 8vw
+    margin-top 100px
+  span
+    margin-top 10px
+    color #cdcdcd
+    font-size 20px
 </style>

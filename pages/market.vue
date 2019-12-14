@@ -4,11 +4,11 @@ div.market
     v-model="keyword"
     clearable
     :placeholder="$t('search')"
-    @keyup.native.13="pageNum = 1; fetchTrend()"
-    @clear="pageNum = 1; fetchTrend()"
+    @keyup.native.13="pageNum = 1; fetchData()"
+    @clear="pageNum = 1; fetchData()"
   )
   h1.market__title
-  badge-list(:data="data")
+  badge-list(:data="data" :loading="loading")
   el-pagination(
     background
     :hide-on-single-page="true"
@@ -44,30 +44,37 @@ export default {
       pageNum: 1,
       pageSize: 50,
       totalNum: 0,
-      data: []
+      data: [],
+      loading: false
     }
   },
 
   watch: {
-    pageNum: 'fetchTrend'
+    pageNum: 'fetchData'
   },
 
   mounted () {
-    this.fetchTrend()
+    this.fetchData()
   },
 
   methods: {
-    async fetchTrend () {
-      const resData = await axios({
-        url: '/npmer/api/badge',
-        params: {
-          pageNum: this.pageNum,
-          pageSize: this.pageSize,
-          keyword: this.keyword
-        }
-      })
-      this.data = resData.data
-      this.totalNum = resData.total
+    async fetchData () {
+      try {
+        this.loading = true
+        const resData = await axios({
+          url: '/npmer/api/badge',
+          params: {
+            pageNum: this.pageNum,
+            pageSize: this.pageSize,
+            keyword: this.keyword
+          }
+        })
+        this.loading = true
+        this.data = resData.data
+        this.totalNum = resData.total
+      } catch {
+        this.loading = false
+      }
     }
   }
 }

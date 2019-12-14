@@ -1,4 +1,6 @@
 export default {
+  uploaded: '已上传',
+  empty: '空',
   tip: '提示',
   login: '登录',
   about: '关于',

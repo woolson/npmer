@@ -23,7 +23,7 @@ import BadgeList from '~/components/badge-list.vue'
 export default {
   head () {
     return {
-      title: this.$t('star') + ' - NPMer'
+      title: this.$t('uploaded') + ' - NPMer'
     }
   },
 
@@ -54,7 +54,7 @@ export default {
       try {
         this.loading = true
         const resData = await axios({
-          url: '/npmer/api/account/star',
+          url: '/npmer/api/account/badge',
           params: {
             pageNum: this.pageNum,
             pageSize: this.pageSize,
@@ -62,7 +62,7 @@ export default {
           }
         })
         this.loading = false
-        this.data = resData.data.map(item => item.badge)
+        this.data = resData.data
         this.totalNum = resData.total
       } catch {
         this.loading = false

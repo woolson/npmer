@@ -34,11 +34,16 @@ div.head
       trigger="hover"
     )
       img(slot="reference" :src="account.avatarUrl")
-      ul.head_user-info
-        li.el-icon-user-solid
-          a(:href="account.htmlUrl") {{account.name}}
-        li.el-icon-star-on
-          nuxt-link(to="/account/star") {{$t('stared')}}
+      div.head_user-info
+        a(:href="account.htmlUrl")
+          i.el-icon-user-solid
+          span {{account.name}}
+        nuxt-link(to="/account/star")
+          i.el-icon-star-on
+          span {{$t('stared')}}
+        nuxt-link(to="/account/uploaded")
+          i.el-icon-upload
+          span {{$t('uploaded')}}
 </template>
 
 <script>
@@ -127,17 +132,18 @@ export default {
 .head_user-info
   display flex
   flex-direction column
-  li
+  a
     font-size 14px
     line-height 30px
     font-weight bold
-    padding 0 5px
+    padding 0 10px
     border-radius 5px
     cursor pointer
-    a
+    color $color-text
+    text-decoration none
+    span
       margin-left 5px
-      color $color-text
-      text-decoration none
     &:hover
       background rgba($color-main, .1)
+      color $color-main
 </style>

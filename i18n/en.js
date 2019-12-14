@@ -1,4 +1,6 @@
 export default {
+  uploaded: 'Uploaded',
+  empty: 'Empty',
   tip: 'Tip',
   login: 'Login',
   about: 'About',
