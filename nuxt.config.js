@@ -14,8 +14,7 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto' }
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto' },
     ]
   },
   generate: {
@@ -50,7 +49,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
     '@nuxtjs/pwa',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    'nuxt-rfg-icon'
   ],
   styleResources: {
     stylus: 'assets/stylus/variables.styl'

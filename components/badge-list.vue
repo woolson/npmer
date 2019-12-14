@@ -96,23 +96,23 @@ export default {
 
 @media screen and (max-width: 1909px)
   .badge__list__content
-    grid-template-columns repeat(5, 1fr)
+    grid-template-columns repeat(5, 1fr) !important
 
 @media screen and (max-width: 1539px)
   .badge__list__content
-    grid-template-columns repeat(4, 1fr)
+    grid-template-columns repeat(4, 1fr) !important
 
 @media screen and (max-width: 1169px)
   .badge__list__content
-    grid-template-columns repeat(3, 1fr)
+    grid-template-columns repeat(3, 1fr) !important
 
 @media screen and (max-width: 767px)
   .badge__list__content
-    grid-template-columns repeat(2, 1fr)
+    grid-template-columns repeat(2, 1fr) !important
 
 @media screen and (max-width: 620px)
   .badge__list__content
-    grid-template-columns repeat(1, 1fr)
+    grid-template-columns repeat(1, 1fr) !important
 
 .badge__list__content
   width 100%
@@ -121,6 +121,7 @@ export default {
   padding 0
   margin 10px 0 20px 0
   grid-column-gap 20px
+  grid-template-columns repeat(5, 1fr)
 
 .list__item
   display flex
