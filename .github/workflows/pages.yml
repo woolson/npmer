@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-  
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,15 +19,21 @@ jobs:
       with:
         node-version: ${{ matrix.node_version }}
 
-    - name: Checkout Code 
+    - name: Checkout Code
       uses: actions/checkout@master
 
     - name: Install & Build
       run: |
         npm install
         npm run generate
-        
-    - name: Publish Pages
-      uses: maxheld83/ghpages@v0.2.1
+
+
+    - name: Deploy Pages
+      if: success()
+      uses: crazy-max/ghaction-github-pages@v1
+      with:
+        target_branch: gh-pages
+        build_dir: docs
+        fqdn: npmer.woolson.cn
       env:
-        BUILD_DIR: docs/
+        GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
