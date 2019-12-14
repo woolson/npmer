@@ -1,4 +1,5 @@
 export default {
+  logout: 'Logout',
   uploaded: 'Uploaded',
   empty: 'Empty',
   tip: 'Tip',

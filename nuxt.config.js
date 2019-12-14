@@ -22,6 +22,9 @@ export default {
   loading: {
     css: false
   },
+  router: {
+    middleware: 'auth',
+  },
   /** Global CSS */
   css: [
     // 'element-ui/lib/theme-chalk/index.css',

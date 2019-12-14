@@ -1,4 +1,5 @@
 export default {
+  logout: '登出',
   uploaded: '已上传',
   empty: '空',
   tip: '提示',
