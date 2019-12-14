@@ -18,6 +18,9 @@ export default {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto' }
     ]
   },
+  generate: {
+    dir: 'docs'
+  },
   /** Customize the progress-bar color */
   loading: {
     css: false
