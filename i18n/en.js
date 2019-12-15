@@ -35,7 +35,7 @@ export default {
   select: 'Select',
   success: 'Success',
   textShadow: 'Text Shadow',
-  title: 'Customize NPM Badge',
+  title: 'NPMer',
   iconPath: 'Icon Path',
   iconScale: 'Icon Scale',
   iconXOffset: 'X Offset',

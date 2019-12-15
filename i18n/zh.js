@@ -35,7 +35,7 @@ export default {
   select: '请选择',
   success: '成功',
   textShadow: '文字阴影',
-  title: '在生成NPM徽标链接',
+  title: 'NPMer',
   iconPath: '图标路径',
   iconScale: '图标缩放',
   iconXOffset: 'X偏移量',
