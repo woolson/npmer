@@ -6,7 +6,7 @@ div.head
     nuxt-link(to="/market") {{$t('market')}}
   div.head__github
     iframe(
-      src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer-page&type=star&count=true"
+      src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer&type=star&count=true"
       frameborder="0"
       scrolling="0"
       width="100px"
@@ -109,9 +109,11 @@ export default {
 
 .head__github
   margin-left auto
+  display flex
+  align-items center
 
 .head__lang
-  margin-left 5px
+  margin-left 10px
   font-weight bold
   span
     &.active
@@ -124,13 +126,19 @@ export default {
 .head__login
   margin-left 20px
   cursor pointer
+  height 38px
+  width 38px
   &:hover
     color $color-main
+  > span
+    line-height 38px
+    font-weight bold
   img
-    height 35px
-    width 35px
+    height 36px
+    width 36px
     border-radius 50%
-    border 2px solid $color-border
+    border 1px solid $color-text
+    background $color-text
 
 .head_user-info
   display flex
