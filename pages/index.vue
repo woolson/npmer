@@ -150,18 +150,19 @@ main.home
               })"
             ) {{$t('copy')}}
       div.options__button
-        el-button.download(
+        el-button(
           @click="downloadImg"
         ) {{$t('download')}}
-        el-button.copy(
+        el-button(
           @click="createLink"
           :loading="loading"
         ) {{$t('createLink')}}
-  //- npmer-foot
+        el-button(
+          @click="createTemplate"
+        ) {{$t('createTemplate')}}
 </template>
 
 <script>
-// import 'whatwg-fetch'
 import axios from '~/plugins/axios'
 import TagSvg from '~/components/tag-svg.vue'
 import ColorPick from '~/components/color-pick.vue'
@@ -350,6 +351,19 @@ export default {
         this.loading = false
         this.$message.error(this.$t(err.message))
       }
+    },
+    createTemplate () {
+      if (!(this.options.leftText + this.options.rightText).includes('$VAR$')) {
+        this.$message.warning(this.$t('pleaseInputVariable'))
+        // return
+      }
+      // await axios({
+      //   method: 'POST',
+      //   url: '/npmer/api/template',
+      //   data: {
+      //     name:
+      //   }
+      // })
     }
   }
 }
@@ -443,22 +457,11 @@ main
     margin-right 10px
   > div
     margin-right 15px
+
 .options__button
   text-align center
   display flex
   padding 10px 20px
   button
     flex 1
-
-.copy
-.download
-  min-width 120px
-  &:hover
-    border-color $color-main
-    color $color-main
-    background #F3D6D6
-
-footer
-  img
-    width 30px
 </style>

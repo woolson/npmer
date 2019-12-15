@@ -5,16 +5,19 @@ svg(
   height="20"
   :width="width"
 )
-  linearGradient(id="b" x2="0" y2="100%")
+  linearGradient(
+    v-if="gradient"
+    id="b" x2="0" y2="100%"
+  )
     stop(offset="0" stop-color="#bbb" stop-opacity=".1")
     stop(offset="1" stop-opacity=".1")
-  clipPath(v-if="roundedAngle" id="a")
+  clipPath(v-if="roundedAngle" id="a" )
     rect(:width="width" height="20" rx="3" fill="#fff")
   g(:clip-path="roundedAngle ? 'url(#a)' : ''")
     path(:fill="leftBgColor" :d="leftPathD")
     path(:fill="rightBgColor" :d="rightPathD")
     path(v-if="gradient" fill="url(#b)" :d="bgPathD")
-  g
+  g(v-if="textShadow || iconPath")
     path(
       v-if="textShadow"
       id="icon"
@@ -24,6 +27,7 @@ svg(
       :style="iconShadowStyle"
     )
     path(
+      v-if="iconPath"
       ref="icon"
       id="icon"
       :d="iconPath"
@@ -176,16 +180,26 @@ export default {
   watch: {
     iconPath: {
       handler (newValue) {
-        if (newValue) { this.iconWidth = this.leftText ? 15 : 10 } else { this.iconWidth = 0 }
+        if (newValue) {
+          this.iconWidth = this.leftText ? 15 : 10
+        } else {
+          this.iconWidth = 0
+        }
         this.$nextTick(() => {
-          const { height } = this.$refs.icon.getBBox()
-          this.$emit('update:iconScale', +(13 / height) || 1)
+          if (this.$refs.icon) {
+            const { height } = this.$refs.icon.getBBox()
+            this.$emit('update:iconScale', +(13 / height) || 1)
+          }
         })
       },
       immediate: true
     },
     leftText (newValue) {
-      if (this.iconWidth) { this.iconWidth = newValue ? 15 : 10 } else { this.iconWidth = 0 }
+      if (this.iconWidth) {
+        this.iconWidth = newValue ? 15 : 10
+      } else {
+        this.iconWidth = 0
+      }
     }
   }
 }
