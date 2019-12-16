@@ -157,9 +157,6 @@ main.home
           @click="createLink"
           :loading="loading"
         ) {{$t('createLink')}}
-        el-button(
-          @click="createTemplate"
-        ) {{$t('createTemplate')}}
 </template>
 
 <script>
