@@ -3,7 +3,7 @@ import axios from 'axios'
 /** 接口地址 */
 const BaseURL = process.env.NODE_ENV === 'production'
   ? 'https://woolson.cn'
-  : 'http://localhost:3001'
+  : ''
 
 /** 接口错误信息 */
 const ErrMsg = {
@@ -14,7 +14,6 @@ const ErrMsg = {
   10005: '已经点赞'
 }
 const request = axios.create({
-  baseURL: process.env.baseUrl,
   https: true,
   withCredentials: true
 })

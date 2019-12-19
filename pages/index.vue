@@ -7,9 +7,13 @@ main.home
       v-bind="options"
       :iconScale.sync="options.iconScale"
     )
-    div.preview__tag
-      div.tag__left {{options.leftText}}
-      div.tag__right {{options.rightText}}
+    //- div.preview__tag
+    //-   div.tag__left
+    //-     path(:d="options.iconPath")
+    //-     span {{options.leftText}}
+    //-   div.tag__right
+    //-     path(:d="options.iconPath")
+    //-     span {{options.rightText}}
   section.home__options
     el-form(
       ref="options"
@@ -187,11 +191,11 @@ export default {
       gradient: false,
       leftText: 'welcome',
       leftTextColor: '#FFFFFF',
-      leftWidth: 0,
+      // leftWidth: 0,
       leftBgColor: '#555555',
       rightText: 'programmer',
       rightTextColor: '#FFFFFF',
-      rightWidth: 0,
+      // rightWidth: 0,
       rightBgColor: '#44CC11',
       iconIndex: 0,
       iconColor: '#FFFFFF',
@@ -215,28 +219,28 @@ export default {
   }),
 
   watch: {
-    'options.leftText': {
-      handler () {
-        this.$nextTick(() => {
-          let { offsetWidth } = document.querySelector('.tag__left')
-          if (this.options.leftText === '') {
-            offsetWidth = 0
-          }
-          this.$set(this.options, 'leftWidth', offsetWidth)
-        })
-      },
-      immediate: true
-    },
-    'options.iconPosition': 'updateRightWidth',
-    'options.iconPath': 'updateRightWidth',
-    'options.rightText': {
-      handler () {
-        this.$nextTick(() => {
-          this.updateRightWidth()
-        })
-      },
-      immediate: true
-    },
+    // 'options.leftText': {
+    //   handler () {
+    //     this.$nextTick(() => {
+    //       let { offsetWidth } = document.querySelector('.tag__left')
+    //       if (this.options.leftText === '') {
+    //         offsetWidth = 0
+    //       }
+    //       this.$set(this.options, 'leftWidth', offsetWidth)
+    //     })
+    //   },
+    //   immediate: true
+    // },
+    // 'options.iconPosition': 'updateRightWidth',
+    // 'options.iconPath': 'updateRightWidth',
+    // 'options.rightText': {
+    //   handler () {
+    //     this.$nextTick(() => {
+    //       this.updateRightWidth()
+    //     })
+    //   },
+    //   immediate: true
+    // },
     'options.iconIndex': {
       handler (newValue) {
         const {
@@ -265,18 +269,18 @@ export default {
   },
 
   methods: {
-    updateRightWidth () {
-      const { rightText, iconPath, iconPosition } = this.options
-      let { offsetWidth } = document.querySelector('.tag__right')
-      if (rightText === '') {
-        offsetWidth = 0
-        if (iconPosition === 'right' && iconPath !== '') {
-          offsetWidth = 7
-        }
-      }
+    // updateRightWidth () {
+    //   const { rightText, iconPath, iconPosition } = this.options
+    //   let { offsetWidth } = document.querySelector('.tag__right')
+    //   if (rightText === '') {
+    //     offsetWidth = 0
+    //     if (iconPosition === 'right' && iconPath !== '') {
+    //       offsetWidth = 7
+    //     }
+    //   }
 
-      this.$set(this.options, 'rightWidth', offsetWidth)
-    },
+    //   this.$set(this.options, 'rightWidth', offsetWidth)
+    // },
     downloadImg () {
       const dataUrl = this.$refs.content.$el.outerHTML
       const link = document.createElement('a')
@@ -399,9 +403,10 @@ main
 
 .preview__tag
   display flex
-  height 0px
+  // height 0px
   overflow hidden
-  color transparent
+  // color transparent
+  background red
   font-family DejaVu Sans,Verdana,Geneva,sans-serif
   div
     user-select none
