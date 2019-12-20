@@ -1,4 +1,5 @@
 export default {
+  center: '中心',
   rounded: '圆角',
   circle: '圆形',
   square: '直角',

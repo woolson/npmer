@@ -1,4 +1,5 @@
 export default {
+  center: 'Center',
   rounded: 'Rounded',
   circle: 'Circle',
   square: 'Square',

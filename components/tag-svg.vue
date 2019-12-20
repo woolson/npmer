@@ -44,26 +44,26 @@ svg(
     font-size="12"
   )
     text(
-      :x="padding + lIconWidth"
+      :x="lTextX"
       y="15"
       v-if="textShadow"
       fill="#010101"
       fill-opacity=".3"
     ) {{leftText}}
     text(
-      :x="padding + lIconWidth"
+      :x="lTextX"
       :fill="leftTextColor"
       y="14"
     ) {{leftText}}
     text(
-      :x="lWidth + innerPadding + rIconWidth"
+      :x="rTextX"
       y="15"
       v-if="textShadow"
       fill="#010101"
       fill-opacity=".3"
     ) {{rightText}}
     text(
-      :x="lWidth + innerPadding + rIconWidth"
+      :x="rTextX"
       :fill="rightTextColor"
       y="14"
     ) {{rightText}}
@@ -127,10 +127,6 @@ export default {
       type: String,
       default: ''
     },
-    iconPosition: {
-      type: String,
-      default: ''
-    },
     iconX: {
       type: [Number, String],
       default: ''
@@ -138,6 +134,10 @@ export default {
     iconY: {
       type: [Number, String],
       default: ''
+    },
+    sort: {
+      type: Array,
+      default: () => []
     }
   },
 
@@ -148,6 +148,18 @@ export default {
   }),
 
   computed: {
+    iIndex () {
+      return this.sort.findIndex(item => item.name === 'icon')
+    },
+    lIndex () {
+      return this.sort.findIndex(item => item.name === 'left')
+    },
+    rIndex () {
+      return this.sort.findIndex(item => item.name === 'right')
+    },
+    cIndex () {
+      return this.sort.findIndex(item => item.name === 'center')
+    },
     lTextWidth () {
       return strWidth(this.leftText, { font: 'Verdana', size: 12 })
     },
@@ -155,16 +167,30 @@ export default {
       return strWidth(this.rightText, { font: 'Verdana', size: 12 })
     },
     lIconWidth () {
-      return this.iconPosition === 'left' ? this.iconWidth : 0
+      return this.iIndex < this.cIndex ? this.iconWidth : 0
     },
     rIconWidth () {
-      return this.iconPosition === 'right' ? this.iconWidth : 0
+      return this.iIndex > this.cIndex ? this.iconWidth : 0
     },
     lWidth () {
       return this.padding + this.lIconWidth + this.lTextWidth + this.innerPadding
     },
     rWidth () {
       return this.padding + this.rIconWidth + this.rTextWidth + this.innerPadding
+    },
+    lTextX () {
+      let result = this.padding
+      if (this.iIndex < this.lIndex) {
+        result += this.lIconWidth
+      }
+      return result
+    },
+    rTextX () {
+      let result = this.lWidth + this.innerPadding
+      if (this.iIndex > this.cIndex && this.iIndex < this.rIndex) {
+        result += this.rIconWidth
+      }
+      return result
     },
     lPathD () {
       return `M0 0h${this.lWidth}v20H0z`
@@ -176,9 +202,21 @@ export default {
       return `M0 0h${this.lWidth + this.rWidth}v20H0z`
     },
     iconStyle () {
-      const x = this.iconPosition === 'left'
-        ? +this.iconX + this.padding - 5
-        : this.lWidth + this.padding
+      let x = 0
+      if (this.iIndex < this.cIndex) {
+        if (this.iIndex < this.lIndex) {
+          x += +this.iconX + this.padding - 5
+        } else {
+          x += this.lTextX + this.lTextWidth + 5
+        }
+      } else {
+        // eslint-disable-next-line no-lonely-if
+        if (this.iIndex < this.rIndex) {
+          x += this.lWidth + this.innerPadding
+        } else {
+          x += this.rTextX + this.rTextWidth + 5
+        }
+      }
       return {
         transform: `scale(${this.iconScale})`,
         transformOrigin: `${x}px ${this.iconY}px 0px`

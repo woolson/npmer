@@ -5,6 +5,7 @@ main.home
     tag-svg(
       ref="content"
       v-bind="options"
+      :sort="sort"
       :iconScale.sync="options.iconScale")
   section.home__options
     el-form(
@@ -12,56 +13,57 @@ main.home
       :model="options"
       label-width="100px")
       //- 文字标题
+      draggable(v-model="sort" :move="checkMove")
+        transition-group.sort-group(tag="div")
+          div.sort-group__item(
+            v-for="item,index in sort"
+            :class="item.name"
+            :key="index")
+            span(
+              :class="{'el-icon-rank': item.name === 'icon'}"
+              ) &nbsp;{{$t(item.title)}}
+            el-select(
+              v-if="item.name === 'icon'"
+              v-model="iconIndex"
+              :placeholder="$t('select')"
+              clearable
+              filterable)
+              el-option(
+                v-for="item,index in icons"
+                :key="item.id"
+                :label="item[nameKey]"
+                :value="index")
+            el-input(
+              v-else-if="item.name === 'left'"
+              v-model="options.leftText"
+              clearable)
+            el-input(
+              v-else-if="item.name === 'right'"
+              v-model="options.rightText"
+              clearable)
+      //- 图标路径和缩放
       div.options__row
-        span {{$t('icon')}}
-        span {{$t('leftText')}}
-        span {{$t('rightText')}}
-      //- 文字输入
-      div.options__row
-        el-select(
-          v-model="iconIndex"
-          :placeholder="$t('select')"
-          clearable
-          filterable)
-          el-option(
-            v-for="item,index in icons"
-            :key="item.id"
-            :label="item[nameKey]"
-            :value="index")
-        el-input(
-          v-model="options.leftText"
-          clearable)
-        el-input(
-          v-model="options.rightText"
-          clearable)
-      //- 图标Path
-      el-form-item.u-flex(
-        v-show="iconIndex === ''"
-        :label="$t('iconPath')")
-        el-input(
-          v-model="options.iconPath"
-          clearable)
-          el-popover(
-            slot="append"
-            placement="bottom-end"
-            :title="$t('help')"
-            width="200"
-            trigger="hover"
-            :content="$t('helpIconPath')"
-          )
-            i.el-icon-question(slot="reference")
-      //- 图标位置和缩放
-      div.options__row
+        el-form-item.u-flex(
+          v-show="iconIndex === ''"
+          :label="$t('iconPath')")
+          el-input(
+            v-model="options.iconPath"
+            clearable)
+            el-popover(
+              slot="append"
+              placement="bottom-start"
+              :title="$t('help')"
+              width="200"
+              trigger="hover"
+              :content="$t('helpIconPath')"
+            )
+              i.el-icon-question(slot="reference")
         el-form-item(:label="$t('iconScale')")
           el-input(
             v-model="options.iconScale"
             type="number"
             step="0.001"
           )
-        el-form-item(:label="$t('iconPosition')")
-          el-radio-group(v-model="options.iconPosition" fill="#C43030")
-            el-radio-button(label="left") {{$t('left')}}
-            el-radio-button(label="right") {{$t('right')}}
       //- 图标位置微调
       div.options__row
         el-form-item(:label="$t('iconXOffset')")
@@ -125,6 +127,7 @@ main.home
 </template>
 
 <script>
+import Draggable from 'vuedraggable'
 import axios from '~/plugins/axios'
 import TagSvg from '~/components/tag-svg.vue'
 import NpmerFoot from '~/components/npmer-foot.vue'
@@ -144,7 +147,8 @@ export default {
     NpmerFoot,
     LinkCopy,
     PickColor,
-    ColorPick
+    ColorPick,
+    Draggable
   },
 
   data: () => ({
@@ -169,7 +173,13 @@ export default {
     markdownLink: '',
     loading: false,
     customPath: '',
-    customScale: 0.13
+    customScale: 0.13,
+    sort: [
+      { name: 'icon', title: 'icon' },
+      { name: 'left', title: 'leftText' },
+      { name: 'center', title: 'center' },
+      { name: 'right', title: 'rightText' }
+    ]
   }),
 
   computed: {
@@ -208,6 +218,9 @@ export default {
   methods: {
     async fetchIcons () {
       this.icons = await axios('/npmer/api/icon')
+    },
+    checkMove ({ draggedContext }) {
+      return draggedContext.element.name === 'icon'
     },
     downloadImg () {
       const dataUrl = this.$refs.content.$el.outerHTML
@@ -349,6 +362,27 @@ main
     width 100%
   .el-form-item
     padding 10px 20px
+
+.sort-group
+  display flex
+  padding 10px 20px
+
+.sort-group__item
+  display flex
+  flex-direction column
+  background $background-color
+  padding 5px
+  border-radius 5px
+  border 1px solid $background-color
+  &:not(.center)
+    flex 1
+  &:not(:last-child)
+    margin-right 5px
+  > span
+    margin-bottom 10px
+    text-align center
+  &.icon span
+    cursor move
 
 .options__row > .el-form-item
   padding 0 !important
