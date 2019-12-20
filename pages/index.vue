@@ -85,11 +85,9 @@ main.home
           el-radio-button(label="circle") {{$t('circle')}}
       //- 阴影和渐变
       div.options__row
-        div.options__switch
-          label {{$t('textShadow')}}
+        el-form-item(:label="$t('textShadow')")
           el-switch(v-model="options.textShadow")
-        div.options__switch
-          label {{$t('gradient')}}
+        el-form-item(:label="$t('gradient')")
           el-switch(v-model="options.gradient")
       //- 图标颜色
       el-form-item(
@@ -384,8 +382,11 @@ main
   &.icon span
     cursor move
 
-.options__row > .el-form-item
-  padding 0 !important
+.options__row
+  .el-switch
+    height 40px
+  > .el-form-item
+    padding 0 !important
 
 .options__row
   padding 10px 20px
