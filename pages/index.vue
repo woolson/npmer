@@ -5,50 +5,42 @@ main.home
     tag-svg(
       ref="content"
       v-bind="options"
-      :iconScale.sync="options.iconScale"
-    )
-    //- div.preview__tag
-    //-   div.tag__left
-    //-     path(:d="options.iconPath")
-    //-     span {{options.leftText}}
-    //-   div.tag__right
-    //-     path(:d="options.iconPath")
-    //-     span {{options.rightText}}
+      :iconScale.sync="options.iconScale")
   section.home__options
     el-form(
       ref="options"
       :model="options"
-      label-width="100px"
-    )
+      label-width="100px")
+      //- 文字标题
       div.options__row
         span {{$t('icon')}}
         span {{$t('leftText')}}
         span {{$t('rightText')}}
+      //- 文字输入
       div.options__row
         el-select(
-          v-model="options.iconIndex"
+          v-model="iconIndex"
           :placeholder="$t('select')"
           clearable
-        )
+          filterable)
           el-option(
             v-for="item,index in icons"
-            :key="item.name"
-            :label="item.name"
-            :value="index"
-          )
+            :key="item.id"
+            :label="item[nameKey]"
+            :value="index")
         el-input(
           v-model="options.leftText"
-          clearable
-        )
+          clearable)
         el-input(
           v-model="options.rightText"
-          clearable
-        )
+          clearable)
+      //- 图标Path
       el-form-item.u-flex(
-        v-show="options.iconIndex === 0"
-        :label="$t('iconPath')"
-      )
-        el-input(v-model="options.iconPath" clearable)
+        v-show="iconIndex === ''"
+        :label="$t('iconPath')")
+        el-input(
+          v-model="options.iconPath"
+          clearable)
           el-popover(
             slot="append"
             placement="bottom-end"
@@ -58,6 +50,7 @@ main.home
             :content="$t('helpIconPath')"
           )
             i.el-icon-question(slot="reference")
+      //- 图标位置和缩放
       div.options__row
         el-form-item(:label="$t('iconScale')")
           el-input(
@@ -69,6 +62,7 @@ main.home
           el-radio-group(v-model="options.iconPosition" fill="#C43030")
             el-radio-button(label="left") {{$t('left')}}
             el-radio-button(label="right") {{$t('right')}}
+      //- 图标位置微调
       div.options__row
         el-form-item(:label="$t('iconXOffset')")
           el-input(
@@ -82,6 +76,7 @@ main.home
             type="number"
             step="1"
           )
+      //- 圆角和渐变
       div.options__row
         div.options__switch
           label {{$t('roundedAngle')}}
@@ -104,6 +99,7 @@ main.home
             active-color="#13ce66"
             inactive-color="#ff4949"
           )
+      //- 图标颜色
       el-form-item(
         :label="$t('iconColor')"
         v-show="options.iconPath")
@@ -111,6 +107,7 @@ main.home
           v-model="options.iconColor"
           :colors="['#FFFFFF', ...colors]"
         )
+      //- 左边文字和背景颜色
       div.options__row
         el-form-item.options__color(:label="$t('leftTextColor')")
           color-pick(
@@ -122,6 +119,7 @@ main.home
             v-model="options.leftBgColor"
             :colors="['#555555', ...colors]"
           )
+      //- 右边文字和背景颜色
       div.options__row
         el-form-item.options__color(:label="$t('rightTextColor')")
           color-pick(
@@ -131,8 +129,8 @@ main.home
         el-form-item.options__color(:label="$t('rightBgColor')")
           color-pick(
             v-model="options.rightBgColor"
-            :colors="['#555555', ...colors]"
-          )
+            :colors="['#555555', ...colors]")
+      //- 链接
       el-form-item(:label="$t('link')")
         el-input(v-model="link" readonly)
           template(slot="append")
@@ -143,6 +141,7 @@ main.home
                 position: 'bottom-right'\
               })"
             ) {{$t('copy')}}
+          //- 链接markdown
       el-form-item(:label="$t('markdown')")
         el-input(v-model="markdownLink" readonly)
           template(slot="append")
@@ -153,6 +152,7 @@ main.home
                 position: 'bottom-right'\
               })"
             ) {{$t('copy')}}
+      //- 按钮
       div.options__button
         el-button(
           @click="downloadImg"
@@ -167,7 +167,7 @@ main.home
 import axios from '~/plugins/axios'
 import TagSvg from '~/components/tag-svg.vue'
 import ColorPick from '~/components/color-pick.vue'
-import Icons from '~/assets/js/icons'
+// import Icons from '~/assets/js/icons'
 import NpmerFoot from '~/components/npmer-foot.vue'
 
 export default {
@@ -184,20 +184,18 @@ export default {
   },
 
   data: () => ({
-    icons: [{ name: 'Custom' }, ...Icons],
+    icons: [],
+    iconIndex: '',
     options: {
       roundedAngle: false,
       textShadow: false,
       gradient: false,
       leftText: 'welcome',
       leftTextColor: '#FFFFFF',
-      // leftWidth: 0,
       leftBgColor: '#555555',
       rightText: 'programmer',
       rightTextColor: '#FFFFFF',
-      // rightWidth: 0,
       rightBgColor: '#44CC11',
-      iconIndex: 0,
       iconColor: '#FFFFFF',
       iconPosition: 'left',
       iconY: 3,
@@ -218,43 +216,23 @@ export default {
     customScale: 0.13
   }),
 
-  watch: {
-    // 'options.leftText': {
-    //   handler () {
-    //     this.$nextTick(() => {
-    //       let { offsetWidth } = document.querySelector('.tag__left')
-    //       if (this.options.leftText === '') {
-    //         offsetWidth = 0
-    //       }
-    //       this.$set(this.options, 'leftWidth', offsetWidth)
-    //     })
-    //   },
-    //   immediate: true
-    // },
-    // 'options.iconPosition': 'updateRightWidth',
-    // 'options.iconPath': 'updateRightWidth',
-    // 'options.rightText': {
-    //   handler () {
-    //     this.$nextTick(() => {
-    //       this.updateRightWidth()
-    //     })
-    //   },
-    //   immediate: true
-    // },
-    'options.iconIndex': {
-      handler (newValue) {
-        const {
-          scale,
-          path,
-          name
-        } = this.icons[newValue] || {}
+  computed: {
+    nameKey () {
+      return this.$i18n.locale === 'zh'
+        ? 'nameZH'
+        : 'nameEN'
+    }
+  },
 
-        if (name === 'Custom') {
+  watch: {
+    iconIndex: {
+      handler (newValue) {
+        if (newValue === '') {
           this.$set(this.options, 'iconPath', '')
           this.$set(this.options, 'iconScale', 1)
         } else {
-          this.$set(this.options, 'iconPath', path || '')
-          this.$set(this.options, 'iconScale', scale || 0)
+          const { content } = this.icons[newValue]
+          this.$set(this.options, 'iconPath', content)
         }
       },
       immediate: true
@@ -268,19 +246,14 @@ export default {
     }
   },
 
-  methods: {
-    // updateRightWidth () {
-    //   const { rightText, iconPath, iconPosition } = this.options
-    //   let { offsetWidth } = document.querySelector('.tag__right')
-    //   if (rightText === '') {
-    //     offsetWidth = 0
-    //     if (iconPosition === 'right' && iconPath !== '') {
-    //       offsetWidth = 7
-    //     }
-    //   }
+  mounted () {
+    this.fetchIcons()
+  },
 
-    //   this.$set(this.options, 'rightWidth', offsetWidth)
-    // },
+  methods: {
+    async fetchIcons () {
+      this.icons = await axios('/npmer/api/icon')
+    },
     downloadImg () {
       const dataUrl = this.$refs.content.$el.outerHTML
       const link = document.createElement('a')

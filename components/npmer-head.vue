@@ -3,7 +3,10 @@ div.head
   span.head__title {{$t('title')}}
   div.head__pages
     nuxt-link(to="/") {{$t('home')}}
-    nuxt-link(to="/market") {{$t('market')}}
+    nuxt-link(
+      :class="{active: $route.path === '/market'}"
+      :to="{path: '/market', query: { pageNum: 1 }}"
+    ) {{$t('market')}}
   div.head__github
     iframe(
       src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer&type=star&count=true"
@@ -97,15 +100,16 @@ export default {
   margin-right 30px
 
 .head__pages > a
-    margin-right 20px
-    color $color-text
-    font-size 18px
-    font-weight bold
-    line-height 38px
-    text-decoration none
-    &.nuxt-link-exact-active
-      color $color-main
-      border-bottom 2px solid $color-main
+  margin-right 20px
+  color $color-text
+  font-size 18px
+  font-weight bold
+  line-height 38px
+  text-decoration none
+  &.active
+  &.nuxt-link-exact-active
+    color $color-main
+    border-bottom 2px solid $color-main
 
 .head__github
   margin-left auto

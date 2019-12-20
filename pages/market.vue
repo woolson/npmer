@@ -8,6 +8,15 @@ div.market
     @clear="pageNum = 1; fetchData()"
   )
   h1.market__title
+  el-pagination(
+    background
+    :hide-on-single-page="true"
+    layout="prev, pager, next"
+    :page-size="pageSize"
+    :total="totalNum"
+    :current-page="pageNum"
+    @current-change="pageNum = $event"
+  )
   badge-list(:data="data" :loading="loading")
   el-pagination(
     background
@@ -39,9 +48,10 @@ export default {
   },
 
   data () {
+    const pageNum = +this.$route.query.pageNum || 1
     return {
       keyword: '',
-      pageNum: 1,
+      pageNum,
       pageSize: 50,
       totalNum: 0,
       data: [],
@@ -50,15 +60,18 @@ export default {
   },
 
   watch: {
-    pageNum: 'fetchData'
-  },
-
-  mounted () {
-    this.fetchData()
+    pageNum: {
+      handler: 'fetchData',
+      immediate: true
+    }
   },
 
   methods: {
     async fetchData () {
+      this.$router.push({
+        path: this.$route.fullPath,
+        query: { pageNum: this.pageNum }
+      })
       try {
         this.loading = true
         const resData = await axios({

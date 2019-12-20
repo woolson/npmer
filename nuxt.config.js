@@ -61,7 +61,8 @@ export default {
   */
   proxy: {
     '/npmer': {
-      target: 'https://woolson.cn/'
+      target: 'http://localhost:3000/'
+      // target: 'https://woolson.cn/'
     }
   },
   /** Build configuration */

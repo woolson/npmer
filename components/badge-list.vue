@@ -119,7 +119,7 @@ export default {
   list-style none
   display grid
   padding 0
-  margin 10px 0 20px 0
+  margin 20px 0
   grid-column-gap 20px
   grid-template-columns repeat(5, 1fr)
 

@@ -140,23 +140,19 @@ export default {
   }),
 
   computed: {
-    /** 左边文字宽度 */
     lTextWidth () {
       return strWidth(this.leftText, { font: 'Verdana', size: 12 })
     },
-    /** 右边文字宽度 */
     rTextWidth () {
       return strWidth(this.rightText, { font: 'Verdana', size: 12 })
     },
     lIconWidth () {
-      return this.iconPosition === 'left' ? this.iconWidth + 3 : 0
+      return this.iconPosition === 'left' ? this.iconWidth : 0
     },
     rIconWidth () {
-      return this.iconPosition === 'right' ? this.iconWidth + 3 : 0
+      return this.iconPosition === 'right' ? this.iconWidth : 0
     },
-    /** 左边区域 */
     lWidth () {
-      /** 左边区域宽度 */
       return this.padding + this.lIconWidth + this.lTextWidth + this.padding
     },
     rWidth () {
@@ -173,7 +169,7 @@ export default {
     },
     iconStyle () {
       const x = this.iconPosition === 'left'
-        ? this.iconX + 2
+        ? +this.iconX + 2
         : this.lWidth + this.padding
       return {
         transform: `scale(${this.iconScale})`,
@@ -193,11 +189,14 @@ export default {
     iconPath: {
       async handler () {
         await this.$nextTick()
-        if (!this.$refs.icon) { return }
+        if (!this.$refs.icon) {
+          this.iconWidth = 0
+          return
+        }
 
         const { height, width } = this.$refs.icon.getBBox()
-        const scale = 13 / height
-        this.iconWidth = width * scale
+        const scale = 14 / height
+        this.iconWidth = width * scale + 3
         this.$emit('update:iconScale', scale || 1)
       },
       immediate: true
