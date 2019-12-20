@@ -11,9 +11,13 @@ svg(
   )
     stop(offset="0" stop-color="#bbb" stop-opacity=".1")
     stop(offset="1" stop-opacity=".1")
-  clipPath(v-if="roundedAngle" id="a" )
-    rect(:width="lWidth + rWidth" height="20" rx="3" fill="#fff")
-  g(:clip-path="roundedAngle ? 'url(#a)' : ''")
+  clipPath(v-if="angle !== 'square'" id="a" )
+    rect(
+      height="20" fill="#fff"
+      :width="lWidth + rWidth"
+      :rx="angle === 'circle' ? 10 : 3"
+    )
+  g(:clip-path="angle !== 'square' ? 'url(#a)' : ''")
     path(:fill="leftBgColor" :d="lPathD")
     path(:fill="rightBgColor" :d="rPathD")
     path(v-if="gradient" fill="url(#b)" :d="bgPathD")
@@ -52,14 +56,14 @@ svg(
       y="14"
     ) {{leftText}}
     text(
-      :x="lWidth + padding + rIconWidth"
+      :x="lWidth + innerPadding + rIconWidth"
       y="15"
       v-if="textShadow"
       fill="#010101"
       fill-opacity=".3"
     ) {{rightText}}
     text(
-      :x="lWidth + padding + rIconWidth"
+      :x="lWidth + innerPadding + rIconWidth"
       :fill="rightTextColor"
       y="14"
     ) {{rightText}}
@@ -96,9 +100,12 @@ export default {
       type: String,
       default: ''
     },
-    roundedAngle: {
-      type: Boolean,
-      default: false
+    angle: {
+      type: String,
+      default: 'square',
+      validator (value) {
+        return ['square', 'circle', 'rounded'].includes(value)
+      }
     },
     gradient: {
       type: Boolean,
@@ -136,7 +143,8 @@ export default {
 
   data: () => ({
     iconWidth: 0,
-    padding: 7
+    padding: 7,
+    innerPadding: 7
   }),
 
   computed: {
@@ -153,10 +161,10 @@ export default {
       return this.iconPosition === 'right' ? this.iconWidth : 0
     },
     lWidth () {
-      return this.padding + this.lIconWidth + this.lTextWidth + this.padding
+      return this.padding + this.lIconWidth + this.lTextWidth + this.innerPadding
     },
     rWidth () {
-      return this.padding + this.rIconWidth + this.rTextWidth + this.padding
+      return this.padding + this.rIconWidth + this.rTextWidth + this.innerPadding
     },
     lPathD () {
       return `M0 0h${this.lWidth}v20H0z`
@@ -169,7 +177,7 @@ export default {
     },
     iconStyle () {
       const x = this.iconPosition === 'left'
-        ? +this.iconX + 2
+        ? +this.iconX + this.padding - 5
         : this.lWidth + this.padding
       return {
         transform: `scale(${this.iconScale})`,
@@ -186,6 +194,9 @@ export default {
   },
 
   watch: {
+    angle (newValue) {
+      this.padding = newValue === 'circle' ? 10 : 7
+    },
     iconPath: {
       async handler () {
         await this.$nextTick()

@@ -76,29 +76,19 @@ main.home
             type="number"
             step="1"
           )
-      //- 圆角和渐变
+      el-form-item.u-flex(:label="$t('roundedAngle')")
+        el-radio-group(v-model="options.angle")
+          el-radio-button(label="square") {{$t('square')}}
+          el-radio-button(label="rounded") {{$t('rounded')}}
+          el-radio-button(label="circle") {{$t('circle')}}
+      //- 阴影和渐变
       div.options__row
         div.options__switch
-          label {{$t('roundedAngle')}}
-          el-switch(
-            v-model="options.roundedAngle"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          )
-        div.options__switch
           label {{$t('textShadow')}}
-          el-switch(
-            v-model="options.textShadow"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          )
+          el-switch(v-model="options.textShadow")
         div.options__switch
           label {{$t('gradient')}}
-          el-switch(
-            v-model="options.gradient"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          )
+          el-switch(v-model="options.gradient")
       //- 图标颜色
       el-form-item(
         :label="$t('iconColor')"
@@ -108,50 +98,21 @@ main.home
           :colors="['#FFFFFF', ...colors]"
         )
       //- 左边文字和背景颜色
-      div.options__row
-        el-form-item.options__color(:label="$t('leftTextColor')")
-          color-pick(
-            v-model="options.leftTextColor"
-            :colors="['#FFFFFF', '#444']"
-          )
-        el-form-item.options__color(:label="$t('leftBgColor')")
-          color-pick(
-            v-model="options.leftBgColor"
-            :colors="['#555555', ...colors]"
-          )
+      pick-color(
+        :textTitle="$t('leftTextColor')"
+        :backgroundTitle="$t('leftBgColor')"
+        :text.sync="options.leftTextColor"
+        :background.sync="options.leftBgColor"
+      )
       //- 右边文字和背景颜色
-      div.options__row
-        el-form-item.options__color(:label="$t('rightTextColor')")
-          color-pick(
-            v-model="options.rightTextColor"
-            :colors="['#FFFFFF', '#444']"
-          )
-        el-form-item.options__color(:label="$t('rightBgColor')")
-          color-pick(
-            v-model="options.rightBgColor"
-            :colors="['#555555', ...colors]")
+      pick-color(
+        :textTitle="$t('rightTextColor')"
+        :backgroundTitle="$t('rightBgColor')"
+        :text.sync="options.rightTextColor"
+        :background.sync="options.rightBgColor"
+      )
       //- 链接
-      el-form-item(:label="$t('link')")
-        el-input(v-model="link" readonly)
-          template(slot="append")
-            el-button(
-              v-clipboard="link"
-              @success="$notify.success({\
-                title: $t('copy') + $t('success'),\
-                position: 'bottom-right'\
-              })"
-            ) {{$t('copy')}}
-          //- 链接markdown
-      el-form-item(:label="$t('markdown')")
-        el-input(v-model="markdownLink" readonly)
-          template(slot="append")
-            el-button(
-              v-clipboard="markdownLink"
-              @success="$notify.success({\
-                title: $t('copy') + $t('success'),\
-                position: 'bottom-right'\
-              })"
-            ) {{$t('copy')}}
+      link-copy(:link="link")
       //- 按钮
       div.options__button
         el-button(
@@ -166,9 +127,10 @@ main.home
 <script>
 import axios from '~/plugins/axios'
 import TagSvg from '~/components/tag-svg.vue'
-import ColorPick from '~/components/color-pick.vue'
-// import Icons from '~/assets/js/icons'
 import NpmerFoot from '~/components/npmer-foot.vue'
+import LinkCopy from '~/components/home/link-copy.vue'
+import PickColor from '~/components/home/pick-color.vue'
+import ColorPick from '~/components/color-pick.vue'
 
 export default {
   head () {
@@ -179,15 +141,17 @@ export default {
 
   components: {
     TagSvg,
-    ColorPick,
-    NpmerFoot
+    NpmerFoot,
+    LinkCopy,
+    PickColor,
+    ColorPick
   },
 
   data: () => ({
     icons: [],
     iconIndex: '',
     options: {
-      roundedAngle: false,
+      angle: 'square',
       textShadow: false,
       gradient: false,
       leftText: 'welcome',
@@ -201,14 +165,6 @@ export default {
       iconY: 3,
       iconX: 5
     },
-    colors: [
-      '#E05D44',
-      '#DFB317',
-      '#44CC11',
-      '#46BC99',
-      '#007EC6',
-      '#7289DA'
-    ],
     link: '',
     markdownLink: '',
     loading: false,
@@ -240,7 +196,6 @@ export default {
     options: {
       handler () {
         this.link = ''
-        this.markdownLink = ''
       },
       deep: true
     }
@@ -273,7 +228,7 @@ export default {
           rightBgColor,
           gradient,
           textShadow,
-          rounded,
+          angle,
           iconIndex,
           iconColor,
           iconPath,
@@ -286,7 +241,7 @@ export default {
           rightText,
           rightTextColor.replace('#', '').toLowerCase(),
           rightBgColor.replace('#', '').toLowerCase(),
-          rounded ? 'rounded' : 'square',
+          angle,
           gradient ? 'gradient' : 'flat',
           textShadow ? 'shadow' : 'plain'
         ]
@@ -316,7 +271,6 @@ export default {
           }
         })
         this.link = badgeLink
-        this.markdownLink = `![${leftText}](${badgeLink})`
         this.loading = false
         this.$message.success(this.$t('createLink') + this.$t('success'))
       } catch (err) {
