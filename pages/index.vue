@@ -13,34 +13,33 @@ main.home
       :model="options"
       label-width="100px")
       //- 文字排序
-      draggable(v-model="sort" :move="checkMove")
-        transition-group.sort-group(tag="div")
-          div.sort-group__item(
-            v-for="item,index in sort"
-            :class="item.name"
-            :key="item.name")
-            span(
-              :class="{'el-icon-rank': item.name === 'icon'}"
-              ) {{$t(item.title)}}
-            el-select(
-              v-if="item.name === 'icon'"
-              v-model="iconIndex"
-              :placeholder="$t('select')"
-              clearable
-              filterable)
-              el-option(
-                v-for="item,index in icons"
-                :key="item.id"
-                :label="item[nameKey]"
-                :value="index")
-            el-input(
-              v-else-if="item.name === 'left'"
-              v-model="options.leftText"
-              clearable)
-            el-input(
-              v-else-if="item.name === 'right'"
-              v-model="options.rightText"
-              clearable)
+      draggable.sort-group(v-model="sort" :move="checkMove")
+        div.sort-group__item(
+          v-for="item,index in sort"
+          :class="item.name"
+          :key="item.name")
+          span(
+            :class="{'el-icon-rank': item.name === 'icon'}"
+            ) {{$t(item.title)}}
+          el-select(
+            v-if="item.name === 'icon'"
+            v-model="iconIndex"
+            :placeholder="$t('select')"
+            clearable
+            filterable)
+            el-option(
+              v-for="item,index in icons"
+              :key="item.id"
+              :label="item[nameKey]"
+              :value="index")
+          el-input(
+            v-else-if="item.name === 'left'"
+            v-model="options.leftText"
+            clearable)
+          el-input(
+            v-else-if="item.name === 'right'"
+            v-model="options.rightText"
+            clearable)
       //- 图标路径和缩放
       div.options__row
         el-form-item.u-flex(
@@ -230,57 +229,67 @@ export default {
       link.href = `data:image/svg+xmlcharset=utf-8,${dataUrl}`
       link.click()
     },
+    getSortName () {
+      let items = [...this.sort]
+      if (this.iconIndex === '') {
+        items = items.filter(item => item.name !== 'icon')
+      }
+      return items
+        .reduce((p, n) => (p += n.name[0]), '')
+        .toLowerCase()
+    },
+    getIconName () {
+      let name = ''
+      switch (this.iconIndex) {
+        case '':
+          name = 'none'
+          break
+        case 0:
+          if (this.iconPath) {
+            name = `custom${Date.now()}`
+          } else {
+            name = 'none'
+          }
+          break
+        default:
+          name = '' + this.icons[this.iconIndex].id
+          break
+      }
+      return name.toLowerCase()
+    },
     async createLink () {
       try {
         this.loading = true
-        const {
-          leftText,
-          leftTextColor,
-          leftBgColor,
-          rightText,
-          rightTextColor,
-          rightBgColor,
-          gradient,
-          textShadow,
-          angle,
-          iconIndex,
-          iconColor,
-          iconPath,
-          iconPosition
-        } = this.options
+        /**
+         * 名称格式
+         * 排序-图标名-左字-左字色-左底色-右字-右字色-右底色-图标颜色-是否渐变-是否文字阴影-是否圆角
+         */
+        const iconName = this.getIconName()
         const names = [
-          leftText,
-          leftTextColor.replace('#', '').toLowerCase(),
-          leftBgColor.replace('#', '').toLowerCase(),
-          rightText,
-          rightTextColor.replace('#', '').toLowerCase(),
-          rightBgColor.replace('#', '').toLowerCase(),
-          angle,
-          gradient ? 'gradient' : 'flat',
-          textShadow ? 'shadow' : 'plain'
+          this.getSortName(),
+          iconName,
+          iconName === 'none'
+            ? 'none'
+            : this.options.iconColor.toLowerCase(),
+          this.options.leftText,
+          this.options.leftTextColor.toLowerCase(),
+          this.options.leftBgColor.toLowerCase(),
+          this.options.rightText,
+          this.options.rightTextColor.toLowerCase(),
+          this.options.rightBgColor.toLowerCase(),
+          this.options.angle[0].toLowerCase(),
+          this.options.gradient ? 't' : 'f',
+          this.options.textShadow ? 't' : 'f'
         ]
-        // 名称格式
-        // 左文字-左文字色-左底色-右文字-右文字色-右底色-图标名称-图标颜色-是否渐变-是否文字阴影-是否圆角
-        // eslint-disable-next-line
-        // leftText-leftColor-rightText-rightColor-iconName-iconColor-iconPosition-rounded-gradient-textShadow
-        if (iconIndex !== '' && iconPath !== '') {
-          let name = ''
-          if (iconIndex === 0) {
-            name = `custom${Date.now()}`
-          } else {
-            name = this.icons[iconIndex].name.toLowerCase()
-          }
-          names.splice(4, 0, name, iconColor.replace('#', '').toLowerCase(), iconPosition)
-        }
-        // console.log('[name]', `${names.join('-')}.svg`)
         const badgeLink = await axios({
+          responseType: 'json',
           url: '/npmer/api/badge',
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           data: {
-            name: encodeURI(`${names.join('-')}.svg`),
+            name: encodeURI(`${names.join('-')}.svg`.replace(/#/g, '')),
             content: this.$refs.content.$el.outerHTML
           }
         })
@@ -293,19 +302,6 @@ export default {
         this.loading = false
         this.$message.error(this.$t(err.message))
       }
-    },
-    createTemplate () {
-      if (!(this.options.leftText + this.options.rightText).includes('$VAR$')) {
-        this.$message.warning(this.$t('pleaseInputVariable'))
-        // return
-      }
-      // await axios({
-      //   method: 'POST',
-      //   url: '/npmer/api/template',
-      //   data: {
-      //     name:
-      //   }
-      // })
     }
   }
 }
