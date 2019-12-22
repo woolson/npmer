@@ -48,7 +48,7 @@ export default {
   },
 
   data () {
-    const pageNum = +this.$route.query.pageNum || 1
+    const pageNum = +this.$route.query.page || 1
     return {
       keyword: '',
       pageNum,
@@ -70,7 +70,7 @@ export default {
     async fetchData () {
       this.$router.push({
         path: this.$route.fullPath,
-        query: { pageNum: this.pageNum }
+        query: { page: this.pageNum }
       })
       try {
         this.loading = true

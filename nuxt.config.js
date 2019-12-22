@@ -14,7 +14,8 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto' }
+      { rel: 'stylesheet', href: '//at.alicdn.com/t/font_1575457_7zq45naflc6.css' },
+      { rel: 'stylesheet', href: '//fonts.googleapis.com/css?family=Roboto' }
     ]
   },
   generate: {

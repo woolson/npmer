@@ -1,8 +1,8 @@
 <template lang="pug">
 div.body
-  //- npmer-head
+  npmer-head
   nuxt(keep-alive)
-  //- npmer-foot
+  npmer-foot
 </template>
 
 <script>

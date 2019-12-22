@@ -12,16 +12,16 @@ main.home
       ref="options"
       :model="options"
       label-width="100px")
-      //- 文字标题
+      //- 文字排序
       draggable(v-model="sort" :move="checkMove")
         transition-group.sort-group(tag="div")
           div.sort-group__item(
             v-for="item,index in sort"
             :class="item.name"
-            :key="index")
+            :key="item.name")
             span(
               :class="{'el-icon-rank': item.name === 'icon'}"
-              ) &nbsp;{{$t(item.title)}}
+              ) {{$t(item.title)}}
             el-select(
               v-if="item.name === 'icon'"
               v-model="iconIndex"
@@ -44,7 +44,7 @@ main.home
       //- 图标路径和缩放
       div.options__row
         el-form-item.u-flex(
-          v-show="iconIndex === ''"
+          v-show="iconIndex === 0"
           :label="$t('iconPath')")
           el-input(
             v-model="options.iconPath"
@@ -80,9 +80,12 @@ main.home
           )
       el-form-item.u-flex(:label="$t('roundedAngle')")
         el-radio-group(v-model="options.angle")
-          el-radio-button(label="square") {{$t('square')}}
-          el-radio-button(label="rounded") {{$t('rounded')}}
-          el-radio-button(label="circle") {{$t('circle')}}
+          el-radio-button(label="square")
+            i.iconfont.icon-square
+          el-radio-button(label="rounded")
+            i.iconfont.icon-rounded
+          el-radio-button(label="circle")
+            i.iconfont.icon-circle
       //- 阴影和渐变
       div.options__row
         el-form-item(:label="$t('textShadow')")
@@ -189,17 +192,14 @@ export default {
   },
 
   watch: {
-    iconIndex: {
-      handler (newValue) {
-        if (newValue === '') {
-          this.$set(this.options, 'iconPath', '')
-          this.$set(this.options, 'iconScale', 1)
-        } else {
-          const { content } = this.icons[newValue]
-          this.$set(this.options, 'iconPath', content)
-        }
-      },
-      immediate: true
+    iconIndex (newValue) {
+      if (newValue === 0) {
+        this.$set(this.options, 'iconPath', '')
+        this.$set(this.options, 'iconScale', 1)
+      } else {
+        const { content } = this.icons[newValue] || {}
+        this.$set(this.options, 'iconPath', content)
+      }
     },
     options: {
       handler () {
@@ -215,7 +215,10 @@ export default {
 
   methods: {
     async fetchIcons () {
-      this.icons = await axios('/npmer/api/icon')
+      this.icons = [
+        { nameEN: 'Customize', nameZH: '自定义' },
+        ...await axios('/npmer/api/icon')
+      ]
     },
     checkMove ({ draggedContext }) {
       return draggedContext.element.name === 'icon'
@@ -371,16 +374,20 @@ main
   background $background-color
   padding 5px
   border-radius 5px
-  border 1px solid $background-color
+  // border 1px solid darken($background-color, 3)
+  box-shadow 0 0 1px rgba(black, .2)
   &:not(.center)
     flex 1
   &:not(:last-child)
     margin-right 5px
   > span
     margin-bottom 10px
+    line-height 24px
     text-align center
   &.icon span
     cursor move
+  input
+    text-align center
 
 .options__row
   .el-switch

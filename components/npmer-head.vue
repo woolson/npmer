@@ -1,11 +1,13 @@
 <template lang="pug">
 div.head
-  span.head__title {{$t('title')}}
+  div.head__title
+    img(src="~assets/img/icon.svg")
+    span {{$t('title')}}
   div.head__pages
     nuxt-link(to="/") {{$t('home')}}
     nuxt-link(
       :class="{active: $route.path === '/market'}"
-      :to="{path: '/market', query: { pageNum: 1 }}"
+      :to="{path: '/market', query: { page: 1 }}"
     ) {{$t('market')}}
   div.head__github
     iframe(
@@ -89,8 +91,8 @@ export default {
   z-index 3
 
 .head__title
-  padding 10px 20px
-  background linear-gradient(139deg, #ff4b01, #c12127)
+  padding 0 15px
+  background #cb3837
   color white
   line-height 1
   text-align center
@@ -98,6 +100,13 @@ export default {
   font-size 18px
   font-weight bold
   margin-right 30px
+  display flex
+  align-items center
+  img
+    height 24px
+    margin-right 7px
+  span
+    line-height 40px
 
 .head__pages > a
   margin-right 20px
