@@ -1,4 +1,8 @@
 export default {
+  center: 'Center',
+  rounded: 'Rounded',
+  circle: 'Circle',
+  square: 'Square',
   logout: 'Logout',
   uploaded: 'Uploaded',
   empty: 'Empty',

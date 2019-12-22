@@ -14,7 +14,8 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto' },
+      { rel: 'stylesheet', href: '//at.alicdn.com/t/font_1575457_7zq45naflc6.css' },
+      { rel: 'stylesheet', href: '//fonts.googleapis.com/css?family=Roboto' }
     ]
   },
   generate: {
@@ -25,7 +26,7 @@ export default {
     css: false
   },
   router: {
-    middleware: 'auth',
+    middleware: 'auth'
   },
   /** Global CSS */
   css: [
@@ -36,7 +37,7 @@ export default {
   /** Plugins to load before mounting the App */
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/i18n-setup',
+    '@/plugins/i18n-setup'
   ],
   /** Nuxt.js dev-modules */
   buildModules: [
@@ -59,13 +60,10 @@ export default {
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
-  axios: {
-    // baseURL: 'https://woolson.cn/npmer/api',
-    baseURL: 'http://localhost:3000/npmer/api',
-  },
   proxy: {
     '/npmer': {
-      target: 'http://woolson.cn/',
+      target: 'http://localhost:3000/'
+      // target: 'https://woolson.cn/'
     }
   },
   /** Build configuration */

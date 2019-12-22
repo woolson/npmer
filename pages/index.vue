@@ -5,66 +5,65 @@ main.home
     tag-svg(
       ref="content"
       v-bind="options"
-      :iconScale.sync="options.iconScale"
-    )
-    div.preview__tag
-      div.tag__left {{options.leftText}}
-      div.tag__right {{options.rightText}}
+      :sort="sort"
+      :iconScale.sync="options.iconScale")
   section.home__options
     el-form(
       ref="options"
       :model="options"
-      label-width="100px"
-    )
+      label-width="100px")
+      //- 文字排序
+      draggable.sort-group(v-model="sort" :move="checkMove")
+        div.sort-group__item(
+          v-for="item,index in sort"
+          :class="item.name"
+          :key="item.name")
+          span(
+            :class="{'el-icon-rank': item.name === 'icon'}"
+            ) {{$t(item.title)}}
+          el-select(
+            v-if="item.name === 'icon'"
+            v-model="iconIndex"
+            :placeholder="$t('select')"
+            clearable
+            filterable)
+            el-option(
+              v-for="item,index in icons"
+              :key="item.id"
+              :label="item[nameKey]"
+              :value="index")
+          el-input(
+            v-else-if="item.name === 'left'"
+            v-model="options.leftText"
+            clearable)
+          el-input(
+            v-else-if="item.name === 'right'"
+            v-model="options.rightText"
+            clearable)
+      //- 图标路径和缩放
       div.options__row
-        span {{$t('icon')}}
-        span {{$t('leftText')}}
-        span {{$t('rightText')}}
-      div.options__row
-        el-select(
-          v-model="options.iconIndex"
-          :placeholder="$t('select')"
-          clearable
-        )
-          el-option(
-            v-for="item,index in icons"
-            :key="item.name"
-            :label="item.name"
-            :value="index"
-          )
-        el-input(
-          v-model="options.leftText"
-          clearable
-        )
-        el-input(
-          v-model="options.rightText"
-          clearable
-        )
-      el-form-item.u-flex(
-        v-show="options.iconIndex === 0"
-        :label="$t('iconPath')"
-      )
-        el-input(v-model="options.iconPath" clearable)
-          el-popover(
-            slot="append"
-            placement="bottom-end"
-            :title="$t('help')"
-            width="200"
-            trigger="hover"
-            :content="$t('helpIconPath')"
-          )
-            i.el-icon-question(slot="reference")
-      div.options__row
+        el-form-item.u-flex(
+          v-show="iconIndex === 0"
+          :label="$t('iconPath')")
+          el-input(
+            v-model="options.iconPath"
+            clearable)
+            el-popover(
+              slot="append"
+              placement="bottom-start"
+              :title="$t('help')"
+              width="200"
+              trigger="hover"
+              :content="$t('helpIconPath')"
+            )
+              i.el-icon-question(slot="reference")
         el-form-item(:label="$t('iconScale')")
           el-input(
             v-model="options.iconScale"
             type="number"
             step="0.001"
           )
-        el-form-item(:label="$t('iconPosition')")
-          el-radio-group(v-model="options.iconPosition" fill="#C43030")
-            el-radio-button(label="left") {{$t('left')}}
-            el-radio-button(label="right") {{$t('right')}}
+      //- 图标位置微调
       div.options__row
         el-form-item(:label="$t('iconXOffset')")
           el-input(
@@ -78,28 +77,21 @@ main.home
             type="number"
             step="1"
           )
+      el-form-item.u-flex(:label="$t('roundedAngle')")
+        el-radio-group(v-model="options.angle")
+          el-radio-button(label="square")
+            i.iconfont.icon-square
+          el-radio-button(label="rounded")
+            i.iconfont.icon-rounded
+          el-radio-button(label="circle")
+            i.iconfont.icon-circle
+      //- 阴影和渐变
       div.options__row
-        div.options__switch
-          label {{$t('roundedAngle')}}
-          el-switch(
-            v-model="options.roundedAngle"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          )
-        div.options__switch
-          label {{$t('textShadow')}}
-          el-switch(
-            v-model="options.textShadow"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          )
-        div.options__switch
-          label {{$t('gradient')}}
-          el-switch(
-            v-model="options.gradient"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          )
+        el-form-item(:label="$t('textShadow')")
+          el-switch(v-model="options.textShadow")
+        el-form-item(:label="$t('gradient')")
+          el-switch(v-model="options.gradient")
+      //- 图标颜色
       el-form-item(
         :label="$t('iconColor')"
         v-show="options.iconPath")
@@ -107,48 +99,23 @@ main.home
           v-model="options.iconColor"
           :colors="['#FFFFFF', ...colors]"
         )
-      div.options__row
-        el-form-item.options__color(:label="$t('leftTextColor')")
-          color-pick(
-            v-model="options.leftTextColor"
-            :colors="['#FFFFFF', '#444']"
-          )
-        el-form-item.options__color(:label="$t('leftBgColor')")
-          color-pick(
-            v-model="options.leftBgColor"
-            :colors="['#555555', ...colors]"
-          )
-      div.options__row
-        el-form-item.options__color(:label="$t('rightTextColor')")
-          color-pick(
-            v-model="options.rightTextColor"
-            :colors="['#FFFFFF', '#444']"
-          )
-        el-form-item.options__color(:label="$t('rightBgColor')")
-          color-pick(
-            v-model="options.rightBgColor"
-            :colors="['#555555', ...colors]"
-          )
-      el-form-item(:label="$t('link')")
-        el-input(v-model="link" readonly)
-          template(slot="append")
-            el-button(
-              v-clipboard="link"
-              @success="$notify.success({\
-                title: $t('copy') + $t('success'),\
-                position: 'bottom-right'\
-              })"
-            ) {{$t('copy')}}
-      el-form-item(:label="$t('markdown')")
-        el-input(v-model="markdownLink" readonly)
-          template(slot="append")
-            el-button(
-              v-clipboard="markdownLink"
-              @success="$notify.success({\
-                title: $t('copy') + $t('success'),\
-                position: 'bottom-right'\
-              })"
-            ) {{$t('copy')}}
+      //- 左边文字和背景颜色
+      pick-color(
+        :textTitle="$t('leftTextColor')"
+        :backgroundTitle="$t('leftBgColor')"
+        :text.sync="options.leftTextColor"
+        :background.sync="options.leftBgColor"
+      )
+      //- 右边文字和背景颜色
+      pick-color(
+        :textTitle="$t('rightTextColor')"
+        :backgroundTitle="$t('rightBgColor')"
+        :text.sync="options.rightTextColor"
+        :background.sync="options.rightBgColor"
+      )
+      //- 链接
+      link-copy(:link="link")
+      //- 按钮
       div.options__button
         el-button(
           @click="downloadImg"
@@ -160,11 +127,13 @@ main.home
 </template>
 
 <script>
+import Draggable from 'vuedraggable'
 import axios from '~/plugins/axios'
 import TagSvg from '~/components/tag-svg.vue'
-import ColorPick from '~/components/color-pick.vue'
-import Icons from '~/assets/js/icons'
 import NpmerFoot from '~/components/npmer-foot.vue'
+import LinkCopy from '~/components/home/link-copy.vue'
+import PickColor from '~/components/home/pick-color.vue'
+import ColorPick from '~/components/color-pick.vue'
 
 export default {
   head () {
@@ -175,107 +144,83 @@ export default {
 
   components: {
     TagSvg,
+    NpmerFoot,
+    LinkCopy,
+    PickColor,
     ColorPick,
-    NpmerFoot
+    Draggable
   },
 
   data: () => ({
-    icons: [{ name: 'Custom' }, ...Icons],
+    icons: [],
+    iconIndex: '',
     options: {
-      roundedAngle: false,
+      angle: 'square',
       textShadow: false,
       gradient: false,
       leftText: 'welcome',
       leftTextColor: '#FFFFFF',
-      leftWidth: 0,
       leftBgColor: '#555555',
       rightText: 'programmer',
       rightTextColor: '#FFFFFF',
-      rightWidth: 0,
       rightBgColor: '#44CC11',
-      iconIndex: 0,
       iconColor: '#FFFFFF',
       iconPosition: 'left',
       iconY: 3,
       iconX: 5
     },
-    colors: [
-      '#E05D44',
-      '#DFB317',
-      '#44CC11',
-      '#46BC99',
-      '#007EC6',
-      '#7289DA'
-    ],
     link: '',
     markdownLink: '',
     loading: false,
     customPath: '',
-    customScale: 0.13
+    customScale: 0.13,
+    sort: [
+      { name: 'icon', title: 'icon' },
+      { name: 'left', title: 'leftText' },
+      { name: 'center', title: 'center' },
+      { name: 'right', title: 'rightText' }
+    ]
   }),
 
-  watch: {
-    'options.leftText': {
-      handler () {
-        this.$nextTick(() => {
-          let { offsetWidth } = document.querySelector('.tag__left')
-          if (this.options.leftText === '') {
-            offsetWidth = 0
-          }
-          this.$set(this.options, 'leftWidth', offsetWidth)
-        })
-      },
-      immediate: true
-    },
-    'options.iconPosition': 'updateRightWidth',
-    'options.iconPath': 'updateRightWidth',
-    'options.rightText': {
-      handler () {
-        this.$nextTick(() => {
-          this.updateRightWidth()
-        })
-      },
-      immediate: true
-    },
-    'options.iconIndex': {
-      handler (newValue) {
-        const {
-          scale,
-          path,
-          name
-        } = this.icons[newValue] || {}
+  computed: {
+    nameKey () {
+      return this.$i18n.locale === 'zh'
+        ? 'nameZH'
+        : 'nameEN'
+    }
+  },
 
-        if (name === 'Custom') {
-          this.$set(this.options, 'iconPath', '')
-          this.$set(this.options, 'iconScale', 1)
-        } else {
-          this.$set(this.options, 'iconPath', path || '')
-          this.$set(this.options, 'iconScale', scale || 0)
-        }
-      },
-      immediate: true
+  watch: {
+    iconIndex (newValue) {
+      if (newValue === 0) {
+        this.$set(this.options, 'iconPath', '')
+        this.$set(this.options, 'iconScale', 1)
+      } else {
+        const { content } = this.icons[newValue] || {}
+        this.$set(this.options, 'iconPath', content)
+      }
     },
     options: {
       handler () {
         this.link = ''
-        this.markdownLink = ''
       },
       deep: true
     }
   },
 
-  methods: {
-    updateRightWidth () {
-      const { rightText, iconPath, iconPosition } = this.options
-      let { offsetWidth } = document.querySelector('.tag__right')
-      if (rightText === '') {
-        offsetWidth = 0
-        if (iconPosition === 'right' && iconPath !== '') {
-          offsetWidth = 7
-        }
-      }
+  mounted () {
+    this.fetchIcons()
+  },
 
-      this.$set(this.options, 'rightWidth', offsetWidth)
+  methods: {
+    async fetchIcons () {
+      this.icons = [
+        { nameEN: 'Customize', nameZH: '自定义' },
+        ...await axios('/npmer/api/icon')
+      ]
+    },
+    checkMove ({ draggedContext }) {
+      return draggedContext.element.name === 'icon'
     },
     downloadImg () {
       const dataUrl = this.$refs.content.$el.outerHTML
@@ -284,62 +229,71 @@ export default {
       link.href = `data:image/svg+xmlcharset=utf-8,${dataUrl}`
       link.click()
     },
+    getSortName () {
+      let items = [...this.sort]
+      if (this.iconIndex === '') {
+        items = items.filter(item => item.name !== 'icon')
+      }
+      return items
+        .reduce((p, n) => (p += n.name[0]), '')
+        .toLowerCase()
+    },
+    getIconName () {
+      let name = ''
+      switch (this.iconIndex) {
+        case '':
+          name = 'none'
+          break
+        case 0:
+          if (this.iconPath) {
+            name = `custom${Date.now()}`
+          } else {
+            name = 'none'
+          }
+          break
+        default:
+          name = '' + this.icons[this.iconIndex].id
+          break
+      }
+      return name.toLowerCase()
+    },
     async createLink () {
       try {
         this.loading = true
-        const {
-          leftText,
-          leftTextColor,
-          leftBgColor,
-          rightText,
-          rightTextColor,
-          rightBgColor,
-          gradient,
-          textShadow,
-          rounded,
-          iconIndex,
-          iconColor,
-          iconPath,
-          iconPosition
-        } = this.options
+        /**
+         * 名称格式
+         * 排序-图标名-左字-左字色-左底色-右字-右字色-右底色-图标颜色-是否渐变-是否文字阴影-是否圆角
+         */
+        const iconName = this.getIconName()
         const names = [
-          leftText,
-          leftTextColor.replace('#', '').toLowerCase(),
-          leftBgColor.replace('#', '').toLowerCase(),
-          rightText,
-          rightTextColor.replace('#', '').toLowerCase(),
-          rightBgColor.replace('#', '').toLowerCase(),
-          rounded ? 'rounded' : 'square',
-          gradient ? 'gradient' : 'flat',
-          textShadow ? 'shadow' : 'plain'
+          this.getSortName(),
+          iconName,
+          iconName === 'none'
+            ? 'none'
+            : this.options.iconColor.toLowerCase(),
+          this.options.leftText,
+          this.options.leftTextColor.toLowerCase(),
+          this.options.leftBgColor.toLowerCase(),
+          this.options.rightText,
+          this.options.rightTextColor.toLowerCase(),
+          this.options.rightBgColor.toLowerCase(),
+          this.options.angle[0].toLowerCase(),
+          this.options.gradient ? 't' : 'f',
+          this.options.textShadow ? 't' : 'f'
         ]
-        // 名称格式
-        // 左文字-左文字色-左底色-右文字-右文字色-右底色-图标名称-图标颜色-是否渐变-是否文字阴影-是否圆角
-        // eslint-disable-next-line
-        // leftText-leftColor-rightText-rightColor-iconName-iconColor-iconPosition-rounded-gradient-textShadow
-        if (iconIndex !== '' && iconPath !== '') {
-          let name = ''
-          if (iconIndex === 0) {
-            name = `custom${Date.now()}`
-          } else {
-            name = this.icons[iconIndex].name.toLowerCase()
-          }
-          names.splice(4, 0, name, iconColor.replace('#', '').toLowerCase(), iconPosition)
-        }
-        // console.log('[name]', `${names.join('-')}.svg`)
         const badgeLink = await axios({
+          responseType: 'json',
           url: '/npmer/api/badge',
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           data: {
-            name: encodeURI(`${names.join('-')}.svg`),
+            name: encodeURI(`${names.join('-')}.svg`.replace(/#/g, '')),
             content: this.$refs.content.$el.outerHTML
           }
         })
         this.link = badgeLink
-        this.markdownLink = `![${leftText}](${badgeLink})`
         this.loading = false
         this.$message.success(this.$t('createLink') + this.$t('success'))
       } catch (err) {
@@ -348,19 +302,6 @@ export default {
         this.loading = false
         this.$message.error(this.$t(err.message))
       }
-    },
-    createTemplate () {
-      if (!(this.options.leftText + this.options.rightText).includes('$VAR$')) {
-        this.$message.warning(this.$t('pleaseInputVariable'))
-        // return
-      }
-      // await axios({
-      //   method: 'POST',
-      //   url: '/npmer/api/template',
-      //   data: {
-      //     name:
-      //   }
-      // })
     }
   }
 }
@@ -399,9 +340,10 @@ main
 
 .preview__tag
   display flex
-  height 0px
+  // height 0px
   overflow hidden
-  color transparent
+  // color transparent
+  background red
   font-family DejaVu Sans,Verdana,Geneva,sans-serif
   div
     user-select none
@@ -418,8 +360,36 @@ main
   .el-form-item
     padding 10px 20px
 
-.options__row > .el-form-item
-  padding 0 !important
+.sort-group
+  display flex
+  padding 10px 20px
+
+.sort-group__item
+  display flex
+  flex-direction column
+  background $background-color
+  padding 5px
+  border-radius 5px
+  // border 1px solid darken($background-color, 3)
+  box-shadow 0 0 1px rgba(black, .2)
+  &:not(.center)
+    flex 1
+  &:not(:last-child)
+    margin-right 5px
+  > span
+    margin-bottom 10px
+    line-height 24px
+    text-align center
+  &.icon span
+    cursor move
+  input
+    text-align center
+
+.options__row
+  .el-switch
+    height 40px
+  > .el-form-item
+    padding 0 !important
 
 .options__row
   padding 10px 20px
