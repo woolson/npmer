@@ -124,6 +124,7 @@ main.home
           @click="createLink"
           :loading="loading"
         ) {{$t('createLink')}}
+  IconMarket
 </template>
 
 <script>
@@ -134,6 +135,7 @@ import NpmerFoot from '~/components/npmer-foot.vue'
 import LinkCopy from '~/components/home/link-copy.vue'
 import PickColor from '~/components/home/pick-color.vue'
 import ColorPick from '~/components/color-pick.vue'
+import IconMarket from '~/components/home/icon-market'
 
 export default {
   head () {
@@ -148,7 +150,8 @@ export default {
     LinkCopy,
     PickColor,
     ColorPick,
-    Draggable
+    Draggable,
+    IconMarket
   },
 
   data: () => ({

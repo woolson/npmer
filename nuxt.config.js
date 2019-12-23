@@ -64,6 +64,12 @@ export default {
     '/npmer': {
       target: 'http://localhost:3000/'
       // target: 'https://woolson.cn/'
+    },
+    '/search': {
+      target: 'https://www.iconfont.cn'
+    },
+    '/api': {
+      target: 'https://www.iconfont.cn'
     }
   },
   /** Build configuration */
