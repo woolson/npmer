@@ -47,6 +47,7 @@ main.home
           :label="$t('iconPath')")
           el-input(
             v-model="options.iconPath"
+            size="small"
             clearable)
             el-popover(
               slot="append"
@@ -58,47 +59,48 @@ main.home
             )
               i.el-icon-question(slot="reference")
         el-form-item(:label="$t('iconScale')")
-          el-input(
+          el-input-number(
             v-model="options.iconScale"
-            type="number"
-            step="0.001"
+            size="small"
+            :step="0.001"
           )
       //- 图标位置微调
       div.options__row
         el-form-item(:label="$t('iconXOffset')")
-          el-input(
+          el-input-number(
             v-model="options.iconX"
-            type="number"
-            step="1"
+            size="small"
+            :step="0.5"
           )
         el-form-item(:label="$t('iconYOffset')")
-          el-input(
+          el-input-number(
             v-model="options.iconY"
-            type="number"
-            step="1"
+            size="small"
+            :step="0.5"
           )
-      el-form-item.u-flex(:label="$t('roundedAngle')")
-        el-radio-group(v-model="options.angle")
-          el-radio-button(label="square")
-            i.iconfont.icon-square
-          el-radio-button(label="rounded")
-            i.iconfont.icon-rounded
-          el-radio-button(label="circle")
-            i.iconfont.icon-circle
       //- 阴影和渐变
       div.options__row
         el-form-item(:label="$t('textShadow')")
           el-switch(v-model="options.textShadow")
         el-form-item(:label="$t('gradient')")
           el-switch(v-model="options.gradient")
-      //- 图标颜色
-      el-form-item(
-        :label="$t('iconColor')"
-        v-show="options.iconPath")
-        color-pick(
-          v-model="options.iconColor"
-          :colors="['#FFFFFF', ...colors]"
-        )
+      //- 圆角和图标颜色
+      div.options__row
+        el-form-item.u-flex(:label="$t('roundedAngle')")
+          el-radio-group(v-model="options.angle" size="mini")
+            el-radio-button(label="square")
+              i.iconfont.icon-square
+            el-radio-button(label="rounded")
+              i.iconfont.icon-rounded
+            el-radio-button(label="circle")
+              i.iconfont.icon-circle
+        el-form-item(
+          :label="$t('iconColor')"
+          v-show="options.iconPath")
+          color-pick(
+            v-model="options.iconColor"
+            :colors="['#FFFFFF', ...colors]"
+          )
       //- 左边文字和背景颜色
       pick-color(
         :textTitle="$t('leftTextColor')"
@@ -118,13 +120,14 @@ main.home
       //- 按钮
       div.options__button
         el-button(
+          type="primary"
           @click="downloadImg"
         ) {{$t('download')}}
         el-button(
+          type="primary"
           @click="createLink"
           :loading="loading"
         ) {{$t('createLink')}}
-  IconMarket
 </template>
 
 <script>
@@ -135,7 +138,7 @@ import NpmerFoot from '~/components/npmer-foot.vue'
 import LinkCopy from '~/components/home/link-copy.vue'
 import PickColor from '~/components/home/pick-color.vue'
 import ColorPick from '~/components/color-pick.vue'
-import IconMarket from '~/components/home/icon-market'
+// import IconMarket from '~/components/home/icon-market'
 
 export default {
   head () {
@@ -150,8 +153,8 @@ export default {
     LinkCopy,
     PickColor,
     ColorPick,
-    Draggable,
-    IconMarket
+    Draggable
+    // IconMarket
   },
 
   data: () => ({
@@ -226,10 +229,10 @@ export default {
       return draggedContext.element.name === 'icon'
     },
     downloadImg () {
-      const dataUrl = this.$refs.content.$el.outerHTML
+      const dataUrl = this.$refs.content.$el.outerHTML.replace(/<!---->/g, '')
       const link = document.createElement('a')
       link.download = 'npm-logo.svg'
-      link.href = `data:image/svg+xmlcharset=utf-8,${dataUrl}`
+      link.href = `data:image/svg+xmlcharset=utf-8,${encodeURIComponent(dataUrl)}`
       link.click()
     },
     getSortName () {
@@ -329,6 +332,14 @@ main
     border-radius 10px
     margin-bottom 20px
     box-shadow 0 0 2px $color-border
+  .el-form-item
+    flex 1
+    display flex
+    align-items center
+  .el-form-item__content
+    margin-left 0 !important
+  .el-input-number--small
+    width 215px
 
 .home__preview
   display flex
@@ -373,7 +384,6 @@ main
   background $background-color
   padding 5px
   border-radius 5px
-  // border 1px solid darken($background-color, 3)
   box-shadow 0 0 1px rgba(black, .2)
   &:not(.center)
     flex 1
@@ -383,8 +393,12 @@ main
     margin-bottom 10px
     line-height 24px
     text-align center
-  &.icon span
-    cursor move
+  &.icon
+    transition all .2s
+    span
+      cursor move
+    &:hover
+      box-shadow 0 0 5px rgba(black, .15)
   input
     text-align center
 
@@ -393,6 +407,7 @@ main
     height 40px
   > .el-form-item
     padding 0 !important
+    align-items center
 
 .options__row
   padding 10px 20px
@@ -410,8 +425,6 @@ main
     &:last-child > input
       border-top-left-radius 0
       border-bottom-left-radius 0
-  .el-form-item
-    flex 1
 
 .options__color
   flex 1
@@ -431,7 +444,8 @@ main
 .options__button
   text-align center
   display flex
+  justify-content center
   padding 10px 20px
   button
-    flex 1
+    min-width 100px
 </style>
