@@ -228,6 +228,14 @@ export default {
     checkMove ({ draggedContext }) {
       return draggedContext.element.name === 'icon'
     },
+    checkExist (url) {
+      return new Promise((resolve, reject) => {
+        const img = document.createElement('img')
+        img.onload = () => resolve(true)
+        img.onerror = () => resolve(false)
+        img.src = url
+      })
+    },
     downloadImg () {
       const dataUrl = this.$refs.content.$el.outerHTML.replace(/<!---->/g, '')
       const link = document.createElement('a')
@@ -265,13 +273,12 @@ export default {
     },
     async createLink () {
       try {
-        this.loading = true
         /**
          * 名称格式
          * 排序-图标名-左字-左字色-左底色-右字-右字色-右底色-图标颜色-是否渐变-是否文字阴影-是否圆角
          */
         const iconName = this.getIconName()
-        const names = [
+        const name = [
           this.getSortName(),
           iconName,
           iconName === 'none'
@@ -286,21 +293,30 @@ export default {
           this.options.angle[0].toLowerCase(),
           this.options.gradient ? 't' : 'f',
           this.options.textShadow ? 't' : 'f'
-        ]
-        const badgeLink = await axios({
-          responseType: 'json',
-          url: '/npmer/api/badge',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          data: {
-            name: encodeURI(`${names.join('-')}.svg`.replace(/#/g, '')),
-            content: this.$refs.content.$el.outerHTML
-          }
-        })
-        this.link = badgeLink
-        this.loading = false
+        ].join('-').replace(/#/g, '') + '.svg'
+
+        const iconLink = 'https://woolson.gitee.io/npmer-badge/' + name
+        const iconExist = await this.checkExist(iconLink)
+
+        if (iconExist) {
+          this.link = iconLink
+        } else {
+          this.loading = true
+          const badgeLink = await axios({
+            responseType: 'json',
+            url: '/npmer/api/badge',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: {
+              name: encodeURI(name),
+              content: this.$refs.content.$el.outerHTML
+            }
+          })
+          this.link = badgeLink
+          this.loading = false
+        }
         this.$message.success(this.$t('createLink') + this.$t('success'))
       } catch (err) {
         // eslint-disable-next-line
