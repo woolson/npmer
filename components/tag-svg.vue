@@ -207,14 +207,14 @@ export default {
         if (this.iIndex < this.lIndex) {
           x += +this.iconX + this.padding - 5
         } else {
-          x += this.lTextX + this.lTextWidth + 5
+          x += +this.iconX + this.lTextX + this.lTextWidth
         }
       } else {
         // eslint-disable-next-line no-lonely-if
         if (this.iIndex < this.rIndex) {
-          x += this.lWidth + this.innerPadding
+          x += +this.iconX + this.lWidth
         } else {
-          x += this.rTextX + this.rTextWidth + 5
+          x += +this.iconX + this.rTextX + this.rTextWidth
         }
       }
       return {
