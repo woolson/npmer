@@ -49,15 +49,9 @@ main.home
             v-model="options.iconPath"
             size="small"
             clearable)
-            el-popover(
+            el-button(
               slot="append"
-              placement="bottom-start"
-              :title="$t('help')"
-              width="200"
-              trigger="hover"
-              :content="$t('helpIconPath')"
-            )
-              i.el-icon-question(slot="reference")
+              @click="iconMarketVisible = true") {{$t('select')}}
         el-form-item(:label="$t('iconScale')")
           el-input-number(
             v-model="options.iconScale"
@@ -128,6 +122,10 @@ main.home
           @click="createLink"
           :loading="loading"
         ) {{$t('createLink')}}
+  IconMarket(
+    v-model="iconMarketVisible"
+    @change="options.iconPath = $event; iconMarketVisible= false"
+  )
 </template>
 
 <script>
@@ -138,7 +136,7 @@ import NpmerFoot from '~/components/npmer-foot.vue'
 import LinkCopy from '~/components/home/link-copy.vue'
 import PickColor from '~/components/home/pick-color.vue'
 import ColorPick from '~/components/color-pick.vue'
-// import IconMarket from '~/components/home/icon-market'
+import IconMarket from '~/components/home/icon-market'
 
 export default {
   head () {
@@ -153,11 +151,12 @@ export default {
     LinkCopy,
     PickColor,
     ColorPick,
-    Draggable
-    // IconMarket
+    Draggable,
+    IconMarket
   },
 
   data: () => ({
+    iconMarketVisible: false,
     icons: [],
     iconIndex: '',
     options: {
