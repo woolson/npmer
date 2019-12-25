@@ -47,58 +47,54 @@ main.home
           :label="$t('iconPath')")
           el-input(
             v-model="options.iconPath"
+            size="small"
             clearable)
-            el-popover(
+            el-button(
               slot="append"
-              placement="bottom-start"
-              :title="$t('help')"
-              width="200"
-              trigger="hover"
-              :content="$t('helpIconPath')"
-            )
-              i.el-icon-question(slot="reference")
+              @click="iconMarketVisible = true") {{$t('select')}}
         el-form-item(:label="$t('iconScale')")
-          el-input(
+          el-input-number(
             v-model="options.iconScale"
-            type="number"
-            step="0.001"
+            size="small"
+            :step="0.001"
           )
       //- 图标位置微调
       div.options__row
         el-form-item(:label="$t('iconXOffset')")
-          el-input(
+          el-input-number(
             v-model="options.iconX"
-            type="number"
-            step="1"
+            size="small"
+            :step="0.5"
           )
         el-form-item(:label="$t('iconYOffset')")
-          el-input(
+          el-input-number(
             v-model="options.iconY"
-            type="number"
-            step="1"
+            size="small"
+            :step="0.5"
           )
-      el-form-item.u-flex(:label="$t('roundedAngle')")
-        el-radio-group(v-model="options.angle")
-          el-radio-button(label="square")
-            i.iconfont.icon-square
-          el-radio-button(label="rounded")
-            i.iconfont.icon-rounded
-          el-radio-button(label="circle")
-            i.iconfont.icon-circle
       //- 阴影和渐变
       div.options__row
         el-form-item(:label="$t('textShadow')")
           el-switch(v-model="options.textShadow")
         el-form-item(:label="$t('gradient')")
           el-switch(v-model="options.gradient")
-      //- 图标颜色
-      el-form-item(
-        :label="$t('iconColor')"
-        v-show="options.iconPath")
-        color-pick(
-          v-model="options.iconColor"
-          :colors="['#FFFFFF', ...colors]"
-        )
+      //- 圆角和图标颜色
+      div.options__row
+        el-form-item.u-flex(:label="$t('roundedAngle')")
+          el-radio-group(v-model="options.angle" size="mini")
+            el-radio-button(label="square")
+              i.iconfont.icon-square
+            el-radio-button(label="rounded")
+              i.iconfont.icon-rounded
+            el-radio-button(label="circle")
+              i.iconfont.icon-circle
+        el-form-item(
+          :label="$t('iconColor')"
+          v-show="options.iconPath")
+          color-pick(
+            v-model="options.iconColor"
+            :colors="['#FFFFFF', ...colors]"
+          )
       //- 左边文字和背景颜色
       pick-color(
         :textTitle="$t('leftTextColor')"
@@ -118,12 +114,18 @@ main.home
       //- 按钮
       div.options__button
         el-button(
+          type="primary"
           @click="downloadImg"
         ) {{$t('download')}}
         el-button(
+          type="primary"
           @click="createLink"
           :loading="loading"
         ) {{$t('createLink')}}
+  IconMarket(
+    v-model="iconMarketVisible"
+    @change="options.iconPath = $event; iconMarketVisible= false"
+  )
 </template>
 
 <script>
@@ -134,6 +136,7 @@ import NpmerFoot from '~/components/npmer-foot.vue'
 import LinkCopy from '~/components/home/link-copy.vue'
 import PickColor from '~/components/home/pick-color.vue'
 import ColorPick from '~/components/color-pick.vue'
+import IconMarket from '~/components/home/icon-market'
 
 export default {
   head () {
@@ -148,10 +151,12 @@ export default {
     LinkCopy,
     PickColor,
     ColorPick,
-    Draggable
+    Draggable,
+    IconMarket
   },
 
   data: () => ({
+    iconMarketVisible: false,
     icons: [],
     iconIndex: '',
     options: {
@@ -222,11 +227,19 @@ export default {
     checkMove ({ draggedContext }) {
       return draggedContext.element.name === 'icon'
     },
+    checkExist (url) {
+      return new Promise((resolve, reject) => {
+        const img = document.createElement('img')
+        img.onload = () => resolve(true)
+        img.onerror = () => resolve(false)
+        img.src = url
+      })
+    },
     downloadImg () {
-      const dataUrl = this.$refs.content.$el.outerHTML
+      const dataUrl = this.$refs.content.$el.outerHTML.replace(/<!---->/g, '')
       const link = document.createElement('a')
       link.download = 'npm-logo.svg'
-      link.href = `data:image/svg+xmlcharset=utf-8,${dataUrl}`
+      link.href = `data:image/svg+xmlcharset=utf-8,${encodeURIComponent(dataUrl)}`
       link.click()
     },
     getSortName () {
@@ -259,13 +272,12 @@ export default {
     },
     async createLink () {
       try {
-        this.loading = true
         /**
          * 名称格式
          * 排序-图标名-左字-左字色-左底色-右字-右字色-右底色-图标颜色-是否渐变-是否文字阴影-是否圆角
          */
         const iconName = this.getIconName()
-        const names = [
+        const name = [
           this.getSortName(),
           iconName,
           iconName === 'none'
@@ -280,21 +292,30 @@ export default {
           this.options.angle[0].toLowerCase(),
           this.options.gradient ? 't' : 'f',
           this.options.textShadow ? 't' : 'f'
-        ]
-        const badgeLink = await axios({
-          responseType: 'json',
-          url: '/npmer/api/badge',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          data: {
-            name: encodeURI(`${names.join('-')}.svg`.replace(/#/g, '')),
-            content: this.$refs.content.$el.outerHTML
-          }
-        })
-        this.link = badgeLink
-        this.loading = false
+        ].join('-').replace(/#/g, '') + '.svg'
+
+        const iconLink = 'https://woolson.gitee.io/npmer-badge/' + name
+        const iconExist = await this.checkExist(iconLink)
+
+        if (iconExist) {
+          this.link = iconLink
+        } else {
+          this.loading = true
+          const badgeLink = await axios({
+            responseType: 'json',
+            url: '/npmer/api/badge',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: {
+              name: encodeURI(name),
+              content: this.$refs.content.$el.outerHTML
+            }
+          })
+          this.link = badgeLink
+          this.loading = false
+        }
         this.$message.success(this.$t('createLink') + this.$t('success'))
       } catch (err) {
         // eslint-disable-next-line
@@ -326,6 +347,16 @@ main
     border-radius 10px
     margin-bottom 20px
     box-shadow 0 0 2px $color-border
+  .el-form-item
+    flex 1
+    display flex
+    align-items center
+  .el-form-item__content
+    margin-left 0 !important
+  .el-input-number--small
+    width 215px
+  .el-form-item__label
+    flex-shrink 0
 
 .home__preview
   display flex
@@ -370,8 +401,8 @@ main
   background $background-color
   padding 5px
   border-radius 5px
-  // border 1px solid darken($background-color, 3)
-  box-shadow 0 0 1px rgba(black, .2)
+  border 1px solid transparent
+  transition all .3s
   &:not(.center)
     flex 1
   &:not(:last-child)
@@ -380,8 +411,14 @@ main
     margin-bottom 10px
     line-height 24px
     text-align center
-  &.icon span
-    cursor move
+  &.icon
+    transition all .2s
+    span
+      cursor move
+    &:hover
+      box-shadow 0 0 3px rgba(black, .15)
+  &.sortable-ghost
+    border 1px solid $color-main
   input
     text-align center
 
@@ -390,6 +427,7 @@ main
     height 40px
   > .el-form-item
     padding 0 !important
+    align-items center
 
 .options__row
   padding 10px 20px
@@ -407,8 +445,6 @@ main
     &:last-child > input
       border-top-left-radius 0
       border-bottom-left-radius 0
-  .el-form-item
-    flex 1
 
 .options__color
   flex 1
@@ -428,7 +464,8 @@ main
 .options__button
   text-align center
   display flex
+  justify-content center
   padding 10px 20px
   button
-    flex 1
+    min-width 100px
 </style>

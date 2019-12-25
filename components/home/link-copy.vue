@@ -1,25 +1,19 @@
 <template lang="pug">
-div.option-row
-  el-form-item(:label="$t('link')")
+div.options__row
+  //- 链接markdown
+  el-form-item(:label="$t('markdown')" size="small")
+    el-input(v-model="markdownLink" readonly )
+      template(slot="append")
+        el-button(
+          v-clipboard="markdownLink"
+          @success="$message.success($t('copy') + $t('success'))"
+        ) {{$t('copy')}}
+  el-form-item(:label="$t('link')" size="small")
     el-input(v-model="link" readonly)
       template(slot="append")
         el-button(
           v-clipboard="link"
-          @success="$notify.success({\
-            title: $t('copy') + $t('success'),\
-            position: 'bottom-right'\
-          })"
-        ) {{$t('copy')}}
-      //- 链接markdown
-  el-form-item(:label="$t('markdown')")
-    el-input(v-model="markdownLink" readonly)
-      template(slot="append")
-        el-button(
-          v-clipboard="markdownLink"
-          @success="$notify.success({\
-            title: $t('copy') + $t('success'),\
-            position: 'bottom-right'\
-          })"
+          @success="$message.success($t('copy') + $t('success'))"
         ) {{$t('copy')}}
 </template>
 

@@ -1,4 +1,5 @@
 export default {
+  invalid: '无效',
   center: '中心',
   rounded: '圆角',
   circle: '圆形',
@@ -25,6 +26,7 @@ export default {
   fileSaver: '文件存储',
   gradient: '渐变底色',
   icon: '选择图标',
+  selectIcon: '选择图标',
   iconColor: '图标颜色',
   leftText: '左边文字',
   leftTextColor: '左文字颜色',
