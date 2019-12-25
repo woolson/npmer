@@ -355,6 +355,8 @@ main
     margin-left 0 !important
   .el-input-number--small
     width 215px
+  .el-form-item__label
+    flex-shrink 0
 
 .home__preview
   display flex
@@ -399,7 +401,8 @@ main
   background $background-color
   padding 5px
   border-radius 5px
-  box-shadow 0 0 1px rgba(black, .2)
+  border 1px solid transparent
+  transition all .3s
   &:not(.center)
     flex 1
   &:not(:last-child)
@@ -413,7 +416,9 @@ main
     span
       cursor move
     &:hover
-      box-shadow 0 0 5px rgba(black, .15)
+      box-shadow 0 0 3px rgba(black, .15)
+  &.sortable-ghost
+    border 1px solid $color-main
   input
     text-align center
 

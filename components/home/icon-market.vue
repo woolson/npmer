@@ -1,20 +1,26 @@
 <template lang="pug">
 el-dialog.icon-market(
-  title="Icon"
+  :title="$t('selectIcon')"
   :visible="value"
+  :lock-scroll="true"
+  @close="$emit('input', false)"
 )
   el-input(
     v-model="searchStr"
     clearable
     :placeholder="$t('search')"
-    @keypress.native.13="fetchIcon")
+    @keypress.native.13="pageNum = 1; fetchIcon()")
+  i.iconfont.icon-empty(v-if="!icons.length")
   ul.icon-market__list
-    li.list__item(v-for="icon in icons")
+    li.list__item(
+      v-for="icon in icons"
+      v-if="!itemInvalid(icon)"
+    )
       div.item__icon(v-html="icon.file")
       div.item__info
         span {{icon.name}}
-        span(@click="$emit('change', icon.svg)") 使用
-      div.item__disable(v-if="icon.svg.includes('|') || !icon.svg") 无效图标
+        span(@click="$emit('change', icon.svg)") {{$t('select')}}
+    li.list__item.item__disable(v-else) {{$t('invalid')}}
   el-pagination(
     background
     :hide-on-single-page="true"
@@ -56,6 +62,9 @@ export default {
   },
 
   methods: {
+    itemInvalid (icon) {
+      return icon.svg.includes('|') || !icon.svg
+    },
     async fetchIcon () {
       if (!this.searchStr) { return }
 
@@ -86,6 +95,11 @@ export default {
   align-items center
   .el-input
     width 250px
+
+.icon-empty
+  font-size 100px
+  color darken($background-color, 5)
+  margin-top 50px
 
 .icon-market__list
   width 100%
@@ -126,18 +140,9 @@ export default {
       &.disable
         color $color-border
         cursor not-allowed
-  .item__disable
-    position absolute
-    top 0
-    left 0
-    height 100%
-    width 100%
-    background rgba(white, .8)
-    backdrop-filter saturate(180%) blur(5px)
-    display flex
+  &.item__disable
     align-items center
     justify-content center
-    font-weight bold
     cursor not-allowed
     color #cccccc
 </style>
