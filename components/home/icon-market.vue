@@ -69,9 +69,7 @@ export default {
       if (!this.searchStr) { return }
 
       this.$nuxt.$loading.start()
-      const {
-        data: resData
-      } = await axios({
+      const resData = await axios({
         url: '/npmer/api/icon/iconfont',
         params: {
           search: this.searchStr,
@@ -80,8 +78,8 @@ export default {
           collection: this.collection ? 1 : -1
         }
       })
-      this.icons = resData.data.icons
-      this.total = resData.data.count
+      this.icons = resData.icons
+      this.total = resData.count
       this.$nuxt.$loading.finish()
     }
   }
