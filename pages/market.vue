@@ -3,7 +3,7 @@ div.market
   el-input.market__search(
     v-model="keyword"
     clearable
-    :placeholder="$t('search')"
+    :placeholder="$t('base.search')"
     @keyup.native.13="pageNum = 1; fetchData()"
     @clear="pageNum = 1; fetchData()"
   )

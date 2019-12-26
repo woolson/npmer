@@ -1,13 +1,13 @@
 <template lang="pug">
 div.foot
   ul.foot__section
-    li {{$t('link')}}
+    li {{$t('base.link')}}
     li
       a(href="https://github.com/woolson/") Woolson Lee Github
     li
       a(href="https://github.com/woolson/npmer-page") GitHub - Repository
   ul.foot__section
-    li {{$t('about')}}
+    li {{$t('base.about')}}
     li
       a(href="https://blog.woolson.cn/") Woolson Lee Blog
     li

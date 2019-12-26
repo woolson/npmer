@@ -7,22 +7,22 @@ div.badge__list
         :src="encode(baseUrl + item.name)"
       )
       div.item__option
-        el-tooltip(:content="$t('copy')" placement="top")
+        el-tooltip(:content="$t('base.copy')" placement="top")
           i.el-icon-link(
             v-clipboard="encode(baseUrl + item.name)"
-            @click="$message.success($t('copy') + $t('success'))"
+            @click="$message.success($t('copySuccess'))"
           )
-            span {{$t('copy')}}
+            span {{$t('base.copy')}}
         el-tooltip(
           v-if="canLike"
-          :content="item.stared ? $t('stared') : $t('star')"
+          :content="item.stared ? $t('base.liked') : $t('base.like')"
           placement="top"
         )
           i(
             :class="item.stared ? 'el-icon-star-on' : 'el-icon-star-off'"
-            @click="star(index)"
+            @click="like(index)"
           )
-            span {{item.stared ? $t('stared') : $t('star')}}
+            span {{item.stared ? $t('base.liked') : $t('base.like')}}
             span(v-if="item.stars > 0") ({{item.stars}})
   div.badge__list__empty(v-if="!loading && !data.length")
     img(src="~assets/img/empty.svg")
@@ -60,10 +60,10 @@ export default {
   },
 
   methods: {
-    async star (index) {
+    async like (index) {
       try {
         if (!this.account) {
-          this.$message.error(this.$t('shouldLogin'))
+          this.$message.error(this.$t('message.shouldLogin'))
           return
         }
         const badge = this.data[index]

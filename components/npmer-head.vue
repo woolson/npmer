@@ -35,7 +35,7 @@ div.head
     span(
       v-if="!account"
       @click="login"
-    ) {{$t('login')}}
+    ) {{$t('base.login')}}
     el-popover(
       v-else
       placement="bottom-end"

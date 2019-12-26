@@ -8,7 +8,7 @@ el-dialog.icon-market(
   el-input(
     v-model="searchStr"
     clearable
-    :placeholder="$t('search')"
+    :placeholder="$t('base.search')"
     @keypress.native.13="pageNum = 1; fetchIcon()")
   i.iconfont.icon-empty(v-if="!icons.length")
   ul.icon-market__list
@@ -19,8 +19,8 @@ el-dialog.icon-market(
       div.item__icon(v-html="icon.file")
       div.item__info
         span {{icon.name}}
-        span(@click="$emit('change', icon.svg)") {{$t('select')}}
-    li.list__item.item__disable(v-else) {{$t('invalid')}}
+        span(@click="$emit('change', icon.svg)") {{$t('base.select')}}
+    li.list__item.item__disable(v-else) {{$t('base.invalid')}}
   el-pagination(
     background
     :hide-on-single-page="true"
