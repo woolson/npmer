@@ -2,13 +2,17 @@
 div.head
   div.head__title
     img(src="~assets/img/icon.svg")
-    span {{$t('title')}}
+    span {{$t('base.npmer')}}
   div.head__pages
-    nuxt-link(to="/") {{$t('home')}}
+    nuxt-link(to="/") {{$t('base.home')}}
     nuxt-link(
       :class="{active: $route.path === '/market'}"
       :to="{path: '/market', query: { page: 1 }}"
-    ) {{$t('market')}}
+    ) {{$t('base.market')}}
+    nuxt-link(
+      :class="{active: $route.path === '/template'}"
+      :to="{path: '/template', query: { page: 1 }}"
+    ) {{$t('base.template')}}
   div.head__github
     iframe(
       src="https://ghbtns.com/github-btn.html?user=woolson&repo=npmer&type=star&count=true"
@@ -45,13 +49,13 @@ div.head
           span {{account.name}}
         nuxt-link(to="/account/star")
           i.el-icon-star-on
-          span {{$t('stared')}}
+          span {{$t('base.liked')}}
         nuxt-link(to="/account/uploaded")
           i.el-icon-upload
-          span {{$t('uploaded')}}
+          span {{$t('base.uploaded')}}
         a(href="https://woolson.cn/npmer/api/account/logout")
           i.el-icon-s-promotion
-          span {{$t('logout')}}
+          span {{$t('base.logout')}}
 </template>
 
 <script>

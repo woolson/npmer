@@ -1,7 +1,7 @@
 <template lang="pug">
 main.home
   section.home__preview
-    label {{$t('preview')}}
+    label {{$t('base.preview')}}
     tag-svg(
       ref="content"
       v-bind="options"
@@ -24,7 +24,7 @@ main.home
           el-select(
             v-if="item.name === 'icon'"
             v-model="iconIndex"
-            :placeholder="$t('select')"
+            :placeholder="$t('base.select')"
             clearable
             filterable)
             el-option(
@@ -51,7 +51,7 @@ main.home
             clearable)
             el-button(
               slot="append"
-              @click="iconMarketVisible = true") {{$t('select')}}
+              @click="iconMarketVisible = true") {{$t('base.select')}}
         el-form-item(:label="$t('iconScale')")
           el-input-number(
             v-model="options.iconScale"
@@ -76,11 +76,11 @@ main.home
       div.options__row
         el-form-item(:label="$t('textShadow')")
           el-switch(v-model="options.textShadow")
-        el-form-item(:label="$t('gradient')")
+        el-form-item(:label="$t('base.gradient')")
           el-switch(v-model="options.gradient")
       //- 圆角和图标颜色
       div.options__row
-        el-form-item.u-flex(:label="$t('roundedAngle')")
+        el-form-item.u-flex(:label="$t('base.angle')")
           el-radio-group(v-model="options.angle" size="mini")
             el-radio-button(label="square")
               i.iconfont.icon-square
@@ -116,12 +116,17 @@ main.home
         el-button(
           type="primary"
           @click="downloadImg"
-        ) {{$t('download')}}
+        ) {{$t('base.download')}}
         el-button(
           type="primary"
           @click="createLink"
           :loading="loading"
         ) {{$t('createLink')}}
+        el-button(
+          type="primary"
+          @click="createLink"
+          :loading="loading"
+        ) {{$t('createTemplate')}}
   IconMarket(
     v-model="iconMarketVisible"
     @change="options.iconPath = $event; iconMarketVisible= false"
@@ -180,9 +185,9 @@ export default {
     customPath: '',
     customScale: 0.13,
     sort: [
-      { name: 'icon', title: 'icon' },
+      { name: 'icon', title: 'base.icon' },
       { name: 'left', title: 'leftText' },
-      { name: 'center', title: 'center' },
+      { name: 'center', title: 'base.center' },
       { name: 'right', title: 'rightText' }
     ]
   }),
