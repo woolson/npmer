@@ -127,7 +127,7 @@ main.home
           @click="createLink"
           :loading="loading"
         ) {{$t('createTemplate')}}
-  IconMarket(
+  icon-market(
     v-model="iconMarketVisible"
     @change="options.iconPath = $event; iconMarketVisible= false"
   )
@@ -136,17 +136,17 @@ main.home
 <script>
 import Draggable from 'vuedraggable'
 import axios from '~/plugins/axios'
-import TagSvg from '~/components/tag-svg.vue'
+import TagSvg from '~/components/home/tag-svg.vue'
 import NpmerFoot from '~/components/npmer-foot.vue'
 import LinkCopy from '~/components/home/link-copy.vue'
 import PickColor from '~/components/home/pick-color.vue'
 import ColorPick from '~/components/color-pick.vue'
-import IconMarket from '~/components/home/icon-market'
+import IconMarket from '~/components/home/icon-market.vue'
 
 export default {
   head () {
     return {
-      title: this.$t('home') + ' - NPMer'
+      title: this.$t('base.home') + ' | NPMer'
     }
   },
 
@@ -340,14 +340,13 @@ main
   justify-content flex-start
   align-items center
   padding-bottom 20px
-  border-radius 20px
   box-sizing border-box
-  background $background-color
+  background var(--background-color)
   padding-top 100px
   min-height 100vh
   > section
     width 680px
-    background white
+    background var(--background-color-mid)
     padding 10px 0
     border-radius 10px
     margin-bottom 20px
@@ -362,6 +361,10 @@ main
     width 215px
   .el-form-item__label
     flex-shrink 0
+    color var(--text-color)
+  .el-input__inner
+    background var(--background-color-light)
+    border-color var(--border-color)
 
 .home__preview
   display flex
@@ -403,7 +406,7 @@ main
 .sort-group__item
   display flex
   flex-direction column
-  background $background-color
+  background var(--background-color)
   padding 5px
   border-radius 5px
   border 1px solid transparent

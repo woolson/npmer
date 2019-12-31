@@ -17,7 +17,16 @@ div.market
     :current-page="pageNum"
     @current-change="pageNum = $event"
   )
-  badge-list(:data="data" :loading="loading")
+  badge-list(
+    :data="data"
+    :loading="loading"
+  )
+    template(v-slot="itemData")
+      badge-item(
+        :data="itemData.item"
+        :canLike="itemData.canLike"
+        @like="like(itemData.item)"
+      )
   el-pagination(
     background
     :hide-on-single-page="true"
@@ -31,20 +40,23 @@ div.market
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from '~/plugins/axios'
 import NpmerFoot from '~/components/npmer-foot.vue'
 import BadgeList from '~/components/badge-list.vue'
+import BadgeItem from '~/components/market/badge-item.vue'
 
 export default {
   head () {
     return {
-      title: this.$t('market') + ' - NPMer'
+      title: this.$t('base.market') + ' | NPMer'
     }
   },
 
   components: {
     NpmerFoot,
-    BadgeList
+    BadgeList,
+    BadgeItem
   },
 
   data () {
@@ -57,6 +69,10 @@ export default {
       data: [],
       loading: false
     }
+  },
+
+  computed: {
+    ...mapState(['account'])
   },
 
   watch: {
@@ -88,6 +104,27 @@ export default {
       } catch {
         this.loading = false
       }
+    },
+    async like (badge) {
+      try {
+        if (!this.account) {
+          this.$message.error(this.$t('message.shouldLogin'))
+          return
+        }
+        const index = this.data.findIndex(o => o.id === badge.id)
+        if (badge.stared) { return }
+        await axios({
+          url: '/npmer/api/badge/star',
+          method: 'POST',
+          data: { badgeId: badge.id }
+        })
+        badge.stars += 1
+        badge.stared = true
+        this.$set(this.data, index, badge)
+        this.$message.success(this.$t('success'))
+      } catch (err) {
+        this.$message.error(err.message)
+      }
     }
   }
 }
@@ -99,7 +136,7 @@ export default {
   flex-direction column
   align-items center
   padding 0 50px 50px
-  background $background-color
+  background var(--background-color)
 
 .market__search
   max-width 600px
@@ -114,7 +151,7 @@ export default {
   margin-top 30px
   font-size 24px
   font-weight bold
-  border-bottom 1px solid darken($background-color, 4)
+  border-bottom 1px solid var(--border-color)
   line-height 50px
 
 </style>

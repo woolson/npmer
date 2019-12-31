@@ -25,12 +25,15 @@ export default {
     logout: '登出',
     markdown: 'Markdown',
     market: '市场',
+    name: '名称',
     npmer: 'NPMer',
     offset: '偏移',
+    package: '包名',
     path: '路径',
     position: '位置',
     preview: '预览',
     r: '右',
+    repository: '仓库',
     result: '结果',
     right: '右',
     rounded: '圆角',
@@ -45,8 +48,11 @@ export default {
     tip: '提示',
     text: '文字',
     trend: '趋势',
+    type: '类型',
     update: '更新',
-    uploaded: '已上传'
+    uploaded: '已上传',
+    use: '使用',
+    user: '用户'
   },
   message: {
     errorMsg: '请求出错，稍后重试！',
@@ -71,5 +77,8 @@ export default {
   rightTextColor: '@:base.r@:base.text@:base.color',
   selectIcon: '@:base.select@:base.icon',
   textShadow: '@:base.text@:base.shadow',
-  updateLog: '@:base.update@:base.log'
+  updateLog: '@:base.update@:base.log',
+  useTemplate: '@:base.use@:base.template',
+  useType: '@:base.use@:base.type',
+  userName: '@:base.user@:base.name'
 }

@@ -25,12 +25,15 @@ export default {
     logout: 'Logout',
     markdown: 'Markdown',
     market: 'Market',
+    name: 'Name',
     npmer: 'NPMer',
     offset: 'Offset',
+    package: 'Package',
     path: 'Path',
     position: 'Position',
     preview: 'Preview',
     r: 'R',
+    repository: 'Repository',
     result: 'Result',
     right: 'Right',
     rounded: 'Rounded',
@@ -45,8 +48,11 @@ export default {
     tip: 'Tip',
     text: 'Text',
     trend: 'Trend',
+    type: 'Type',
     update: 'Update',
-    uploaded: 'Uploaded'
+    uploaded: 'Uploaded',
+    use: 'Use',
+    user: 'User'
   },
   message: {
     errorMsg: 'Error, Try again later!',
@@ -71,5 +77,8 @@ export default {
   rightTextColor: '@:base.r @:base.text @:base.color',
   selectIcon: '@:base.select @:base.icon',
   textShadow: '@:base.text @:base.shadow',
-  updateLog: '@:base.update @:base.log'
+  updateLog: '@:base.update @:base.log',
+  useTemplate: '@:base.use @:base.template',
+  useType: '@:base.use @:base.type',
+  userName: '@:base.user @:base.name'
 }

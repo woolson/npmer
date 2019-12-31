@@ -10,12 +10,31 @@ body
   box-sizing border-box
   overflow auto !important
 
+:root
+  --background-color #FAFAFA
+  --background-color-mid #FFFFFF
+  --background-color-light #FFFFFF
+  --background-header rgba(#FAFAFA, .8)
+  --text-color #2c3e50
+  --border-color rgba(0,0,0,.1)
+
+@media (prefers-color-scheme: dark)
+  body
+    background #1F2123
+  :root
+    --background-color #1F2123
+    --background-color-mid #25272a
+    --background-color-light #35363A
+    --background-header rgba(#1F2123, .9)
+    --text-color #FEFEFE
+    --border-color rgba(0,0,0,.1)
+
 html
 body
 ul
   padding 0
   margin 0
-  color $color-text
+  color var(--text-color)
   line-height 1.2
 
 .u-bb
@@ -32,6 +51,47 @@ ul
     background #EFEFEF
     transform scaleY(0.5)
     transform-origin 50%100%
+
+for $size in 0 1 2 3 4 5 10 12 15 16 20 24 30 35 40 50 60 80 100
+  .u-mt{$size}
+    margin-top $size * 1px !important
+  .u-mr{$size}
+    margin-right $size * 1px !important
+  .u-mb{$size}
+    margin-bottom $size * 1px !important
+  .u-ml{$size}
+    margin-left $size * 1px !important
+  .u-pt{$size}
+    padding-top $size * 1px !important
+  .u-pr{$size}
+    padding-right $size * 1px !important
+  .u-pb{$size}
+    padding-bottom $size * 1px !important
+  .u-pl{$size}
+    padding-left $size * 1px !important
+
+for $size in -5 -10 -15 -16 -20 -30 -40 -50
+  .u-mt{$size}
+    margin-top $size * 1px !important
+  .u-mr{$size}
+    margin-right $size * 1px !important
+  .u-mb{$size}
+    margin-bottom $size * 1px !important
+  .u-ml{$size}
+    margin-left $size * 1px !important
+  .u-pt{$size}
+    padding-top $size * 1px !important
+  .u-pr{$size}
+    padding-right $size * 1px !important
+  .u-pb{$size}
+    padding-bottom $size * 1px !important
+  .u-pl{$size}
+    padding-left $size * 1px !important
+
+// 宽度
+for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
+  .u-w{$size}
+    width $size * 1px !important
 
 .u-mb10
   margin-bottom 10px !important
@@ -64,3 +124,64 @@ ul
   border-top-style solid
   border-image linear-gradient(139deg, #fb8817, #ff4b01, #c12127, #e02aff) 3
   z-index 99999999
+
+.el-input-number__decrease
+.el-input-number__increase
+.el-radio-button__inner
+.el-radio-button:first-child .el-radio-button__inner
+.el-input-group__append
+  background var(--background-color)
+  border-color var(--border-color)
+
+.el-color-picker__color
+  border none
+
+.el-color-picker__trigger
+  border-width 2px
+
+.el-color-picker__color-inner
+  border-radius 2px
+
+.el-dialog__title
+.el-form-item__label
+  color var(--text-color)
+
+.el-pager li
+.el-dialog
+.el-pagination.is-background .btn-prev
+.el-pagination.is-background .btn-next
+  color var(--text-color)
+  background var(--background-color-mid) !important
+  &[disabled]
+    opacity .6
+
+.el-cascader__dropdown
+.el-cascader-menu
+  background var(--background-color-mid) !important
+  border-color var(--background-color) !important
+
+.el-popper[x-placement^=bottom] .popper__arrow
+  border-bottom-color var(--background-color)
+  &::after
+    border-bottom-color var(--background-color-mid)
+
+.el-cascader-node:not(.is-disabled):hover
+  color var(--text-color)
+  background var(--background-color)
+
+.el-pager li.active
+  background $color-main !important
+
+.el-input__inner
+.el-cascader
+  background var(--background-color-light)
+  border-color var(--border-color)
+  color var(--text-color)
+  &:hover
+    border-color var(--border-color)
+    .el-input__inner
+      border-color var(--border-color) !important
+
+
+.el-image__error
+  background var(--background-color-light) !important

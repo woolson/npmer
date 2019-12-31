@@ -23,7 +23,7 @@ import BadgeList from '~/components/badge-list.vue'
 export default {
   head () {
     return {
-      title: this.$t('star') + ' - NPMer'
+      title: this.$t('base.like') + ' | NPMer'
     }
   },
 
@@ -78,6 +78,6 @@ export default {
   flex-direction column
   align-items center
   padding 100px 50px 50px
-  background $background-color
+  background $color-background
   box-sizing border-box
 </style>

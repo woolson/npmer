@@ -87,16 +87,16 @@ export default {
   display flex
   align-items center
   border-bottom 1px solid $color-border
-  background hsla(0,0%,100%,.8)
+  background var(--background-header)
   backdrop-filter saturate(180%) blur(20px)
-  box-shadow 0 0 5px $color-shadow
+  box-shadow 0 0 15px $color-shadow
   padding 15px 50px
   box-sizing border-box
   z-index 3
 
 .head__title
   padding 0 15px
-  background #cb3837
+  background $color-main
   color white
   line-height 1
   text-align center
@@ -114,7 +114,7 @@ export default {
 
 .head__pages > a
   margin-right 20px
-  color $color-text
+  color var(--text-color)
   font-size 18px
   font-weight bold
   line-height 38px

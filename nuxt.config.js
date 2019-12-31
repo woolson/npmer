@@ -56,7 +56,8 @@ export default {
   /** Axios module configuration */
   proxy: {
     '/npmer': {
-      target: 'https://woolson.cn/'
+      // target: 'https://woolson.cn/'
+      target: 'http://localhost:3000/'
     }
   },
   /** Build configuration */

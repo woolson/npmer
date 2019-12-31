@@ -20,13 +20,11 @@ div.foot
   width 100vw
   min-width 770px
   max-height 155px
-  background #333
+  background var(--background-color-mid)
   margin-top auto
   padding 20px 50px 50px
   text-align center
   font-family Roboto
-  color white
-  border-top 1px solid $color-border
   display flex
   box-sizing border-box
 
@@ -39,13 +37,11 @@ div.foot
   align-items flex-start
   width 250px
   line-height 1.7
-  // &:first-child
-  //   margin-left calc(50% - 480px)
   li
-    color white
+    color var(--text-color)
     font-size 14px
     a
-      color white
+      color var(--text-color)
     &:first-child
       line-height 25px
       font-size 16px

@@ -96,7 +96,7 @@ export default {
 
 .icon-empty
   font-size 100px
-  color darken($background-color, 5)
+  color darken($color-background, 5)
   margin-top 50px
 
 .icon-market__list
