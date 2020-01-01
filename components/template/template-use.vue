@@ -6,6 +6,8 @@ el-dialog.template-use(
   @close="$emit('input', false)"
 )
   el-form(label-width="100px")
+    el-form-item(:label="$t('base.preview')")
+      el-image(:src="preview" fit="none")
     el-form-item(:label="$t('useType')")
       el-cascader.u-w300(
         v-model="useType"
@@ -36,14 +38,32 @@ el-dialog.template-use(
         v-model="package"
         :placeholder="$t('base.package')"
         clearable)
+    el-form-item(
+      v-show="useType[0] === 'npm' && useType[1] === 'download'"
+      :label="$t('base.type')"
+    )
+      el-select.u-w300(v-model="dateType")
+        el-option(
+          v-for="item in dateTypeList"
+          :key="item.value"
+          :label="$t('base.' + item.label)"
+          :value="item.value"
+        )
     el-form-item(:label="$t('base.link')")
-      div.template-use__result
-        p {{result}}
+      el-input.u-w300(
+        v-model="result"
+        readonly)
         el-button(
-          type="text"
+          slot="append"
           v-clipboard="result"
           @success="$message.success($t('copySuccess'))"
         ) {{$t('base.copy')}}
+    el-form-item
+      el-button.u-w300(
+        type="primary"
+        plain
+        @click="preview = result"
+      ) {{$t('base.preview')}}
 </template>
 
 <script>
@@ -62,12 +82,34 @@ export default {
   data () {
     return {
       /** 基础路由 */
-      baseURL: 'https://woolson.cn/npmer',
-      useType: ['github', 'star'],
+      // baseURL: 'https://woolson.cn/npmer',
+      baseURL: 'http://localhost:3000/npmer',
+      useType: ['npm', 'version'],
       userName: '',
       repository: '',
       package: '',
+      dateType: 'd',
+      preview: '',
+      dateTypeList: [
+        { label: 'day', value: 'd' },
+        { label: 'week', value: 'w' },
+        { label: 'month', value: 'm' }
+      ],
       useTypeList: [
+        {
+          value: 'npm',
+          label: 'NPM',
+          children: [
+            {
+              value: 'version',
+              label: 'Version'
+            },
+            {
+              value: 'download',
+              label: 'Download'
+            }
+          ]
+        },
         {
           value: 'github',
           label: 'Github',
@@ -79,20 +121,6 @@ export default {
             {
               value: 'release',
               label: 'Release'
-            },
-            {
-              value: 'download',
-              label: 'Download'
-            }
-          ]
-        },
-        {
-          value: 'npm',
-          label: 'NPM',
-          children: [
-            {
-              value: 'version',
-              label: 'Version'
             },
             {
               value: 'download',
@@ -115,9 +143,18 @@ export default {
 
         case 'npm':
           result = `${base}?name=${this.package}`
+          if (this.useType[1] === 'download') {
+            result += `&type=${this.dateType}`
+          }
           break
       }
       return result
+    }
+  },
+
+  watch: {
+    templateId () {
+      this.preview = ''
     }
   }
 }

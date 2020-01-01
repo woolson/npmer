@@ -116,17 +116,17 @@ main.home
         el-button(
           type="primary"
           @click="downloadImg"
-        ) {{$t('base.download')}}
+        ) ↓ {{$t('base.download')}}
         el-button(
           type="primary"
           @click="createLink"
           :loading="loading"
-        ) {{$t('createLink')}}
+        ) + {{$t('base.link')}}
         el-button(
           type="primary"
-          @click="createLink"
+          @click="createTemplate"
           :loading="loading"
-        ) {{$t('createTemplate')}}
+        ) + {{$t('base.template')}}
   icon-market(
     v-model="iconMarketVisible"
     @change="options.iconPath = $event; iconMarketVisible= false"
@@ -328,6 +328,20 @@ export default {
         this.loading = false
         this.$message.error(this.$t(err.message))
       }
+    },
+    async createTemplate () {
+      const templateId = await axios({
+        method: 'POST',
+        url: '/npmer/api/template',
+        data: {
+          name: '',
+          content: this.$refs.content.$el.outerHTML
+        }
+      })
+      this.$router.push({
+        path: '/template?page=1',
+        query: { id: templateId }
+      })
     }
   }
 }

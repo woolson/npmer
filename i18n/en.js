@@ -52,7 +52,11 @@ export default {
     update: 'Update',
     uploaded: 'Uploaded',
     use: 'Use',
-    user: 'User'
+    user: 'User',
+    day: 'Day',
+    week: 'Week',
+    month: 'Month',
+    date: 'Date'
   },
   message: {
     errorMsg: 'Error, Try again later!',

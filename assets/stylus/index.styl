@@ -15,6 +15,7 @@ body
   --background-color-mid #FFFFFF
   --background-color-light #FFFFFF
   --background-header rgba(#FAFAFA, .8)
+  --background-footer #1F2123
   --text-color #2c3e50
   --border-color rgba(0,0,0,.1)
 
@@ -26,6 +27,7 @@ body
     --background-color-mid #25272a
     --background-color-light #35363A
     --background-header rgba(#1F2123, .9)
+    --background-footer #35363A
     --text-color #FEFEFE
     --border-color rgba(0,0,0,.1)
 
@@ -177,11 +179,27 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
   background var(--background-color-light)
   border-color var(--border-color)
   color var(--text-color)
+  border-radius 3px
   &:hover
-    border-color var(--border-color)
+    border-color $color-main
     .el-input__inner
       border-color var(--border-color) !important
+  &:focus
+    border-color $color-main
 
+.el-input__inner[readonly]
+  &:hover
+    border-color $color-border
+
+.el-select-dropdown
+  background var(--background-color-mid) !important
+  border-color var(--border-color)
+
+.el-select-dropdown__item.hover
+  background var(--background-color) !important
 
 .el-image__error
-  background var(--background-color-light) !important
+  background transparent !important
+
+.el-radio-button__orig-radio:checked+.el-radio-button__inner
+  background $color-main

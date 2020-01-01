@@ -6,6 +6,7 @@ el-dialog.icon-market(
   @close="$emit('input', false)"
 )
   el-input(
+    ref="searchInput"
     v-model="searchStr"
     clearable
     :placeholder="$t('base.search')"
@@ -54,7 +55,12 @@ export default {
   },
 
   watch: {
-    pageNum: 'fetchIcon'
+    pageNum: 'fetchIcon',
+    value (newValue) {
+      if (newValue && this.$refs.searchInput) {
+        this.$refs.searchInput.focus()
+      }
+    }
   },
 
   mounted () {
@@ -87,12 +93,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.icon-market >>> .el-dialog__body
-  display flex
-  flex-direction column
-  align-items center
-  .el-input
-    width 250px
+.icon-market
+  >>> .el-dialog
+    min-width 500px
+  >>> .el-dialog__body
+    display flex
+    flex-direction column
+    align-items center
+    .el-input
+      width 250px
 
 .icon-empty
   font-size 100px
@@ -121,7 +130,7 @@ export default {
     svg
       width 100%
     >>> path
-      fill $color-text
+      fill var(--text-color)
   .item__info
     display flex
     overflow hidden

@@ -52,7 +52,11 @@ export default {
     update: '更新',
     uploaded: '已上传',
     use: '使用',
-    user: '用户'
+    user: '用户',
+    day: '天',
+    week: '周',
+    month: '月',
+    date: '日期'
   },
   message: {
     errorMsg: '请求出错，稍后重试！',

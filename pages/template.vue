@@ -33,6 +33,11 @@ export default {
 
   data () {
     const pageNum = +this.$route.query.page || 1
+    const templateId = this.$route.query.id
+    const template = {}
+    if (templateId) {
+      template.id = templateId
+    }
     return {
       keyword: '',
       pageNum,
@@ -40,8 +45,8 @@ export default {
       totalNum: 0,
       data: [],
       loading: false,
-      currentTemplate: {},
-      templateUseVisible: false
+      currentTemplate: template,
+      templateUseVisible: !!templateId
     }
   },
 
@@ -49,6 +54,23 @@ export default {
     pageNum: {
       handler: 'fetchData',
       immediate: true
+    },
+    $route: {
+      handler () {
+        if (this.$route.query.id) {
+          this.templateUseVisible = true
+        }
+      },
+      deep: true
+    },
+    templateUseVisible (newValue) {
+      const { id, page } = this.$route.query
+      if (id) {
+        this.$router.replace({
+          path: this.$route.path,
+          query: { page }
+        })
+      }
     }
   },
 

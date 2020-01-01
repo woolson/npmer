@@ -20,7 +20,7 @@ div.foot
   width 100vw
   min-width 770px
   max-height 155px
-  background var(--background-color-mid)
+  background var(--background-footer)
   margin-top auto
   padding 20px 50px 50px
   text-align center
@@ -38,10 +38,10 @@ div.foot
   width 250px
   line-height 1.7
   li
-    color var(--text-color)
+    color white
     font-size 14px
     a
-      color var(--text-color)
+      color white
     &:first-child
       line-height 25px
       font-size 16px

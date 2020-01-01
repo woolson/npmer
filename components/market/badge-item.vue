@@ -54,7 +54,7 @@ export default {
   align-items center
   justify-content center
   flex-direction column
-  background var(--background-color-light)
+  background var(--background-color-mid)
   padding 20px 0
   border-radius 5px
   margin-bottom 20px
