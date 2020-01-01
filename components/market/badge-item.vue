@@ -1,6 +1,6 @@
 <template lang="pug">
 li.list__item
-  el-image.item__img(
+  el-image.item__badge(
     lazy
     :src="encode(baseUrl + data.name)"
   )
@@ -62,7 +62,7 @@ export default {
   &:hover i
     opacity 1 !important
 
-.item__img
+.item__badge
   height 100px
   display flex
   align-items center

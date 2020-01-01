@@ -145,6 +145,7 @@ export default {
   font-size 16px
   >>> input
     text-align center
+    background var(--background-color-mid) !important
 
 .market__title
   width 100%

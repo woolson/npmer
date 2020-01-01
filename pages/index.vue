@@ -120,12 +120,10 @@ main.home
         el-button(
           type="primary"
           @click="createLink"
-          :loading="loading"
         ) + {{$t('base.link')}}
         el-button(
           type="primary"
           @click="createTemplate"
-          :loading="loading"
         ) + {{$t('base.template')}}
   icon-market(
     v-model="iconMarketVisible"
@@ -181,7 +179,6 @@ export default {
     },
     link: '',
     markdownLink: '',
-    loading: false,
     customPath: '',
     customScale: 0.13,
     sort: [
@@ -305,7 +302,6 @@ export default {
         if (iconExist) {
           this.link = iconLink
         } else {
-          this.loading = true
           const badgeLink = await axios({
             responseType: 'json',
             url: '/npmer/api/badge',
@@ -319,29 +315,31 @@ export default {
             }
           })
           this.link = badgeLink
-          this.loading = false
         }
         this.$message.success(this.$t('createLink') + this.$t('success'))
       } catch (err) {
         // eslint-disable-next-line
         console.log(err)
-        this.loading = false
         this.$message.error(this.$t(err.message))
       }
     },
     async createTemplate () {
-      const templateId = await axios({
-        method: 'POST',
-        url: '/npmer/api/template',
-        data: {
-          name: '',
-          content: this.$refs.content.$el.outerHTML
-        }
-      })
-      this.$router.push({
-        path: '/template?page=1',
-        query: { id: templateId }
-      })
+      try {
+        const templateId = await axios({
+          method: 'POST',
+          url: '/npmer/api/template',
+          data: {
+            name: '',
+            content: this.$refs.content.$el.outerHTML
+          }
+        })
+        this.$router.push({
+          path: '/template?page=1',
+          query: { id: templateId }
+        })
+      } catch (err) {
+        this.$message.error(this.$t(err.message))
+      }
     }
   }
 }
@@ -361,7 +359,7 @@ main
   > section
     width 680px
     background var(--background-color-mid)
-    padding 10px 0
+    padding 15px 0
     border-radius 10px
     margin-bottom 20px
     box-shadow 0 0 2px $color-border
@@ -443,6 +441,7 @@ main
     border 1px solid $color-main
   input
     text-align center
+    background var(--background-color-mid) !important
 
 .options__row
   .el-switch

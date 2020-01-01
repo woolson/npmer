@@ -21,13 +21,13 @@ body
 
 @media (prefers-color-scheme: dark)
   body
-    background #1F2123
+    background #1a1c1e
   :root
     --background-color #1F2123
     --background-color-mid #25272a
     --background-color-light #35363A
-    --background-header rgba(#1F2123, .9)
-    --background-footer #35363A
+    --background-header rgba(#1a1c1e, .8)
+    --background-footer #1a1c1e
     --text-color #FEFEFE
     --border-color rgba(0,0,0,.1)
 
@@ -127,14 +127,6 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
   border-image linear-gradient(139deg, #fb8817, #ff4b01, #c12127, #e02aff) 3
   z-index 99999999
 
-.el-input-number__decrease
-.el-input-number__increase
-.el-radio-button__inner
-.el-radio-button:first-child .el-radio-button__inner
-.el-input-group__append
-  background var(--background-color)
-  border-color var(--border-color)
-
 .el-color-picker__color
   border none
 
@@ -144,62 +136,87 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-color-picker__color-inner
   border-radius 2px
 
-.el-dialog__title
-.el-form-item__label
-  color var(--text-color)
-
-.el-pager li
-.el-dialog
 .el-pagination.is-background .btn-prev
 .el-pagination.is-background .btn-next
-  color var(--text-color)
-  background var(--background-color-mid) !important
   &[disabled]
     opacity .6
 
-.el-cascader__dropdown
-.el-cascader-menu
-  background var(--background-color-mid) !important
-  border-color var(--background-color) !important
+.el-pager li.active
+  background $color-main !important
+
+// ===========================================
+
+.el-cascader
+  border-radius 3px
+
+.el-image__error
+  background transparent !important
+
+.el-switch.is-checked .el-switch__core
+.el-radio-button__orig-radio:checked+.el-radio-button__inner
+  background $color-main !important
 
 .el-popper[x-placement^=bottom] .popper__arrow
   border-bottom-color var(--background-color)
   &::after
     border-bottom-color var(--background-color-mid)
 
+.__nuxt-error-page
+.el-switch__core
+.el-select-dropdown__item.hover
 .el-cascader-node:not(.is-disabled):hover
-  color var(--text-color)
-  background var(--background-color)
+.el-input-number__decrease
+.el-input-number__increase
+.el-radio-button__inner
+.el-input-group__append
+.el-input__inner
+  background var(--background-color) !important
 
-.el-pager li.active
-  background $color-main !important
+.el-select-dropdown
+.el-cascader-menu
+.el-pager li
+.el-dialog
+.el-pagination.is-background .btn-prev
+.el-pagination.is-background .btn-next
+.el-popover
+  background var(--background-color-mid) !important
+
+.el-switch__core
+.el-cascader
+.el-input__inner
+  border-color var(--background-color-light) !important
+
+.el-cascader-menu
+.el-cascader__dropdown
+.el-popover
+  border-color var(--background-color) !important
+
+.el-select-dropdown
+.el-cascader:hover .el-input__inner
+.el-input__inner
+.el-cascader
+.el-input-number__decrease
+.el-input-number__increase
+.el-radio-button__inner
+.el-radio-button:first-child .el-radio-button__inner
+.el-input-group__append
+  border-color var(--border-color) !important
+
+.el-input__inner[readonly]:hover
+  border-color $color-border !important
+
+.el-cascader:hover
+.el-cascader:focus
+.el-input__inner:hover
+  border-color $color-main !important
 
 .el-input__inner
 .el-cascader
-  background var(--background-color-light)
-  border-color var(--border-color)
-  color var(--text-color)
-  border-radius 3px
-  &:hover
-    border-color $color-main
-    .el-input__inner
-      border-color var(--border-color) !important
-  &:focus
-    border-color $color-main
-
-.el-input__inner[readonly]
-  &:hover
-    border-color $color-border
-
-.el-select-dropdown
-  background var(--background-color-mid) !important
-  border-color var(--border-color)
-
-.el-select-dropdown__item.hover
-  background var(--background-color) !important
-
-.el-image__error
-  background transparent !important
-
-.el-radio-button__orig-radio:checked+.el-radio-button__inner
-  background $color-main
+.el-cascader-node:not(.is-disabled):hover
+.el-dialog__title
+.el-form-item__label
+.el-pager li:not(.active)
+.el-dialog
+.el-pagination.is-background .btn-prev
+.el-pagination.is-background .btn-next
+  color var(--text-color) !important

@@ -24,12 +24,12 @@ div.head
   div.head__lang
     span(
       :class="{active: $i18n.locale === 'zh'}"
-      @click="$i18n.locale = 'zh'"
+      @click="changeLang('zh')"
     ) 中
     i &nbsp;|&nbsp;
     span(
       :class="{active: $i18n.locale === 'en'}"
-      @click="$i18n.locale = 'en'"
+      @click="changeLang('en')"
     ) EN
   div.head__login
     span(
@@ -72,6 +72,10 @@ export default {
         confirmButtonText: this.$t('submit')
       })
       location.href = 'https://github.com/login/oauth/authorize?client_id=c03fba868563cbf34940&redirect_uri=https://woolson.cn/npmer/api/github/callback&state=123123sadh1as12'
+    },
+    changeLang (lang) {
+      this.$i18n.locale = lang
+      localStorage.setItem('LANGUAGE', lang)
     }
   }
 }
@@ -167,7 +171,7 @@ export default {
     padding 0 10px
     border-radius 5px
     cursor pointer
-    color $color-text
+    color var(--text-color)
     text-decoration none
     span
       margin-left 5px

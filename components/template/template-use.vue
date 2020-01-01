@@ -7,7 +7,13 @@ el-dialog.template-use(
 )
   el-form(label-width="100px")
     el-form-item(:label="$t('base.preview')")
-      el-image(:src="preview" fit="none")
+      el-image(
+        v-if="preview"
+        :src="preview"
+        fit="none"
+        @load="loading = false"
+        @error="loading = false; $message.error($t('base.error'))"
+      )
     el-form-item(:label="$t('useType')")
       el-cascader.u-w300(
         v-model="useType"
@@ -61,8 +67,8 @@ el-dialog.template-use(
     el-form-item
       el-button.u-w300(
         type="primary"
-        plain
-        @click="preview = result"
+        :loading='loading'
+        @click="loading = true; preview = result"
       ) {{$t('base.preview')}}
 </template>
 
@@ -90,6 +96,7 @@ export default {
       package: '',
       dateType: 'd',
       preview: '',
+      loading: false,
       dateTypeList: [
         { label: 'day', value: 'd' },
         { label: 'week', value: 'w' },

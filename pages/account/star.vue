@@ -2,9 +2,13 @@
 div.user__star
   badge-list(
     :data="data"
-    :canLike="false"
     :loading="loading"
   )
+    template(v-slot="itemData")
+      badge-item(
+        :data="itemData.item"
+        :canLike="false"
+      )
   el-pagination(
     background
     :hide-on-single-page="true"
@@ -19,6 +23,7 @@ div.user__star
 <script>
 import axios from '~/plugins/axios'
 import BadgeList from '~/components/badge-list.vue'
+import BadgeItem from '~/components/market/badge-item.vue'
 
 export default {
   head () {
@@ -28,7 +33,8 @@ export default {
   },
 
   components: {
-    BadgeList
+    BadgeList,
+    BadgeItem
   },
 
   data () {
@@ -78,6 +84,6 @@ export default {
   flex-direction column
   align-items center
   padding 100px 50px 50px
-  background $color-background
+  background var(--background-color)
   box-sizing border-box
 </style>

@@ -1,7 +1,8 @@
 <template lang="pug">
 li.list__item
-  div.item__badge(
-    v-html="data.content"
+  el-image.item__badge(
+    lazy
+    :src="encode(data.link)"
   )
   div.item__option
     i.el-icon-brush(
@@ -17,6 +18,12 @@ export default {
       type: Object,
       default: () => {}
     }
+  },
+
+  methods: {
+    encode (value) {
+      return encodeURI(value)
+    }
   }
 }
 </script>
@@ -27,7 +34,7 @@ export default {
   align-items center
   justify-content center
   flex-direction column
-  background var(--background-color-light)
+  background var(--background-color-mid)
   padding 20px 0
   border-radius 5px
   margin-bottom 20px
@@ -39,6 +46,8 @@ export default {
   height 100px
   display flex
   align-items center
+  >>> img
+    height auto
   >>> .el-image__error
     background white
 

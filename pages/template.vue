@@ -58,6 +58,9 @@ export default {
     $route: {
       handler () {
         if (this.$route.query.id) {
+          this.currentTemplate = {
+            id: this.$route.query.id
+          }
           this.templateUseVisible = true
         }
       },

@@ -56,7 +56,8 @@ export default {
     day: '天',
     week: '周',
     month: '月',
-    date: '日期'
+    date: '日期',
+    error: '错误'
   },
   message: {
     errorMsg: '请求出错，稍后重试！',

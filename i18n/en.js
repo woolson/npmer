@@ -56,7 +56,8 @@ export default {
     day: 'Day',
     week: 'Week',
     month: 'Month',
-    date: 'Date'
+    date: 'Date',
+    error: 'Error'
   },
   message: {
     errorMsg: 'Error, Try again later!',

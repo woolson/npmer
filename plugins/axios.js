@@ -32,6 +32,7 @@ request.interceptors.response.use((res) => {
   return res.data.data
 }, () => {
   window.$nuxt.$loading.finish()
+  throw new Error('未知错误')
 })
 
 export default request
