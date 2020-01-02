@@ -7,7 +7,7 @@ div.badge__list
     )
   div.badge__list__empty(v-if="!loading && !data.length")
     img(src="~assets/img/empty.svg")
-    span {{$t('empty')}}
+    span {{$t('base.empty')}}
 </template>
 
 <script>

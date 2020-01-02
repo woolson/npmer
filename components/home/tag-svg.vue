@@ -4,6 +4,16 @@ svg(
   xmlns:xlink="http://www.w3.org/1999/xlink"
   height="20"
   :width="lWidth + rWidth"
+  :l="lWidth"
+  :r="rWidth"
+  :s="getSortName"
+  :ltw="lTextWidth"
+  :rtw="rTextWidth"
+  :op="padding"
+  :ip="innerPadding"
+  :iw="iconWidth"
+  :lt="leftText"
+  :rt="rightText"
 )
   linearGradient(
     v-if="gradient"
@@ -148,6 +158,15 @@ export default {
   }),
 
   computed: {
+    getSortName () {
+      let items = [...this.sort]
+      if (this.iconPath === '') {
+        items = items.filter(item => item.name !== 'icon')
+      }
+      return items
+        .reduce((p, n) => (p += n.name[0]), '')
+        .toLowerCase()
+    },
     iIndex () {
       return this.sort.findIndex(item => item.name === 'icon')
     },
@@ -161,10 +180,10 @@ export default {
       return this.sort.findIndex(item => item.name === 'center')
     },
     lTextWidth () {
-      return strWidth(this.leftText, { font: 'Verdana', size: 12 })
+      return +strWidth(this.leftText, { font: 'Verdana', size: 12 }).toFixed(0)
     },
     rTextWidth () {
-      return strWidth(this.rightText, { font: 'Verdana', size: 12 })
+      return +strWidth(this.rightText, { font: 'Verdana', size: 12 }).toFixed(0)
     },
     lIconWidth () {
       return this.iIndex < this.cIndex ? this.iconWidth : 0
@@ -245,7 +264,7 @@ export default {
 
         const { height, width } = this.$refs.icon.getBBox()
         const scale = 14 / height
-        this.iconWidth = width * scale + 3
+        this.iconWidth = +(width * scale + 3).toFixed(0)
         this.$emit('update:iconScale', scale || 1)
       },
       immediate: true

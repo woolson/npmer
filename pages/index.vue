@@ -132,6 +132,7 @@ main.home
 </template>
 
 <script>
+import Vue from 'vue'
 import Draggable from 'vuedraggable'
 import axios from '~/plugins/axios'
 import TagSvg from '~/components/home/tag-svg.vue'
@@ -140,6 +141,7 @@ import LinkCopy from '~/components/home/link-copy.vue'
 import PickColor from '~/components/home/pick-color.vue'
 import ColorPick from '~/components/color-pick.vue'
 import IconMarket from '~/components/home/icon-market.vue'
+// import Comp from '~/dist/npmer.umd'
 
 export default {
   head () {
@@ -217,6 +219,30 @@ export default {
 
   mounted () {
     this.fetchIcons()
+
+    const result = this.renderComponent(TagSvg, {
+      leftText: 'woolson',
+      leftTextColor: '#FFF',
+      leftBgColor: '#FF0',
+      rightText: 'lee',
+      rightTextColor: '#FFF',
+      rightBgColor: '#F0F',
+      angle: 'square',
+      gradient: false,
+      textShadow: false,
+      iconScale: 0,
+      iconPath: '',
+      iconColor: '',
+      iconX: 5,
+      iconY: 3,
+      sort: [
+        { name: 'icon' },
+        { name: 'left' },
+        { name: 'center' },
+        { name: 'right' }
+      ]
+    })
+    console.log('render', result.$el.outerHTML)
   },
 
   methods: {
@@ -252,6 +278,12 @@ export default {
       return items
         .reduce((p, n) => (p += n.name[0]), '')
         .toLowerCase()
+    },
+    renderComponent (Comp, props) {
+      const Instance = new Vue({
+        render: h => h(Comp, { props })
+      })
+      return Instance.$mount()
     },
     getIconName () {
       let name = ''
@@ -325,12 +357,17 @@ export default {
     },
     async createTemplate () {
       try {
+        const config = {
+          ...this.options,
+          sort: this.sort,
+          iconScale: this.iconScale
+        }
         const templateId = await axios({
           method: 'POST',
           url: '/npmer/api/template',
           data: {
             name: '',
-            content: this.$refs.content.$el.outerHTML
+            config: JSON.stringify(config)
           }
         })
         this.$router.push({

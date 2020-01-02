@@ -14,7 +14,7 @@ body
   --background-color #FAFAFA
   --background-color-mid #FFFFFF
   --background-color-light #FFFFFF
-  --background-header rgba(#FAFAFA, .8)
+  --background-header rgba(#FAFAFA, .9)
   --background-footer #1F2123
   --text-color #2c3e50
   --border-color rgba(0,0,0,.1)
@@ -26,7 +26,7 @@ body
     --background-color #1F2123
     --background-color-mid #25272a
     --background-color-light #35363A
-    --background-header rgba(#1a1c1e, .8)
+    --background-header rgba(#1a1c1e, .9)
     --background-footer #1a1c1e
     --text-color #FEFEFE
     --border-color rgba(0,0,0,.1)
@@ -175,11 +175,14 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-select-dropdown
 .el-cascader-menu
 .el-pager li
-.el-dialog
 .el-pagination.is-background .btn-prev
 .el-pagination.is-background .btn-next
-.el-popover
   background var(--background-color-mid) !important
+
+.el-popover
+.el-dialog
+  background var(--background-header)
+  backdrop-filter saturate(180%) blur(20px)
 
 .el-switch__core
 .el-cascader
