@@ -119,6 +119,10 @@ export default {
       type: [Number, String],
       default: ''
     },
+    iconWidth: {
+      type: Number,
+      default: 0
+    },
     iconPath: {
       type: String,
       default: ''
@@ -142,7 +146,6 @@ export default {
   },
 
   data: () => ({
-    iconWidth: 0,
     padding: 7,
     innerPadding: 7
   }),
@@ -248,13 +251,14 @@ export default {
       async handler () {
         await this.$nextTick()
         if (!this.$refs.icon) {
-          this.iconWidth = 0
+          this.$emit('update:iconWidth', 0)
           return
         }
 
         const { height, width } = this.$refs.icon.getBBox()
         const scale = 14 / height
-        this.iconWidth = +(width * scale + 3).toFixed(0)
+        const iconWidth = +(width * scale + 3).toFixed(0)
+        this.$emit('update:iconWidth', iconWidth)
         this.$emit('update:iconScale', scale || 1)
       },
       immediate: true

@@ -6,7 +6,9 @@ main.home
       ref="content"
       v-bind="options"
       :sort="sort"
-      :iconScale.sync="options.iconScale")
+      :iconScale.sync="options.iconScale"
+      :iconWidth.sync="options.iconWidth"
+    )
   section.home__options
     el-form(
       ref="options"
@@ -41,23 +43,16 @@ main.home
             v-model="options.rightText"
             clearable)
       //- 图标路径和缩放
-      div.options__row
-        el-form-item.u-flex(
-          v-show="iconIndex === 0"
-          :label="$t('iconPath')")
+      div.options__row(v-show="iconIndex === 0")
+        el-form-item.u-flex(:label="$t('iconPath')")
           el-input(
             v-model="options.iconPath"
             size="small"
             clearable)
             el-button(
               slot="append"
-              @click="iconMarketVisible = true") {{$t('base.select')}}
-        el-form-item(:label="$t('iconScale')")
-          el-input-number(
-            v-model="options.iconScale"
-            size="small"
-            :step="0.001"
-          )
+              @click="iconMarketVisible = true"
+            ) {{$t('base.select')}}
       //- 图标位置微调
       div.options__row
         el-form-item(:label="$t('iconXOffset')")
@@ -175,6 +170,8 @@ export default {
       rightBgColor: '#44CC11',
       iconColor: '#FFFFFF',
       iconPosition: 'left',
+      iconScale: 0,
+      iconWidth: 0,
       iconY: 3,
       iconX: 5
     },
@@ -202,7 +199,6 @@ export default {
     iconIndex (newValue) {
       if (newValue === 0) {
         this.$set(this.options, 'iconPath', '')
-        this.$set(this.options, 'iconScale', 1)
       } else {
         const { content } = this.icons[newValue] || {}
         this.$set(this.options, 'iconPath', content)
@@ -328,8 +324,7 @@ export default {
       try {
         const config = {
           ...this.options,
-          sort: this.sort,
-          iconScale: this.options.iconScale
+          sort: this.sort
         }
         const templateId = await axios({
           method: 'POST',
