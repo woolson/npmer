@@ -3,6 +3,7 @@ el-dialog.template-use(
   :title="$t('useTemplate')"
   :visible="value"
   :lock-scroll="true"
+  width="500px"
   @close="$emit('input', false)"
 )
   el-form(label-width="100px")

@@ -10,27 +10,6 @@ body
   box-sizing border-box
   overflow auto !important
 
-:root
-  --background-color #FAFAFA
-  --background-color-mid #FFFFFF
-  --background-color-light #FFFFFF
-  --background-header rgba(#FAFAFA, .9)
-  --background-footer #1F2123
-  --text-color #2c3e50
-  --border-color rgba(0,0,0,.1)
-
-@media (prefers-color-scheme: dark)
-  body
-    background #1a1c1e
-  :root
-    --background-color #1F2123
-    --background-color-mid #25272a
-    --background-color-light #35363A
-    --background-header rgba(#1a1c1e, .9)
-    --background-footer #1a1c1e
-    --text-color #FEFEFE
-    --border-color rgba(0,0,0,.1)
-
 html
 body
 ul
@@ -157,34 +136,64 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
   background $color-main !important
 
 .el-popper[x-placement^=bottom] .popper__arrow
-  border-bottom-color var(--background-color)
+  border-bottom-color var(--border-color)
   &::after
-    border-bottom-color var(--background-color-mid)
+    border-bottom-color var(--background-color)
 
-.__nuxt-error-page
+:root
+  --background-color #FAFAFA
+  --background-color-mid #FEFEFE
+  --background-color-light #FFFFFF
+  --background-color-dark #F5F5F5
+  --background-color-input #FFFFFF
+  --background-header rgba(#FAFAFA, .9)
+  --background-footer #1F2123
+  --text-color #2c3e50
+  --border-color #E4E7ED
+
+@media (prefers-color-scheme: dark)
+  body
+    background #1a1c1e
+  :root
+    --background-color #1F2123
+    --background-color-mid #25272a
+    --background-color-light #35363A
+    --background-color-dark #25272a
+    --background-color-input #1F2123
+    --background-header rgba(#1a1c1e, .9)
+    --background-footer #1a1c1e
+    --text-color #FEFEFE
+    --border-color #1F2123
+
 .el-switch__core
-.el-select-dropdown__item.hover
 .el-cascader-node:not(.is-disabled):hover
+  background var(--background-color-dark) !important
+
 .el-input-number__decrease
 .el-input-number__increase
-.el-radio-button__inner
 .el-input-group__append
-.el-input__inner
+.el-select-dropdown
+.el-cascader-panel
+.el-cascader__dropdown
   background var(--background-color) !important
 
-.el-select-dropdown
-.el-cascader-menu
+.__nuxt-error-page
+.el-radio-button__inner
+.el-input__inner
+  background var(--background-color-input) !important
+
 .el-pager li
 .el-pagination.is-background .btn-prev
 .el-pagination.is-background .btn-next
+.el-dialog
+.el-select-dropdown__item.hover
+.el-input-number .el-input__inner
   background var(--background-color-mid) !important
 
 .el-popover
-.el-dialog
   background var(--background-header)
   backdrop-filter saturate(180%) blur(20px)
 
-.el-switch__core
 .el-cascader
 .el-input__inner
   border-color var(--background-color-light) !important
@@ -192,7 +201,7 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-cascader-menu
 .el-cascader__dropdown
 .el-popover
-  border-color var(--background-color) !important
+  border-color var(--border-color) !important
 
 .el-select-dropdown
 .el-cascader:hover .el-input__inner
@@ -203,6 +212,7 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-radio-button__inner
 .el-radio-button:first-child .el-radio-button__inner
 .el-input-group__append
+.el-switch__core
   border-color var(--border-color) !important
 
 .el-input__inner[readonly]:hover
@@ -211,6 +221,7 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-cascader:hover
 .el-cascader:focus
 .el-input__inner:hover
+.el-radio-button__orig-radio:checked+.el-radio-button__inner
   border-color $color-main !important
 
 .el-input__inner

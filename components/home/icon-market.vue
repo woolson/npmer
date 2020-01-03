@@ -3,6 +3,7 @@ el-dialog.icon-market(
   :title="$t('selectIcon')"
   :visible="value"
   :lock-scroll="true"
+  width="60%"
   @close="$emit('input', false)"
 )
   el-input(
