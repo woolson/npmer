@@ -4,16 +4,6 @@ svg(
   xmlns:xlink="http://www.w3.org/1999/xlink"
   height="20"
   :width="lWidth + rWidth"
-  :l="lWidth"
-  :r="rWidth"
-  :s="getSortName"
-  :ltw="lTextWidth"
-  :rtw="rTextWidth"
-  :op="padding"
-  :ip="innerPadding"
-  :iw="iconWidth"
-  :lt="leftText"
-  :rt="rightText"
 )
   linearGradient(
     v-if="gradient"

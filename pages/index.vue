@@ -132,7 +132,6 @@ main.home
 </template>
 
 <script>
-import Vue from 'vue'
 import Draggable from 'vuedraggable'
 import axios from '~/plugins/axios'
 import TagSvg from '~/components/home/tag-svg.vue'
@@ -219,30 +218,6 @@ export default {
 
   mounted () {
     this.fetchIcons()
-
-    const result = this.renderComponent(TagSvg, {
-      leftText: 'woolson',
-      leftTextColor: '#FFF',
-      leftBgColor: '#FF0',
-      rightText: 'lee',
-      rightTextColor: '#FFF',
-      rightBgColor: '#F0F',
-      angle: 'square',
-      gradient: false,
-      textShadow: false,
-      iconScale: 0,
-      iconPath: '',
-      iconColor: '',
-      iconX: 5,
-      iconY: 3,
-      sort: [
-        { name: 'icon' },
-        { name: 'left' },
-        { name: 'center' },
-        { name: 'right' }
-      ]
-    })
-    console.log('render', result.$el.outerHTML)
   },
 
   methods: {
@@ -278,12 +253,6 @@ export default {
       return items
         .reduce((p, n) => (p += n.name[0]), '')
         .toLowerCase()
-    },
-    renderComponent (Comp, props) {
-      const Instance = new Vue({
-        render: h => h(Comp, { props })
-      })
-      return Instance.$mount()
     },
     getIconName () {
       let name = ''
@@ -360,7 +329,7 @@ export default {
         const config = {
           ...this.options,
           sort: this.sort,
-          iconScale: this.iconScale
+          iconScale: this.options.iconScale
         }
         const templateId = await axios({
           method: 'POST',

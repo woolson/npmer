@@ -1,9 +1,7 @@
 <template lang="pug">
 li.list__item
-  el-image.item__badge(
-    lazy
-    :src="encode(data.link)"
-  )
+  div.item__badge
+    tag-svg(v-bind="config")
   div.item__option
     i.el-icon-brush(
       @click="$emit('use')"
@@ -12,11 +10,27 @@ li.list__item
 </template>
 
 <script>
+import TagSvg from '~/components/home/tag-svg'
+
 export default {
+  components: {
+    TagSvg
+  },
+
   props: {
     data: {
       type: Object,
       default: () => {}
+    }
+  },
+
+  computed: {
+    config () {
+      if (this.data.config) {
+        return JSON.parse(this.data.config)
+      } else {
+        return {}
+      }
     }
   },
 
