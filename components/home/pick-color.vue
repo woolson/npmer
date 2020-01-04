@@ -51,6 +51,12 @@ export default {
     },
     bgColor () {
       this.$emit('update:background', this.bgColor)
+    },
+    text () {
+      this.textColor = this.text
+    },
+    background () {
+      this.bgColor = this.background
     }
   }
 }

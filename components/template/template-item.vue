@@ -4,6 +4,10 @@ li.list__item
     tag-svg(v-bind="config")
   div.item__option
     i.el-icon-brush(
+      @click="$emit('edit')"
+    )
+      span {{$t('base.edit')}}
+    i.el-icon-brush(
       @click="$emit('use')"
     )
       span {{$t('base.use')}}

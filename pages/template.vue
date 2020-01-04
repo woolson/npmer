@@ -5,6 +5,7 @@ div.template
       template-item(
         :data="itemData.item"
         @use="currentTemplate = itemData.item; templateUseVisible = true"
+        @edit="editTemplate(itemData.item)"
       )
   template-use(
     v-model="templateUseVisible"
@@ -88,6 +89,10 @@ export default {
       })
       this.data = resData.data
       this.totalNum = resData.total
+    },
+    editTemplate (data) {
+      localStorage.setItem('template-edit', JSON.stringify(data))
+      this.$router.push('/create')
     }
   }
 }

@@ -4,11 +4,11 @@ div.head
     img(src="~assets/img/icon.svg")
     span {{$t('base.npmer')}}
   div.head__pages
-    nuxt-link(to="/") {{$t('base.home')}}
+    nuxt-link(to="/create") {{$t('base.create')}}
     nuxt-link(
-      :class="{active: $route.path === '/market'}"
-      :to="{path: '/market', query: { page: 1 }}"
-    ) {{$t('base.market')}}
+      :class="{active: $route.path === '/static'}"
+      :to="{path: '/static', query: { page: 1 }}"
+    ) {{$t('base.static')}}
     nuxt-link(
       :class="{active: $route.path === '/template'}"
       :to="{path: '/template', query: { page: 1 }}"
@@ -124,6 +124,7 @@ export default {
   line-height 38px
   text-decoration none
   &.active
+  &.nuxt-link-active
   &.nuxt-link-exact-active
     color $color-main
     border-bottom 2px solid $color-main

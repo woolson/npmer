@@ -107,7 +107,16 @@ main.home
       //- 链接
       link-copy(:link="link")
       //- 按钮
-      div.options__button
+      div.options__button(v-if="editTemplateId")
+        el-button(
+          type="primary"
+          @click=""
+        ) {{$t('base.cancel')}}
+        el-button(
+          type="primary"
+          @click="updateTemplate"
+        ) {{$t('updateTemplate')}}
+      div.options__button(v-else)
         el-button(
           type="primary"
           @click="downloadImg"
@@ -135,7 +144,25 @@ import LinkCopy from '~/components/home/link-copy.vue'
 import PickColor from '~/components/home/pick-color.vue'
 import ColorPick from '~/components/color-pick.vue'
 import IconMarket from '~/components/home/icon-market.vue'
-// import Comp from '~/dist/npmer.umd'
+
+const DEFAULT_OPTION = {
+  angle: 'square',
+  textShadow: false,
+  gradient: false,
+  leftText: 'welcome',
+  leftTextColor: '#FFFFFF',
+  leftBgColor: '#555555',
+  rightText: 'programmer',
+  rightTextColor: '#FFFFFF',
+  rightBgColor: '#44CC11',
+  iconColor: '#FFFFFF',
+  iconPosition: 'left',
+  iconPath: '',
+  iconScale: 0,
+  iconWidth: 0,
+  iconY: 3,
+  iconX: 5
+}
 
 export default {
   head () {
@@ -155,26 +182,11 @@ export default {
   },
 
   data: () => ({
+    editTemplateId: false,
     iconMarketVisible: false,
     icons: [],
     iconIndex: '',
-    options: {
-      angle: 'square',
-      textShadow: false,
-      gradient: false,
-      leftText: 'welcome',
-      leftTextColor: '#FFFFFF',
-      leftBgColor: '#555555',
-      rightText: 'programmer',
-      rightTextColor: '#FFFFFF',
-      rightBgColor: '#44CC11',
-      iconColor: '#FFFFFF',
-      iconPosition: 'left',
-      iconScale: 0,
-      iconWidth: 0,
-      iconY: 3,
-      iconX: 5
-    },
+    options: { ...DEFAULT_OPTION },
     link: '',
     markdownLink: '',
     customPath: '',
@@ -214,6 +226,11 @@ export default {
 
   mounted () {
     this.fetchIcons()
+    this.enterEdit()
+  },
+
+  activated () {
+    this.enterEdit()
   },
 
   methods: {
@@ -330,7 +347,6 @@ export default {
           method: 'POST',
           url: '/npmer/api/template',
           data: {
-            name: '',
             config: JSON.stringify(config)
           }
         })
@@ -338,6 +354,39 @@ export default {
           path: '/template?page=1',
           query: { id: templateId }
         })
+      } catch (err) {
+        this.$message.error(this.$t(err.message))
+      }
+    },
+    enterEdit () {
+      const editTemplate = localStorage.getItem('template-edit')
+      if (editTemplate) {
+        const templateData = JSON.parse(editTemplate)
+        const config = JSON.parse(templateData.config)
+        this.editTemplateId = templateData.id
+        this.sort = config.sort
+        Object.keys(this.options).forEach((key) => {
+          this.$set(this.options, key, config[key])
+        })
+        localStorage.removeItem('template-edit')
+      } else {
+        this.editTemplateId = ''
+      }
+    },
+    async updateTemplate () {
+      try {
+        const config = {
+          ...this.options,
+          sort: this.sort
+        }
+        await axios({
+          method: 'PUT',
+          url: `/npmer/api/template/${this.editTemplateId}`,
+          data: {
+            config: JSON.stringify(config)
+          }
+        })
+        this.$router.push('/template?page=1')
       } catch (err) {
         this.$message.error(this.$t(err.message))
       }

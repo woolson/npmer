@@ -9,11 +9,11 @@ el-dialog.template-use(
   el-form(label-width="100px")
     el-form-item(:label="$t('base.preview')")
       el-image(
-        v-if="preview"
+        v-show="preview"
         :src="preview"
         fit="none"
         @load="loading = false"
-        @error="loading = false; $message.error($t('base.error'))"
+        @error="loading = false; preview && $message.error($t('base.error'))"
       )
     el-form-item(:label="$t('useType')")
       el-cascader.u-w300(
@@ -28,6 +28,7 @@ el-dialog.template-use(
       el-input.u-w300(
         v-model="userName"
         :placeholder="$t('userName')"
+        @change="loading = false"
         clearable)
     el-form-item(
       v-show="useType[0] === 'github'"
@@ -36,6 +37,7 @@ el-dialog.template-use(
       el-input.u-w300(
         v-model="repository"
         :placeholder="$t('base.repository')"
+        @change="loading = false"
         clearable)
     el-form-item(
       v-show="useType[0] === 'npm'"
@@ -44,6 +46,7 @@ el-dialog.template-use(
       el-input.u-w300(
         v-model="package"
         :placeholder="$t('base.package')"
+        @change="loading = false"
         clearable)
     el-form-item(
       v-show="useType[0] === 'npm' && useType[1] === 'download'"
