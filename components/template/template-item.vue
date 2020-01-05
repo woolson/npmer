@@ -4,13 +4,21 @@ li.list__item
     tag-svg(v-bind="config")
   div.item__option
     i.el-icon-brush(
+      v-if="items.includes('edit')"
       @click="$emit('edit')"
     )
       span {{$t('base.edit')}}
     i.el-icon-brush(
+      v-if="items.includes('use')"
       @click="$emit('use')"
     )
       span {{$t('base.use')}}
+    i.el-icon-share(
+      v-if="items.includes('share')"
+      @click="$emit('share')"
+    )
+      span(v-if="!data.shared") {{$t('base.share')}}
+      span(v-else) {{$t('base.shared')}}
 </template>
 
 <script>
@@ -25,6 +33,10 @@ export default {
     data: {
       type: Object,
       default: () => {}
+    },
+    items: {
+      type: String,
+      default: ''
     }
   },
 

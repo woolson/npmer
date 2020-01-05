@@ -1,62 +1,64 @@
 <template lang="pug">
-div.market
-  el-input.market__search(
+div.common-list(:class="account ? 'has-login' : ''")
+  el-input.list__search(
+    v-if="showSearch"
     v-model="keyword"
     clearable
     :placeholder="$t('base.search')"
     @keyup.native.13="pageNum = 1; fetchData()"
     @clear="pageNum = 1; fetchData()"
   )
-  h1.market__title
+  h1.list__title(v-if="showSearch")
   el-pagination(
     background
     :hide-on-single-page="true"
     layout="prev, pager, next"
     :page-size="pageSize"
-    :total="totalNum"
+    :total="total"
     :current-page="pageNum"
     @current-change="pageNum = $event"
   )
-  badge-list(
-    :data="data"
-    :loading="loading"
-  )
-    template(v-slot="itemData")
-      badge-item(
-        :data="itemData.item"
-        :canLike="itemData.canLike"
-        @like="like(itemData.item)"
+  div.badge__list
+    ul.badge__list__content(v-if="data.length")
+      slot(
+        v-for="item in data"
+        v-bind="item"
       )
+    div.badge__list__empty(v-if="!loading && !data.length")
+      img(src="~assets/img/empty.svg")
+      span {{$t('base.empty')}}
   el-pagination(
     background
     :hide-on-single-page="true"
     layout="prev, pager, next"
     :page-size="pageSize"
-    :total="totalNum"
+    :total="total"
     :current-page="pageNum"
     @current-change="pageNum = $event"
   )
-  //- npmer-foot
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import axios from '~/plugins/axios'
-import NpmerFoot from '~/components/npmer-foot.vue'
-import BadgeList from '~/components/badge-list.vue'
-import BadgeItem from '~/components/market/badge-item.vue'
 
 export default {
-  head () {
-    return {
-      title: this.$t('base.market') + ' | NPMer'
+  props: {
+    showSearch: {
+      type: Boolean,
+      default: false
+    },
+    data: {
+      type: Array,
+      default: () => []
+    },
+    total: {
+      type: Number,
+      default: 0
+    },
+    updateData: {
+      type: Function
     }
-  },
-
-  components: {
-    NpmerFoot,
-    BadgeList,
-    BadgeItem
   },
 
   data () {
@@ -64,9 +66,7 @@ export default {
     return {
       keyword: '',
       pageNum,
-      pageSize: 50,
-      totalNum: 0,
-      data: [],
+      pageSize: 30,
       loading: false
     }
   },
@@ -90,17 +90,8 @@ export default {
       })
       try {
         this.loading = true
-        const resData = await axios({
-          url: '/npmer/api/badge',
-          params: {
-            pageNum: this.pageNum,
-            pageSize: this.pageSize,
-            keyword: this.keyword
-          }
-        })
-        this.loading = true
-        this.data = resData.data
-        this.totalNum = resData.total
+        await this.updateData(this.$data)
+        this.loading = false
       } catch {
         this.loading = false
       }
@@ -121,7 +112,7 @@ export default {
         badge.stars += 1
         badge.stared = true
         this.$set(this.data, index, badge)
-        this.$message.success(this.$t('success'))
+        this.$message.success(this.$t('base.success'))
       } catch (err) {
         this.$message.error(err.message)
       }
@@ -131,23 +122,24 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.market
+.common-list
   display flex
   flex-direction column
   align-items center
-  padding 0 50px 50px
+  padding 100px 50px 50px
   background var(--background-color)
+  &.has-login
+    padding 130px 50px 50px
 
-.market__search
+.list__search
   max-width 600px
   width 100%
-  margin 100px 20px 0 20px
   font-size 16px
   >>> input
     text-align center
     background var(--background-color-mid) !important
 
-.market__title
+.list__title
   width 100%
   margin-top 30px
   font-size 24px
@@ -155,4 +147,47 @@ export default {
   border-bottom 1px solid var(--border-color)
   line-height 50px
 
+@media screen and (max-width: 1909px)
+  .badge__list__content
+    grid-template-columns repeat(5, 1fr) !important
+
+@media screen and (max-width: 1539px)
+  .badge__list__content
+    grid-template-columns repeat(4, 1fr) !important
+
+@media screen and (max-width: 1169px)
+  .badge__list__content
+    grid-template-columns repeat(3, 1fr) !important
+
+@media screen and (max-width: 767px)
+  .badge__list__content
+    grid-template-columns repeat(2, 1fr) !important
+
+@media screen and (max-width: 620px)
+  .badge__list__content
+    grid-template-columns repeat(1, 1fr) !important
+
+.badge__list
+  width 100%
+
+.badge__list__content
+  width 100%
+  list-style none
+  display grid
+  padding 0
+  margin 20px 0
+  grid-column-gap 20px
+  grid-template-columns repeat(5, 1fr)
+
+.badge__list__empty
+  display flex
+  flex-direction column
+  align-items center
+  img
+    width 8vw
+    margin-top 100px
+  span
+    margin-top 10px
+    color #cdcdcd
+    font-size 20px
 </style>

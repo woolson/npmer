@@ -330,7 +330,7 @@ export default {
           })
           this.link = badgeLink
         }
-        this.$message.success(this.$t('createLink') + this.$t('success'))
+        this.$message.success(this.$t('createLink') + this.$t('base.success'))
       } catch (err) {
         // eslint-disable-next-line
         console.log(err)
@@ -351,7 +351,7 @@ export default {
           }
         })
         this.$router.push({
-          path: '/template?page=1',
+          path: '/template/my?page=1',
           query: { id: templateId }
         })
       } catch (err) {
@@ -386,7 +386,7 @@ export default {
             config: JSON.stringify(config)
           }
         })
-        this.$router.push('/template?page=1')
+        this.$router.push('/template/my?page=1')
       } catch (err) {
         this.$message.error(this.$t(err.message))
       }
@@ -405,7 +405,6 @@ main
   box-sizing border-box
   background var(--background-color)
   padding-top 100px
-  min-height 100vh
   > section
     width 680px
     background var(--background-color-mid)

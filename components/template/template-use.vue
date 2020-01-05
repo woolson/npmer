@@ -1,10 +1,10 @@
 <template lang="pug">
 el-dialog.template-use(
   :title="$t('useTemplate')"
-  :visible="value"
+  :visible="templateUseVisible"
   :lock-scroll="true"
   width="500px"
-  @close="$emit('input', false)"
+  @close="updateState({templateUseVisible: false})"
 )
   el-form(label-width="100px")
     el-form-item(:label="$t('base.preview')")
@@ -77,18 +77,9 @@ el-dialog.template-use(
 </template>
 
 <script>
-export default {
-  props: {
-    value: {
-      type: Boolean,
-      default: false
-    },
-    templateId: {
-      type: String,
-      default: ''
-    }
-  },
+import { mapMutations, mapState } from 'vuex'
 
+export default {
   data () {
     return {
       /** 基础路由 */
@@ -144,8 +135,12 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'templateData',
+      'templateUseVisible'
+    ]),
     result () {
-      const base = `${this.baseURL}/${this.useType.join('/')}/${this.templateId}`
+      const base = `${this.baseURL}/${this.useType.join('/')}/${this.templateData.id}`
       let result = ''
       switch (this.useType[0]) {
         case 'github':
@@ -167,6 +162,12 @@ export default {
     templateId () {
       this.preview = ''
     }
+  },
+
+  methods: {
+    ...mapMutations({
+      updateState: 'UPDATE_STATE'
+    })
   }
 }
 </script>
