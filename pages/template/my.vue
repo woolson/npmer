@@ -123,7 +123,7 @@ export default {
     },
     editTemplate (data) {
       localStorage.setItem('template-edit', JSON.stringify(data))
-      this.$router.push('/create')
+      this.$router.push('/')
     },
     async shareTemplate (data) {
       try {

@@ -5,7 +5,10 @@ div.head
       img(src="~assets/img/icon.svg")
       span {{$t('base.npmer')}}
     div.head__pages
-      nuxt-link(to="/create") {{$t('base.create')}}
+      nuxt-link(
+        :class="{active: pathFirstLevel === ''}"
+        to="/"
+      ) {{$t('base.home')}}
       nuxt-link(
         :class="{active: pathFirstLevel === 'static'}"
         :to="{path: '/static/shared', query: { page: 1 }}"
@@ -119,8 +122,6 @@ export default {
   line-height 38px
   text-decoration none
   &.active
-  &.nuxt-link-active
-  &.nuxt-link-exact-active
     color $color-main
     border-bottom 2px solid $color-main
 
