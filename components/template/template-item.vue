@@ -17,8 +17,15 @@ li.list__item
       v-if="items.includes('share')"
       @click="$emit('share')"
     )
-      span(v-if="!data.shared") {{$t('base.share')}}
-      span(v-else) {{$t('base.shared')}}
+      span(v-if="data.shared") {{$t('base.shared')}}
+      span(v-else) {{$t('base.share')}}
+    i.el-icon-star-off(
+      v-if="items.includes('like')"
+      :class="data.liked ? 'el-icon-star-on' : 'el-icon-star-off'"
+      @click="$emit('like')"
+    )
+      span {{data.liked ? $t('base.liked') : $t('base.like')}}
+      span(v-if="data.likes > 0") ({{data.likes}})
 </template>
 
 <script>

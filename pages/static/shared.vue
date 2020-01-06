@@ -72,12 +72,12 @@ export default {
         })
         if (badge.stared) { return }
         await axios({
-          url: '/npmer/api/badge/star',
+          url: '/npmer/api/badge/like',
           method: 'POST',
           data: { badgeId: badge.id }
         })
-        badge.stars += 1
-        badge.stared = true
+        badge.likes += 1
+        badge.liked = true
         this.$set(this.list, index, badge)
         this.$message.success(this.$t('base.success'))
       } catch (err) {

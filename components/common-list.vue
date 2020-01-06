@@ -132,6 +132,7 @@ export default {
     padding 130px 50px 50px
 
 .list__search
+  margin-top 10px
   max-width 600px
   width 100%
   font-size 16px

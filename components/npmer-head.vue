@@ -36,10 +36,11 @@ div.head
   div.head__sub(v-if="pathFirstLevel === 'static' && account")
     nuxt-link(to="/static/shared") {{$t('base.shared')}}
     nuxt-link(to="/static/my") {{$t('myBadge')}}
-    nuxt-link(to="/static/liked") {{$t('myLiked')}}
+    nuxt-link(to="/static/liked") {{$t('myLike')}}
   div.head__sub(v-if="pathFirstLevel === 'template' && account")
     nuxt-link(to="/template/shared") {{$t('base.shared')}}
     nuxt-link(to="/template/my") {{$t('myTemplate')}}
+    nuxt-link(to="/template/liked") {{$t('myLike')}}
 </template>
 
 <script>

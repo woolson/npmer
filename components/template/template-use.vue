@@ -83,8 +83,8 @@ export default {
   data () {
     return {
       /** 基础路由 */
-      // baseURL: 'https://woolson.cn/npmer',
-      baseURL: 'http://localhost:3000/npmer',
+      baseURL: 'https://woolson.cn/npmer',
+      // baseURL: 'http://localhost:3000/npmer',
       useType: ['npm', 'version'],
       userName: '',
       repository: '',

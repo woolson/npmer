@@ -7,7 +7,7 @@ common-list(
 )
   template(v-slot="itemData")
     template-item(
-      items="use"
+      items="use,like"
       :data="itemData"
       :canLike="true"
       @like="like(itemData)"
@@ -66,24 +66,24 @@ export default {
       this.total = data.total
     },
     /** 喜欢图标 */
-    async like (badge) {
+    async like (template) {
       try {
         if (!this.account) {
           this.$message.error(this.$t('message.shouldLogin'))
           return
         }
         const index = this.list.findIndex((o) => {
-          return o.id === badge.id
+          return o.id === template.id
         })
-        if (badge.stared) { return }
+        if (template.stared) { return }
         await axios({
-          url: '/npmer/api/badge/star',
+          url: '/npmer/api/template/like',
           method: 'POST',
-          data: { badgeId: badge.id }
+          data: { templateId: template.id }
         })
-        badge.stars += 1
-        badge.stared = true
-        this.$set(this.list, index, badge)
+        template.likes += 1
+        template.liked = true
+        this.$set(this.list, index, template)
         this.$message.success(this.$t('base.success'))
       } catch (err) {
         this.$message.error(err.message)

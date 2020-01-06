@@ -12,11 +12,11 @@ li.list__item
       span {{$t('base.copy')}}
     i(
       v-if="canLike"
-      :class="data.stared ? 'el-icon-star-on' : 'el-icon-star-off'"
+      :class="data.liked ? 'el-icon-star-on' : 'el-icon-star-off'"
       @click="$emit('like', data)"
     )
-      span {{data.stared ? $t('base.liked') : $t('base.like')}}
-      span(v-if="data.stars > 0") ({{data.stars}})
+      span {{data.liked ? $t('base.liked') : $t('base.like')}}
+      span(v-if="data.likes > 0") ({{data.likes}})
 </template>
 
 <script>

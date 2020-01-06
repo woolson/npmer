@@ -6,17 +6,19 @@ common-list(
   :updateData="fetchData"
 )
   template(v-slot="itemData")
-    badge-item(
+    template-item(
+      items="use"
       :data="itemData"
       :canLike="false"
+      @use="updateState({templateUseVisible: true, templateData: itemData})"
     )
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import axios from '~/plugins/axios'
 import CommonList from '~/components/common-list.vue'
-import BadgeItem from '~/components/market/badge-item.vue'
+import TemplateItem from '~/components/template/template-item.vue'
 
 export default {
   head () {
@@ -27,7 +29,7 @@ export default {
 
   components: {
     CommonList,
-    BadgeItem
+    TemplateItem
   },
 
   data () {
@@ -42,20 +44,23 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      updateState: 'UPDATE_STATE'
+    }),
     async fetchData (param) {
       this.$router.push({
         path: this.$route.fullPath,
         query: { page: param.pageNum }
       })
       const resData = await axios({
-        url: '/npmer/api/account/like/badge',
+        url: '/npmer/api/account/like/template',
         params: {
           pageNum: param.pageNum,
           pageSize: param.pageSize,
           keyword: param.keyword
         }
       })
-      this.list = resData.data.map(item => item.badge)
+      this.list = resData.data.map(item => item.template)
       this.total = resData.total
     }
   }
