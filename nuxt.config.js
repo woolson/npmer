@@ -30,7 +30,6 @@ export default {
   },
   /** Global CSS */
   css: [
-    // 'element-ui/lib/theme-chalk/index.css',
     'assets/css/element/index.css',
     'assets/stylus/index.styl'
   ],
@@ -41,12 +40,10 @@ export default {
   ],
   /** Nuxt.js dev-modules */
   buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module'
   ],
   /** Nuxt.js modules */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
     '@nuxtjs/pwa',
@@ -56,20 +53,11 @@ export default {
   styleResources: {
     stylus: 'assets/stylus/variables.styl'
   },
-  /*
-  ** Axios module configuration
-  ** See https://axios.nuxtjs.org/options
-  */
+  /** Axios module configuration */
   proxy: {
     '/npmer': {
-      target: 'http://localhost:3000/'
       // target: 'https://woolson.cn/'
-    },
-    '/search': {
-      target: 'https://www.iconfont.cn'
-    },
-    '/api': {
-      target: 'https://www.iconfont.cn'
+      target: 'http://localhost:3000/'
     }
   },
   /** Build configuration */

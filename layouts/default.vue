@@ -3,17 +3,20 @@ div.body
   npmer-head
   nuxt(keep-alive)
   npmer-foot
+  template-use
 </template>
 
 <script>
 import axios from '~/plugins/axios'
 import NpmerHead from '~/components/npmer-head.vue'
 import NpmerFoot from '~/components/npmer-foot.vue'
+import TemplateUse from '~/components/template/template-use.vue'
 
 export default {
   components: {
     NpmerHead,
-    NpmerFoot
+    NpmerFoot,
+    TemplateUse
   },
 
   mounted () {

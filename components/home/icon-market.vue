@@ -3,12 +3,14 @@ el-dialog.icon-market(
   :title="$t('selectIcon')"
   :visible="value"
   :lock-scroll="true"
+  width="60%"
   @close="$emit('input', false)"
 )
   el-input(
+    ref="searchInput"
     v-model="searchStr"
     clearable
-    :placeholder="$t('search')"
+    :placeholder="$t('base.search')"
     @keypress.native.13="pageNum = 1; fetchIcon()")
   i.iconfont.icon-empty(v-if="!icons.length")
   ul.icon-market__list
@@ -19,8 +21,8 @@ el-dialog.icon-market(
       div.item__icon(v-html="icon.file")
       div.item__info
         span {{icon.name}}
-        span(@click="$emit('change', icon.svg)") {{$t('select')}}
-    li.list__item.item__disable(v-else) {{$t('invalid')}}
+        span(@click="$emit('change', icon.svg)") {{$t('base.select')}}
+    li.list__item.item__disable(v-else) {{$t('base.invalid')}}
   el-pagination(
     background
     :hide-on-single-page="true"
@@ -54,7 +56,12 @@ export default {
   },
 
   watch: {
-    pageNum: 'fetchIcon'
+    pageNum: 'fetchIcon',
+    value (newValue) {
+      if (newValue && this.$refs.searchInput) {
+        this.$refs.searchInput.focus()
+      }
+    }
   },
 
   mounted () {
@@ -87,16 +94,19 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.icon-market >>> .el-dialog__body
-  display flex
-  flex-direction column
-  align-items center
-  .el-input
-    width 250px
+.icon-market
+  >>> .el-dialog
+    min-width 500px
+  >>> .el-dialog__body
+    display flex
+    flex-direction column
+    align-items center
+    .el-input
+      width 250px
 
 .icon-empty
   font-size 100px
-  color darken($background-color, 5)
+  color darken($color-background, 5)
   margin-top 50px
 
 .icon-market__list
@@ -121,7 +131,7 @@ export default {
     svg
       width 100%
     >>> path
-      fill $color-text
+      fill var(--text-color)
   .item__info
     display flex
     overflow hidden

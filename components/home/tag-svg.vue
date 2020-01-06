@@ -119,6 +119,10 @@ export default {
       type: [Number, String],
       default: ''
     },
+    iconWidth: {
+      type: Number,
+      default: 0
+    },
     iconPath: {
       type: String,
       default: ''
@@ -142,12 +146,20 @@ export default {
   },
 
   data: () => ({
-    iconWidth: 0,
     padding: 7,
     innerPadding: 7
   }),
 
   computed: {
+    getSortName () {
+      let items = [...this.sort]
+      if (this.iconPath === '') {
+        items = items.filter(item => item.name !== 'icon')
+      }
+      return items
+        .reduce((p, n) => (p += n.name[0]), '')
+        .toLowerCase()
+    },
     iIndex () {
       return this.sort.findIndex(item => item.name === 'icon')
     },
@@ -161,10 +173,10 @@ export default {
       return this.sort.findIndex(item => item.name === 'center')
     },
     lTextWidth () {
-      return strWidth(this.leftText, { font: 'Verdana', size: 12 })
+      return +strWidth(this.leftText, { font: 'Verdana', size: 12 }).toFixed(0)
     },
     rTextWidth () {
-      return strWidth(this.rightText, { font: 'Verdana', size: 12 })
+      return +strWidth(this.rightText, { font: 'Verdana', size: 12 }).toFixed(0)
     },
     lIconWidth () {
       return this.iIndex < this.cIndex ? this.iconWidth : 0
@@ -239,13 +251,14 @@ export default {
       async handler () {
         await this.$nextTick()
         if (!this.$refs.icon) {
-          this.iconWidth = 0
+          this.$emit('update:iconWidth', 0)
           return
         }
 
         const { height, width } = this.$refs.icon.getBBox()
         const scale = 14 / height
-        this.iconWidth = width * scale + 3
+        const iconWidth = +(width * scale + 3).toFixed(0)
+        this.$emit('update:iconWidth', iconWidth)
         this.$emit('update:iconScale', scale || 1)
       },
       immediate: true

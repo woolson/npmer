@@ -1,12 +1,14 @@
 <template lang="pug">
 main.home
   section.home__preview
-    label {{$t('preview')}}
+    label {{$t('base.preview')}}
     tag-svg(
       ref="content"
       v-bind="options"
       :sort="sort"
-      :iconScale.sync="options.iconScale")
+      :iconScale.sync="options.iconScale"
+      :iconWidth.sync="options.iconWidth"
+    )
   section.home__options
     el-form(
       ref="options"
@@ -24,7 +26,7 @@ main.home
           el-select(
             v-if="item.name === 'icon'"
             v-model="iconIndex"
-            :placeholder="$t('select')"
+            :placeholder="$t('base.select')"
             clearable
             filterable)
             el-option(
@@ -41,23 +43,16 @@ main.home
             v-model="options.rightText"
             clearable)
       //- 图标路径和缩放
-      div.options__row
-        el-form-item.u-flex(
-          v-show="iconIndex === 0"
-          :label="$t('iconPath')")
+      div.options__row(v-show="iconIndex === 0")
+        el-form-item.u-flex(:label="$t('iconPath')")
           el-input(
             v-model="options.iconPath"
             size="small"
             clearable)
             el-button(
               slot="append"
-              @click="iconMarketVisible = true") {{$t('select')}}
-        el-form-item(:label="$t('iconScale')")
-          el-input-number(
-            v-model="options.iconScale"
-            size="small"
-            :step="0.001"
-          )
+              @click="iconMarketVisible = true"
+            ) {{$t('base.select')}}
       //- 图标位置微调
       div.options__row
         el-form-item(:label="$t('iconXOffset')")
@@ -76,11 +71,11 @@ main.home
       div.options__row
         el-form-item(:label="$t('textShadow')")
           el-switch(v-model="options.textShadow")
-        el-form-item(:label="$t('gradient')")
+        el-form-item(:label="$t('base.gradient')")
           el-switch(v-model="options.gradient")
       //- 圆角和图标颜色
       div.options__row
-        el-form-item.u-flex(:label="$t('roundedAngle')")
+        el-form-item.u-flex(:label="$t('base.angle')")
           el-radio-group(v-model="options.angle" size="mini")
             el-radio-button(label="square")
               i.iconfont.icon-square
@@ -112,17 +107,29 @@ main.home
       //- 链接
       link-copy(:link="link")
       //- 按钮
-      div.options__button
+      div.options__button(v-if="editTemplateId")
+        el-button(
+          type="primary"
+          @click=""
+        ) {{$t('base.cancel')}}
+        el-button(
+          type="primary"
+          @click="updateTemplate"
+        ) {{$t('updateTemplate')}}
+      div.options__button(v-else)
         el-button(
           type="primary"
           @click="downloadImg"
-        ) {{$t('download')}}
+        ) ↓ {{$t('base.download')}}
         el-button(
           type="primary"
           @click="createLink"
-          :loading="loading"
-        ) {{$t('createLink')}}
-  IconMarket(
+        ) + {{$t('base.link')}}
+        el-button(
+          type="primary"
+          @click="createTemplate"
+        ) + {{$t('base.template')}}
+  icon-market(
     v-model="iconMarketVisible"
     @change="options.iconPath = $event; iconMarketVisible= false"
   )
@@ -131,17 +138,36 @@ main.home
 <script>
 import Draggable from 'vuedraggable'
 import axios from '~/plugins/axios'
-import TagSvg from '~/components/tag-svg.vue'
+import TagSvg from '~/components/home/tag-svg.vue'
 import NpmerFoot from '~/components/npmer-foot.vue'
 import LinkCopy from '~/components/home/link-copy.vue'
 import PickColor from '~/components/home/pick-color.vue'
 import ColorPick from '~/components/color-pick.vue'
-import IconMarket from '~/components/home/icon-market'
+import IconMarket from '~/components/home/icon-market.vue'
+
+const DEFAULT_OPTION = {
+  angle: 'square',
+  textShadow: false,
+  gradient: false,
+  leftText: 'welcome',
+  leftTextColor: '#FFFFFF',
+  leftBgColor: '#555555',
+  rightText: 'programmer',
+  rightTextColor: '#FFFFFF',
+  rightBgColor: '#44CC11',
+  iconColor: '#FFFFFF',
+  iconPosition: 'left',
+  iconPath: '',
+  iconScale: 0,
+  iconWidth: 0,
+  iconY: 3,
+  iconX: 5
+}
 
 export default {
   head () {
     return {
-      title: this.$t('home') + ' - NPMer'
+      title: this.$t('base.home') + ' | NPMer'
     }
   },
 
@@ -156,33 +182,19 @@ export default {
   },
 
   data: () => ({
+    editTemplateId: false,
     iconMarketVisible: false,
     icons: [],
     iconIndex: '',
-    options: {
-      angle: 'square',
-      textShadow: false,
-      gradient: false,
-      leftText: 'welcome',
-      leftTextColor: '#FFFFFF',
-      leftBgColor: '#555555',
-      rightText: 'programmer',
-      rightTextColor: '#FFFFFF',
-      rightBgColor: '#44CC11',
-      iconColor: '#FFFFFF',
-      iconPosition: 'left',
-      iconY: 3,
-      iconX: 5
-    },
+    options: { ...DEFAULT_OPTION },
     link: '',
     markdownLink: '',
-    loading: false,
     customPath: '',
     customScale: 0.13,
     sort: [
-      { name: 'icon', title: 'icon' },
+      { name: 'icon', title: 'base.icon' },
       { name: 'left', title: 'leftText' },
-      { name: 'center', title: 'center' },
+      { name: 'center', title: 'base.center' },
       { name: 'right', title: 'rightText' }
     ]
   }),
@@ -199,7 +211,6 @@ export default {
     iconIndex (newValue) {
       if (newValue === 0) {
         this.$set(this.options, 'iconPath', '')
-        this.$set(this.options, 'iconScale', 1)
       } else {
         const { content } = this.icons[newValue] || {}
         this.$set(this.options, 'iconPath', content)
@@ -215,6 +226,11 @@ export default {
 
   mounted () {
     this.fetchIcons()
+    this.enterEdit()
+  },
+
+  activated () {
+    this.enterEdit()
   },
 
   methods: {
@@ -300,7 +316,6 @@ export default {
         if (iconExist) {
           this.link = iconLink
         } else {
-          this.loading = true
           const badgeLink = await axios({
             responseType: 'json',
             url: '/npmer/api/badge',
@@ -314,13 +329,65 @@ export default {
             }
           })
           this.link = badgeLink
-          this.loading = false
         }
-        this.$message.success(this.$t('createLink') + this.$t('success'))
+        this.$message.success(this.$t('createLink') + this.$t('base.success'))
       } catch (err) {
         // eslint-disable-next-line
         console.log(err)
-        this.loading = false
+        this.$message.error(this.$t(err.message))
+      }
+    },
+    async createTemplate () {
+      try {
+        const config = {
+          ...this.options,
+          sort: this.sort
+        }
+        const templateId = await axios({
+          method: 'POST',
+          url: '/npmer/api/template',
+          data: {
+            config: JSON.stringify(config)
+          }
+        })
+        this.$router.push({
+          path: '/template/my?page=1',
+          query: { id: templateId }
+        })
+      } catch (err) {
+        this.$message.error(this.$t(err.message))
+      }
+    },
+    enterEdit () {
+      const editTemplate = localStorage.getItem('template-edit')
+      if (editTemplate) {
+        const templateData = JSON.parse(editTemplate)
+        const config = JSON.parse(templateData.config)
+        this.editTemplateId = templateData.id
+        this.sort = config.sort
+        Object.keys(this.options).forEach((key) => {
+          this.$set(this.options, key, config[key])
+        })
+        localStorage.removeItem('template-edit')
+      } else {
+        this.editTemplateId = ''
+      }
+    },
+    async updateTemplate () {
+      try {
+        const config = {
+          ...this.options,
+          sort: this.sort
+        }
+        await axios({
+          method: 'PUT',
+          url: `/npmer/api/template/${this.editTemplateId}`,
+          data: {
+            config: JSON.stringify(config)
+          }
+        })
+        this.$router.push('/template/my?page=1')
+      } catch (err) {
         this.$message.error(this.$t(err.message))
       }
     }
@@ -335,15 +402,13 @@ main
   justify-content flex-start
   align-items center
   padding-bottom 20px
-  border-radius 20px
   box-sizing border-box
-  background $background-color
+  background var(--background-color)
   padding-top 100px
-  min-height 100vh
   > section
     width 680px
-    background white
-    padding 10px 0
+    background var(--background-color-mid)
+    padding 15px 0
     border-radius 10px
     margin-bottom 20px
     box-shadow 0 0 2px $color-border
@@ -357,6 +422,10 @@ main
     width 215px
   .el-form-item__label
     flex-shrink 0
+    color var(--text-color)
+  .el-input__inner
+    background var(--background-color-light)
+    border-color var(--border-color)
 
 .home__preview
   display flex
@@ -398,7 +467,7 @@ main
 .sort-group__item
   display flex
   flex-direction column
-  background $background-color
+  background var(--background-color)
   padding 5px
   border-radius 5px
   border 1px solid transparent
@@ -421,6 +490,7 @@ main
     border 1px solid $color-main
   input
     text-align center
+    background var(--background-color-mid) !important
 
 .options__row
   .el-switch
