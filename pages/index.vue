@@ -369,7 +369,9 @@ export default {
       try {
         if (!this.account) {
           this.$alert(this.$t('message.shouldLogin'), this.$t('base.tip'), {
-            confirmButtonText: this.$t('base.submit')
+            confirmButtonText: this.$t('base.login')
+          }).then(() => {
+            location.href = 'https://github.com/login/oauth/authorize?client_id=c03fba868563cbf34940&redirect_uri=https://woolson.cn/npmer/api/github/callback&state=123123sadh1as12'
           })
           return
         }
