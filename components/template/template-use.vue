@@ -123,10 +123,6 @@ export default {
             {
               value: 'release',
               label: 'Release'
-            },
-            {
-              value: 'download',
-              label: 'Download'
             }
           ]
         }
