@@ -85,6 +85,7 @@ export default {
   iconXOffset: 'X @:base.offset',
   iconYOffset: 'Y @:base.offset',
   myBadge: '@:base.my@:base.badge',
+  myLiked: '@:base.my@:base.liked',
   myLike: '@:base.my@:base.like',
   myTemplate: '@:base.my@:base.template',
   leftBgColor: '@:base.l@:base.bg@:base.color',

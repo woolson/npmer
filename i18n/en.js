@@ -89,6 +89,7 @@ export default {
   leftTextColor: '@:base.l @:base.text @:base.color',
   myBadge: '@:base.my @:base.badge',
   myLiked: '@:base.my @:base.liked',
+  myLike: '@:base.my @:base.like',
   myTemplate: '@:base.my @:base.template',
   rightBgColor: '@:base.r @:base.bg @:base.color',
   rightText: '@:base.r @:base.text',
