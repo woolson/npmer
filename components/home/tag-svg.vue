@@ -70,8 +70,6 @@ svg(
 </template>
 
 <script>
-import strWidth from 'string-pixel-width'
-
 export default {
   name: 'TagSvg',
 
@@ -79,6 +77,10 @@ export default {
     leftText: {
       type: String,
       default: ''
+    },
+    leftTextWidth: {
+      type: Number,
+      default: 0
     },
     leftTextColor: {
       type: String,
@@ -91,6 +93,10 @@ export default {
     rightText: {
       type: String,
       default: ''
+    },
+    rightTextWidth: {
+      type: Number,
+      default: 0
     },
     rightTextColor: {
       type: String,
@@ -172,12 +178,12 @@ export default {
     cIndex () {
       return this.sort.findIndex(item => item.name === 'center')
     },
-    lTextWidth () {
-      return +strWidth(this.leftText, { font: 'Verdana', size: 12 }).toFixed(0)
-    },
-    rTextWidth () {
-      return +strWidth(this.rightText, { font: 'Verdana', size: 12 }).toFixed(0)
-    },
+    // leftTextWidth () {
+    //   return +strWidth(this.leftText, { font: 'Verdana', size: 12 }).toFixed(0)
+    // },
+    // rightTextWidth () {
+    //   return +strWidth(this.rightText, { font: 'Verdana', size: 12 }).toFixed(0)
+    // },
     lIconWidth () {
       return this.iIndex < this.cIndex ? this.iconWidth : 0
     },
@@ -185,10 +191,10 @@ export default {
       return this.iIndex > this.cIndex ? this.iconWidth : 0
     },
     lWidth () {
-      return this.padding + this.lIconWidth + this.lTextWidth + this.innerPadding
+      return this.padding + this.lIconWidth + this.leftTextWidth + this.innerPadding
     },
     rWidth () {
-      return this.padding + this.rIconWidth + this.rTextWidth + this.innerPadding
+      return this.padding + this.rIconWidth + this.rightTextWidth + this.innerPadding
     },
     lTextX () {
       let result = this.padding
@@ -219,14 +225,14 @@ export default {
         if (this.iIndex < this.lIndex) {
           x += +this.iconX + this.padding - 5
         } else {
-          x += +this.iconX + this.lTextX + this.lTextWidth
+          x += +this.iconX + this.lTextX + this.leftTextWidth
         }
       } else {
         // eslint-disable-next-line no-lonely-if
         if (this.iIndex < this.rIndex) {
           x += +this.iconX + this.lWidth
         } else {
-          x += +this.iconX + this.rTextX + this.rTextWidth
+          x += +this.iconX + this.rTextX + this.rightTextWidth
         }
       }
       return {

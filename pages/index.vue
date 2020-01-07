@@ -9,6 +9,9 @@ main.home
       :iconScale.sync="options.iconScale"
       :iconWidth.sync="options.iconWidth"
     )
+    div.preview__mock
+      span(ref="leftText") {{options.leftText}}
+      span(ref="rightText") {{options.rightText}}
   section.home__options
     el-form(
       ref="options"
@@ -159,9 +162,11 @@ const DEFAULT_OPTION = {
   textShadow: false,
   gradient: false,
   leftText: 'welcome',
+  leftTextWidth: 0,
   leftTextColor: '#FFFFFF',
   leftBgColor: '#555555',
   rightText: 'programmer',
+  rightTextWidth: 0,
   rightTextColor: '#FFFFFF',
   rightBgColor: '#44CC11',
   iconColor: '#FFFFFF',
@@ -195,7 +200,7 @@ export default {
     iconMarketVisible: false,
     icons: [],
     iconIndex: '',
-    options: { ...DEFAULT_OPTION },
+    options: {},
     link: '',
     markdownLink: '',
     customPath: '',
@@ -226,6 +231,18 @@ export default {
         this.$set(this.options, 'iconPath', content)
       }
     },
+    'options.leftText' () {
+      const $leftText = this.$refs.leftText
+      this.$nextTick(() => {
+        this.$set(this.options, 'leftTextWidth', $leftText.offsetWidth)
+      })
+    },
+    'options.rightText' () {
+      const $rightText = this.$refs.rightText
+      this.$nextTick(() => {
+        this.$set(this.options, 'rightTextWidth', $rightText.offsetWidth)
+      })
+    },
     options: {
       handler () {
         this.link = ''
@@ -237,6 +254,7 @@ export default {
   mounted () {
     this.fetchIcons()
     this.enterEdit()
+    this.options = { ...DEFAULT_OPTION }
   },
 
   activated () {
@@ -453,6 +471,12 @@ main
   label
     margin-bottom 15px
     font-size 20px
+
+.preview__mock
+  font-family Verdana,sans-serif
+  font-size 12px
+  height 0
+  overflow hidden
 
 .preview__tag
   display flex
