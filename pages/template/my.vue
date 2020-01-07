@@ -25,7 +25,7 @@ import TemplateItem from '~/components/template/template-item.vue'
 export default {
   head () {
     return {
-      title: this.$t('base.template') + ' | NPMer'
+      title: this.$t('myTemplate') + ' | NPMer'
     }
   },
 

@@ -23,7 +23,7 @@ import TemplateItem from '~/components/template/template-item.vue'
 export default {
   head () {
     return {
-      title: this.$t('base.market') + ' | NPMer'
+      title: this.$t('base.liked') + ' | NPMer'
     }
   },
 

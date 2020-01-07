@@ -22,7 +22,7 @@ import BadgeItem from '~/components/market/badge-item.vue'
 export default {
   head () {
     return {
-      title: this.$t('base.market') + ' | NPMer'
+      title: this.$t('base.badge') + ' | NPMer'
     }
   },
 
