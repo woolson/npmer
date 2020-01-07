@@ -71,7 +71,8 @@ export default {
     errorMsg: 'Error, Try again later!',
     helpIconPath: 'Paste attribute [d] of tag [path], you can find it in element svg.',
     shouldLogin: 'You should login before this option!',
-    githubTip: 'Will you to login with GitHub, continue?'
+    githubTip: 'Will you to login with GitHub, continue?',
+    useTemplate: 'Use __VAR__ replace left or right text to use variable!'
   },
   badgeTemplate: '@:base.badge @:base.template',
   copySuccess: '@:base.copy @:base.success',

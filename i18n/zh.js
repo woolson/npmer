@@ -71,7 +71,8 @@ export default {
     errorMsg: '请求出错，稍后重试！',
     helpIconPath: '可以粘贴svg元素中的【path】标签的【d】属性值。',
     shouldLogin: '你需要先登录，才能执行此操作！',
-    githubTip: '将使用Github进行登录，是否继续？'
+    githubTip: '将使用Github进行登录，是否继续？',
+    useTemplate: '使用【__VAR__】替代左边文字或右边文字，以使用变量！'
   },
   badgeTemplate: '@:base.badge@:base.template',
   copySuccess: '@:base.copy@:base.success',

@@ -129,6 +129,14 @@ main.home
           type="primary"
           @click="createTemplate"
         ) + {{$t('base.template')}}
+        el-popover(
+          placement="top"
+          :title="$t('base.tip')"
+          width="200"
+          trigger="hover"
+          :content="$t('message.useTemplate')"
+        )
+          i.el-icon-info(slot="reference")
   icon-market(
     v-model="iconMarketVisible"
     @change="options.iconPath = $event; iconMarketVisible= false"
@@ -136,6 +144,7 @@ main.home
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Draggable from 'vuedraggable'
 import axios from '~/plugins/axios'
 import TagSvg from '~/components/home/tag-svg.vue'
@@ -200,6 +209,7 @@ export default {
   }),
 
   computed: {
+    ...mapState(['account']),
     nameKey () {
       return this.$i18n.locale === 'zh'
         ? 'nameZH'
@@ -339,6 +349,12 @@ export default {
     },
     async createTemplate () {
       try {
+        if (!this.account) {
+          this.$alert(this.$t('message.shouldLogin'), this.$t('base.tip'), {
+            confirmButtonText: this.$t('base.submit')
+          })
+          return
+        }
         const config = {
           ...this.options,
           sort: this.sort
@@ -538,4 +554,10 @@ main
   padding 10px 20px
   button
     min-width 100px
+  .el-icon-info
+    line-height 40px
+    color var(--text-color)
+    margin-right -30px
+    cursor help
+    opacity .6
 </style>

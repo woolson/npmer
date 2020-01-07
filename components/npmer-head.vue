@@ -63,12 +63,6 @@ export default {
   },
 
   methods: {
-    async login () {
-      await this.$alert(this.$t('githubTip'), this.$t('tip'), {
-        confirmButtonText: this.$t('submit')
-      })
-      location.href = 'https://github.com/login/oauth/authorize?client_id=c03fba868563cbf34940&redirect_uri=https://woolson.cn/npmer/api/github/callback&state=123123sadh1as12'
-    },
     changeLang (lang) {
       this.$i18n.locale = lang
       localStorage.setItem('LANGUAGE', lang)
