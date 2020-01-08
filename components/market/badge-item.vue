@@ -2,11 +2,11 @@
 li.list__item
   el-image.item__badge(
     lazy
-    :src="encode(baseUrl + data.name)"
+    :src="decode(baseUrl + data.name)"
   )
   div.item__option
     i.el-icon-link(
-      v-clipboard="encode(baseUrl + data.name)"
+      v-clipboard="decode(baseUrl + data.name)"
       @click="$message.success($t('copySuccess'))"
     )
       span {{$t('base.copy')}}
@@ -41,8 +41,8 @@ export default {
   }),
 
   methods: {
-    encode (value) {
-      return encodeURI(value)
+    decode (value) {
+      return decodeURI(value)
     }
   }
 }
