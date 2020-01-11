@@ -32,9 +32,17 @@ export default {
       type: String,
       default: ''
     },
+    textDefault: {
+      type: String,
+      default: '#FFFFFF'
+    },
     background: {
       type: String,
       default: ''
+    },
+    backgroundDefault: {
+      type: String,
+      default: '#555555'
     }
   },
 
@@ -46,11 +54,17 @@ export default {
   },
 
   watch: {
-    textColor () {
-      this.$emit('update:text', this.textColor)
+    textColor (newValue) {
+      if (!newValue) {
+        this.textColor = newValue = this.textDefault
+      }
+      this.$emit('update:text', newValue)
     },
-    bgColor () {
-      this.$emit('update:background', this.bgColor)
+    bgColor (newValue) {
+      if (!newValue) {
+        this.bgColor = newValue = this.backgroundDefault
+      }
+      this.$emit('update:background', newValue)
     },
     text () {
       this.textColor = this.text

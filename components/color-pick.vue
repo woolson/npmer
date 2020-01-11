@@ -10,9 +10,9 @@ div.options__color
   span •••
   el-color-picker(
     :value="value"
-    @change="$emit('input', $event)"
     :predefine="defaultColors"
     size="mini"
+    @change="$emit('input', $event)"
   )
 </template>
 

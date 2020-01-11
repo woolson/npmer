@@ -46,18 +46,21 @@ main.home
             v-model="options.rightText"
             clearable)
       //- 图标路径和缩放
-      div.options__row(v-show="iconIndex === 0")
-        el-form-item.u-flex(:label="$t('iconPath')")
-          el-input(
-            v-model="options.iconPath"
-            size="small"
-            clearable)
-            el-button(
-              slot="append"
-              @click="iconMarketVisible = true"
-            ) {{$t('base.select')}}
+      el-form-item.u-flex(
+        v-show="iconIndex === 0"
+        :label="$t('iconPath')"
+      )
+        el-input(
+          v-model="options.iconPath"
+          disabled
+          size="small"
+          clearable)
+          el-button(
+            slot="append"
+            @click="iconMarketVisible = true"
+          ) {{$t('base.select')}}
       //- 图标位置微调
-      div.options__row
+      div.options__row(v-show="options.iconPath")
         el-form-item(:label="$t('iconXOffset')")
           el-input-number(
             v-model="options.iconX"
@@ -70,15 +73,28 @@ main.home
             size="small"
             :step="0.5"
           )
+      //- 图标颜色和重置
+      div.options__row(v-show="options.iconPath")
+        el-form-item(:label="$t('iconColor')")
+          color-pick(
+            v-model="options.iconColor"
+            :colors="['#FFFFFF', ...colors]"
+          )
+        el-form-item(:label="$t('iconPosition')")
+          el-button(
+            type="primary"
+            size="small"
+            @click="iconPositionReset"
+          ) {{$t('base.reset')}}
       //- 阴影和渐变
       div.options__row
         el-form-item(:label="$t('textShadow')")
           el-switch(v-model="options.textShadow")
-        el-form-item(:label="$t('base.gradient')")
-          el-switch(v-model="options.gradient")
-      //- 圆角和图标颜色
+      //- 圆角
       div.options__row
-        el-form-item.u-flex(:label="$t('base.angle')")
+        el-form-item(:label="$t('bgGradient')")
+          el-switch(v-model="options.gradient")
+        el-form-item.u-flex(:label="$t('bgAngle')")
           el-radio-group(v-model="options.angle" size="mini")
             el-radio-button(label="square")
               i.iconfont.icon-square
@@ -86,19 +102,13 @@ main.home
               i.iconfont.icon-rounded
             el-radio-button(label="circle")
               i.iconfont.icon-circle
-        el-form-item(
-          :label="$t('iconColor')"
-          v-show="options.iconPath")
-          color-pick(
-            v-model="options.iconColor"
-            :colors="['#FFFFFF', ...colors]"
-          )
       //- 左边文字和背景颜色
       pick-color(
         :textTitle="$t('leftTextColor')"
         :backgroundTitle="$t('leftBgColor')"
         :text.sync="options.leftTextColor"
         :background.sync="options.leftBgColor"
+        backgroundDefault="#555555"
       )
       //- 右边文字和背景颜色
       pick-color(
@@ -106,6 +116,7 @@ main.home
         :backgroundTitle="$t('rightBgColor')"
         :text.sync="options.rightTextColor"
         :background.sync="options.rightBgColor"
+        backgroundDefault="#C43030"
       )
       //- 链接
       link-copy(:link="link")
@@ -168,7 +179,7 @@ const DEFAULT_OPTION = {
   rightText: 'programmer',
   rightTextWidth: 0,
   rightTextColor: '#FFFFFF',
-  rightBgColor: '#44CC11',
+  rightBgColor: '#C43030',
   iconColor: '#FFFFFF',
   iconPosition: 'left',
   iconPath: '',
@@ -267,6 +278,10 @@ export default {
         { nameEN: 'Customize', nameZH: '自定义' },
         ...await axios('/npmer/api/icon')
       ]
+    },
+    iconPositionReset () {
+      this.options.iconX = 5
+      this.options.iconY = 3
     },
     checkMove ({ draggedContext }) {
       return draggedContext.element.name === 'icon'
@@ -581,7 +596,6 @@ main
   button
     min-width 100px
   .el-icon-info
-    line-height 40px
     color var(--text-color)
     margin-right -30px
     cursor help

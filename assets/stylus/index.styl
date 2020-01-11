@@ -135,11 +135,6 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-radio-button__orig-radio:checked+.el-radio-button__inner
   background $color-main !important
 
-.el-popper[x-placement^=bottom] .popper__arrow
-  border-bottom-color var(--border-color)
-  &::after
-    border-bottom-color var(--background-color)
-
 :root
   --background-color #FAFAFA
   --background-color-mid #FEFEFE
@@ -170,6 +165,7 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-pager li
 .el-pagination.is-background .btn-prev
 .el-pagination.is-background .btn-next
+.el-button.is-plain
   background var(--background-color-dark) !important
 
 .el-input-number__decrease
@@ -179,6 +175,7 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-cascader-panel
 .el-cascader__dropdown
 .el-cascader-node:not(.is-disabled):focus
+.el-popover
   background var(--background-color) !important
 
 .__nuxt-error-page
@@ -189,14 +186,13 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-dialog
 .el-select-dropdown__item.hover
 .el-input-number .el-input__inner
+.el-color-picker__panel
   background var(--background-color-mid) !important
-
-.el-popover
-  background var(--background-header)
-  backdrop-filter saturate(180%) blur(20px)
 
 .el-cascader
 .el-input__inner
+.el-color-picker__panel
+.el-button.is-plain
   border-color var(--background-color-light) !important
 
 .el-cascader-menu
@@ -225,6 +221,18 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-radio-button__orig-radio:checked+.el-radio-button__inner
   border-color $color-main !important
 
+.el-popper[x-placement^=top] .popper__arrow
+.el-popper[x-placement^=top] .popper__arrow
+  border-top-color var(--border-color)
+  &::after
+    border-top-color var(--background-color)
+
+.el-popper[x-placement^=bottom] .popper__arrow
+.el-popper .popper__arrow
+  border-bottom-color var(--border-color)
+  &::after
+    border-bottom-color var(--background-color)
+
 .el-input__inner
 .el-cascader
 .el-cascader-node:not(.is-disabled):hover
@@ -234,4 +242,7 @@ for $size in 0 25 50 80 100 120 130 150 160 180 200 210 300 500
 .el-dialog
 .el-pagination.is-background .btn-prev
 .el-pagination.is-background .btn-next
+.el-button.is-plain
+.el-popover
+.el-popover__title
   color var(--text-color) !important
