@@ -75,7 +75,7 @@ export default {
     shouldLogin: 'You should login before this option!',
     githubTip: 'Will you to login with GitHub, continue?',
     useTemplate: 'Use __VAR__ replace left or right text to use variable!',
-    accessLater: 'Badge Link can be access right after link generated.'
+    accessLater: 'Badge Link can be access right after 1~5min link generated.'
   },
   bgGradient: '@:base.bg@:base.gradient',
   bgAngle: '@:base.bg@:base.angle',
