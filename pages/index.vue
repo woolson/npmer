@@ -151,6 +151,12 @@ main.home
           :content="$t('message.useTemplate')"
         )
           i.el-icon-info(slot="reference")
+      el-alert(
+        :title="$t('base.warn')"
+        type="warning"
+        :description="$t('message.accessLater')"
+        :closable="false"
+        show-icon)
   icon-market(
     v-model="iconMarketVisible"
     @change="options.iconPath = $event; iconMarketVisible= false"

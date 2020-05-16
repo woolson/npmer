@@ -57,7 +57,8 @@ export default {
       default: 0
     },
     updateData: {
-      type: Function
+      type: Function,
+      default: () => {}
     }
   },
 

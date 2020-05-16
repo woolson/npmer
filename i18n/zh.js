@@ -66,14 +66,16 @@ export default {
     week: '周',
     month: '月',
     date: '日期',
-    error: '错误'
+    error: '错误',
+    warn: '注意'
   },
   message: {
     errorMsg: '请求出错，稍后重试！',
     helpIconPath: '可以粘贴svg元素中的【path】标签的【d】属性值。',
     shouldLogin: '你需要先登录，才能执行此操作！',
     githubTip: '将使用Github进行登录，是否继续？',
-    useTemplate: '使用【__VAR__】替代左边文字或右边文字，以使用变量！'
+    useTemplate: '使用【__VAR__】替代左边文字或右边文字，以使用变量！',
+    accessLater: '徽章链接生成后需等待1~5分钟才能正确访问。'
   },
   bgGradient: '@:base.bg@:base.gradient',
   bgAngle: '@:base.bg@:base.angle',

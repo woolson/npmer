@@ -66,14 +66,16 @@ export default {
     week: 'Week',
     month: 'Month',
     date: 'Date',
-    error: 'Error'
+    error: 'Error',
+    warn: 'WARN'
   },
   message: {
     errorMsg: 'Error, Try again later!',
     helpIconPath: 'Paste attribute [d] of tag [path], you can find it in element svg.',
     shouldLogin: 'You should login before this option!',
     githubTip: 'Will you to login with GitHub, continue?',
-    useTemplate: 'Use __VAR__ replace left or right text to use variable!'
+    useTemplate: 'Use __VAR__ replace left or right text to use variable!',
+    accessLater: 'Badge Link can be access right after link generated.'
   },
   bgGradient: '@:base.bg@:base.gradient',
   bgAngle: '@:base.bg@:base.angle',
