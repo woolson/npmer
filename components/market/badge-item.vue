@@ -37,7 +37,7 @@ export default {
   },
 
   data: () => ({
-    baseUrl: 'https://woolson.gitee.io/npmer-badge/'
+    baseUrl: 'https://woolson.github.io/npmer-badge/badge/'
   }),
 
   methods: {
