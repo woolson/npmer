@@ -359,7 +359,7 @@ export default {
           this.options.textShadow ? 't' : 'f'
         ].join('-').replace(/#/g, '') + '.svg'
 
-        const iconLink = 'https://woolson.gitee.io/npmer-badge/' + name
+        const iconLink = 'https://woolson.github.io/npmer-badge/badge/' + name
         const iconExist = await this.checkExist(iconLink)
 
         if (iconExist) {

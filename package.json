@@ -1,6 +1,6 @@
 {
   "name": "npmer",
-  "version": "1.8.3",
+  "version": "1.8.5",
   "description": "Make npm packge badge with svg.",
   "author": "Woolson Lee",
   "private": true,
